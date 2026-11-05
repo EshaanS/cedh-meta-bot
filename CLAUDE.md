@@ -13,6 +13,10 @@ Milestone 1: ingestion and data-quality tabulation. Do not write Discord code, s
 - Migrations are numbered plain SQL files in db/migrations, applied by a small script
 - Later, not now: Vercel, with Next.js route handlers for Discord interactions and a daily cron
 
+## Environments
+
+- Cloud sessions: Node's built-in `fetch` ignores `HTTPS_PROXY` unless `NODE_USE_ENV_PROXY=1` is set (needs Node >= 22.21). Set it in the cloud environment's variables. Node then prints an experimental-feature warning (`EnvHttpProxyAgent`) to stderr, which is harmless.
+
 ## Hard rules
 
 - Never access cedhstats.org, topdeck.gg HTML pages, or anything other than the documented TopDeck API.
@@ -25,12 +29,17 @@ Milestone 1: ingestion and data-quality tabulation. Do not write Discord code, s
 - Do not expand scope beyond the task given.
 - Supabase Data API is disabled; access is only via postgres.js as the table owner. Automatic RLS is on with no policies. If queries ever return unexpectedly empty, check which role is connected.
 
-## TopDeck API facts (from docs; verify against real responses)
+## TopDeck API facts (from docs unless labeled "Observed in October 2026 data"; verify against real responses)
 
 - Base URL: https://topdeck.gg/api. Header: `Authorization: <key>` with no "Bearer" prefix.
 - Bulk search: POST /v2/tournaments with `{ game: "Magic: The Gathering", format: "EDH", start, end, columns }`. Dates are unix seconds. Returns completed events only. League events are excluded unless `leagues: true`.
 - Bulk `eventData` is documented as lat, lng, city, state, address, headerImage. It has no country field. `address` is organizer free text and can be "Online".
+  - Observed in October 2026 data: bulk `eventData` does include `country`, present on ~56% of events (912 of 1632) and non-blank on ~55%. This contradicts the docs.
+  - Observed in October 2026 data: there is no "Online" address convention. No address was "Online", and only 3 matched online-sounding terms, 2 of them Discord invite links. ~40% of events have no location field at all (no non-blank lat, lng, city, state, address, or country). Whether those are online events is unverified.
 - Standings rows include `leader` (the commander name; partners appear as "A / B", alphabetical) when a deck was submitted. Otherwise it is absent. Expect roughly 40% of entries to have no commander.
+  - Observed in October 2026 data: `leader` is present on ~34% of standings rows overall, so ~66% have no commander. Coverage rises with event size: ~12% of rows in events under 16 players, ~30% at 16–31, ~69% at 32–63, ~88% at 64+.
+  - Observed in October 2026 data: standings rows carry a `players` key only in team events (`isTeamEvent: true`; 1 event and 6 rows that month). Ingestion drops team events.
 - The bulk response has no rank/standing column. Preserve the array index, but do not treat it as rank until verified.
 - GET /v2/tournaments/{TID}/info returns `location` with name, city, state, country, lat, lng. Every subfield is nullable, and the whole object can be null.
+  - Observed in October 2026 data: `location` was never null in 30 sampled calls. Events with no location returned an object with every field null. Keep handling null anyway.
 - State values are inconsistent ("WA" vs "Washington" vs "Lombardia"). Never key regions on raw strings.
