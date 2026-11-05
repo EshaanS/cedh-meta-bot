@@ -8,7 +8,7 @@ Milestone 1: ingestion and data-quality tabulation. Do not write Discord code, s
 
 ## Stack
 
-- TypeScript, Node 20+, scripts run with tsx
+- TypeScript, Node 22.21+, scripts run with tsx
 - Postgres on Supabase, accessed with postgres.js. No ORM, no Prisma, no supabase-js.
 - Migrations are numbered plain SQL files in db/migrations, applied by a small script
 - Later, not now: Vercel, with Next.js route handlers for Discord interactions and a daily cron
