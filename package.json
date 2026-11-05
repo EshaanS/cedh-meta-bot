@@ -8,11 +8,15 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "probe": "tsx scripts/probe.ts"
+    "probe": "tsx scripts/probe.ts",
+    "migrate": "tsx --env-file-if-exists=.env scripts/migrate.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "postgres": "^3.4.9"
   }
 }
