@@ -4,7 +4,7 @@
 // Data provided by TopDeck.gg — https://topdeck.gg
 
 const BASE = "https://topdeck.gg/api";
-const COLUMNS = ["wins", "draws", "losses", "winsSwiss", "winsBracket", "lossesSwiss", "lossesBracket"];
+const COLUMNS = ["wins", "draws", "losses", "winsSwiss", "winsBracket", "lossesSwiss", "lossesBracket", "byes"];
 const SENSITIVE = new Set(["name", "id", "discord", "discordid", "decklist", "players"]);
 const INVITE_RE = /(https?:\/\/)?(www\.)?(discord\.gg|discord(app)?\.com\/invite)\/[\w-]+/gi;
 const redact = (s: string) => s.replace(INVITE_RE, "[discord invite redacted]");
@@ -95,8 +95,59 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-/** True if values are non-increasing (ties allowed). */
-const nonIncreasing = (xs: number[]) => xs.every((x, i) => i === 0 || xs[i - 1]! >= x);
+/** Index of the first value greater than the one before it, or -1 if non-increasing (ties allowed). */
+const firstRise = (xs: number[]) => xs.findIndex((x, i) => i > 0 && x > xs[i - 1]!);
+
+const BUCKETS = ["<16", "16-31", "32-63", "64+"] as const;
+type Bucket = (typeof BUCKETS)[number];
+const bucketOf = (n: number): Bucket => (n < 16 ? "<16" : n < 32 ? "16-31" : n < 64 ? "32-63" : "64+");
+
+const THIRDS = ["first third (top)", "middle third", "last third (bottom)"] as const;
+type Third = (typeof THIRDS)[number];
+const thirdOf = (fraction: number): Third => THIRDS[Math.min(2, Math.floor(fraction * 3))]!;
+
+const LOC_FIELDS = ["lat", "lng", "city", "state", "address", "country"];
+/** A finite number or a non-blank string. */
+const usable = (v: unknown) => num(v) !== undefined || (typeof v === "string" && v.trim() !== "");
+const hasLeader = (r: Obj) => typeof r.leader === "string" && r.leader.trim() !== "";
+
+type OrderTally = {
+  checked: number;
+  skipped: number;
+  fail5: number;
+  fail3: number;
+  failBoth: number;
+  firstViolation: Record<Third, number>;
+};
+const newTally = (): OrderTally => ({
+  checked: 0,
+  skipped: 0,
+  fail5: 0,
+  fail3: 0,
+  failBoth: 0,
+  firstViolation: { "first third (top)": 0, "middle third": 0, "last third (bottom)": 0 },
+});
+
+/**
+ * Check (a) on one tournament's Swiss rows, which start at index `offset` of a standings array of
+ * length `total`. Tallies violations under 5/1/0 and 3/1/0. For tournaments that fail under both,
+ * also tallies which third of the full standings holds the first 5/1/0 violation.
+ */
+function checkSwissOrder(t: OrderTally, wins: (number | undefined)[], draws: (number | undefined)[], offset: number, total: number): void {
+  if (wins.some((v) => v === undefined) || draws.some((v) => v === undefined)) {
+    t.skipped++;
+    return;
+  }
+  t.checked++;
+  const rise5 = firstRise(wins.map((w, i) => 5 * w! + draws[i]!));
+  const rise3 = firstRise(wins.map((w, i) => 3 * w! + draws[i]!));
+  if (rise5 >= 0) t.fail5++;
+  if (rise3 >= 0) t.fail3++;
+  if (rise5 >= 0 && rise3 >= 0) {
+    t.failBoth++;
+    t.firstViolation[thirdOf((offset + rise5) / total)]++;
+  }
+}
 
 async function main() {
   const now = new Date();
@@ -214,19 +265,12 @@ async function main() {
 
   // 6. leader share + size buckets
   let rows = 0, withLeader = 0;
-  const buckets = { "<16": 0, "16-31": 0, "32-63": 0, "64+": 0 };
+  const buckets: Record<Bucket, number> = { "<16": 0, "16-31": 0, "32-63": 0, "64+": 0 };
   for (const t of tournaments) {
-    const st = Array.isArray(t.standings) ? t.standings : [];
-    const n = st.length;
-    if (n < 16) buckets["<16"]++;
-    else if (n < 32) buckets["16-31"]++;
-    else if (n < 64) buckets["32-63"]++;
-    else buckets["64+"]++;
-    for (const r of st) {
-      if (!isObj(r)) continue;
-      rows++;
-      if (typeof r.leader === "string" && r.leader.trim() !== "") withLeader++;
-    }
+    const st = (Array.isArray(t.standings) ? t.standings : []).filter(isObj);
+    buckets[bucketOf(st.length)]++;
+    rows += st.length;
+    withLeader += st.filter(hasLeader).length;
   }
   p(
     "## 5. Commanders and event size",
@@ -235,16 +279,20 @@ async function main() {
     "",
     "| standings length | tournaments |",
     "|---|---:|",
-    ...Object.entries(buckets).map(([b, c]) => `| ${b} | ${c} (${pct(c, N)}) |`),
+    ...BUCKETS.map((b) => `| ${b} | ${buckets[b]} (${pct(buckets[b], N)}) |`),
     "",
   );
 
   // 7. Order checks
   let topCutMissing = 0, topCutZero = 0, topCutPositive = 0, topCutExceeds = 0;
-  let aChecked = 0, aSkippedFields = 0, aFail5 = 0, aFail3 = 0, aFailBoth = 0;
   let bChecked = 0, bSkippedFields = 0, bFail = 0;
+  let orderRows = 0, byesRows = 0;
+  const plain = newTally();
+  const withByes = newTally();
   for (const t of tournaments) {
     const st = (Array.isArray(t.standings) ? t.standings : []).filter(isObj);
+    orderRows += st.length;
+    byesRows += st.filter((r) => num(r.byes) !== undefined).length;
     const topCut = num(t.topCut);
     if (topCut === undefined) {
       topCutMissing++;
@@ -255,19 +303,14 @@ async function main() {
     if (topCut > st.length) topCutExceeds++;
     const k = Math.min(Math.max(0, topCut), st.length);
 
-    // (a) Swiss rows ordered by points, under 5/1/0 and 3/1/0
+    // (a) Swiss rows ordered by points under 5/1/0 and 3/1/0, without and with byes counted as wins
     const swiss = st.slice(k);
     const ws = swiss.map((r) => num(r.winsSwiss));
     const ds = swiss.map((r) => num(r.draws));
-    if (ws.some((v) => v === undefined) || ds.some((v) => v === undefined)) aSkippedFields++;
-    else {
-      aChecked++;
-      const ok5 = nonIncreasing(ws.map((w, i) => 5 * w! + ds[i]!));
-      const ok3 = nonIncreasing(ws.map((w, i) => 3 * w! + ds[i]!));
-      if (!ok5) aFail5++;
-      if (!ok3) aFail3++;
-      if (!ok5 && !ok3) aFailBoth++;
-    }
+    const bs = swiss.map((r) => num(r.byes));
+    const wsb = ws.map((w, i) => (w === undefined || bs[i] === undefined ? undefined : w + bs[i]!));
+    checkSwissOrder(plain, ws, ds, k, st.length);
+    checkSwissOrder(withByes, wsb, ds, k, st.length);
 
     // (b) Top-cut rows actually played in the cut
     if (topCut > 0) {
@@ -281,6 +324,10 @@ async function main() {
       }
     }
   }
+  const byesReturned = byesRows > 0;
+  const remaining = byesReturned ? withByes : plain;
+  const vs = (n: number, d: number) => `${n} (${pct(n, d)})`;
+  const byesCell = (s: string) => (byesReturned ? s : "n/a");
   p(
     "## 6. Standings order",
     "",
@@ -291,18 +338,77 @@ async function main() {
     `- \`topCut\` > 0: ${topCutPositive}`,
     `- \`topCut\` > standings length: ${topCutExceeds}`,
     "",
-    "**(a)** Rows from index k onward non-increasing in Swiss points, ties allowed:",
+    "**(a)** Rows from index k onward non-increasing in Swiss points, ties allowed. Points are `5×W + draws` (5/1/0) or `3×W + draws` (3/1/0), where W is `winsSwiss` without byes, or `winsSwiss + byes` with each bye counted as a win.",
     "",
-    `- Checked: ${aChecked}; skipped for missing numeric \`winsSwiss\`/\`draws\`: ${aSkippedFields}`,
-    `- Violations under 5/1/0 (\`5×winsSwiss + draws\`): **${aFail5}** (${pct(aFail5, aChecked)})`,
-    `- Violations under 3/1/0 (\`3×winsSwiss + draws\`): **${aFail3}** (${pct(aFail3, aChecked)})`,
-    `- Violations under both (not in points order under either system): **${aFailBoth}** (${pct(aFailBoth, aChecked)})`,
+    byesReturned
+      ? `- Standings rows with a numeric \`byes\`: ${vs(byesRows, orderRows)}`
+      : "- `byes` was not returned for any row, so the with-byes column is n/a.",
+    "",
+    "| tournaments | without byes | with byes |",
+    "|---|---:|---:|",
+    `| checked | ${plain.checked} | ${byesCell(String(withByes.checked))} |`,
+    `| skipped (missing numeric fields) | ${plain.skipped} | ${byesCell(String(withByes.skipped))} |`,
+    `| violations under 5/1/0 | ${vs(plain.fail5, plain.checked)} | ${byesCell(vs(withByes.fail5, withByes.checked))} |`,
+    `| violations under 3/1/0 | ${vs(plain.fail3, plain.checked)} | ${byesCell(vs(withByes.fail3, withByes.checked))} |`,
+    `| violations under both | **${vs(plain.failBoth, plain.checked)}** | **${byesCell(vs(withByes.failBoth, withByes.checked))}** |`,
+    "",
+    `Remaining violators: the ${remaining.failBoth} tournaments that fail under both systems ${byesReturned ? "with byes counted" : "(without byes, since byes were not returned)"}. Position of the first violation, measured under 5/1/0, is the index of the first row with more points than the row above it, divided by standings length.`,
+    "",
+    "| first violation in | tournaments |",
+    "|---|---:|",
+    ...THIRDS.map((third) => `| ${third} | ${vs(remaining.firstViolation[third], remaining.failBoth)} |`),
     "",
     "**(b)** First k rows all have `winsBracket > 0 || lossesBracket > 0`:",
     "",
     `- Checked: ${bChecked}; skipped for missing numeric bracket fields: ${bSkippedFields}`,
     `- Failures: **${bFail}** (${pct(bFail, bChecked)})`,
     "- Caveat: byes or drawn cut pods may leave both bracket counts at 0 for a player who did make the cut.",
+    "",
+  );
+
+  // 8. Coverage by event size, team events excluded
+  type Cell = { events: number; rows: number; leaderRows: number; locEvents: number; countryEvents: number; leaderCountryRows: number };
+  const zeroCell = (): Cell => ({ events: 0, rows: 0, leaderRows: 0, locEvents: 0, countryEvents: 0, leaderCountryRows: 0 });
+  const cells: Record<Bucket | "All", Cell> = { "<16": zeroCell(), "16-31": zeroCell(), "32-63": zeroCell(), "64+": zeroCell(), All: zeroCell() };
+  let teamEvents = 0, playersRows = 0, playersRowsInTeamEvents = 0;
+  for (const t of tournaments) {
+    const st = (Array.isArray(t.standings) ? t.standings : []).filter(isObj);
+    const withPlayers = st.filter((r) => "players" in r).length;
+    playersRows += withPlayers;
+    if (t.isTeamEvent === true) {
+      teamEvents++;
+      playersRowsInTeamEvents += withPlayers;
+      continue;
+    }
+    const e: Obj = isObj(t.eventData) ? t.eventData : {};
+    const hasLoc = LOC_FIELDS.some((f) => usable(e[f]));
+    const hasCountry = usable(e.country);
+    const leaderRows = st.filter(hasLeader).length;
+    for (const c of [cells[bucketOf(st.length)], cells.All]) {
+      c.events++;
+      c.rows += st.length;
+      c.leaderRows += leaderRows;
+      if (hasLoc) c.locEvents++;
+      if (hasCountry) {
+        c.countryEvents++;
+        c.leaderCountryRows += leaderRows;
+      }
+    }
+  }
+  p(
+    "## 7. Coverage by event size (team events excluded)",
+    "",
+    `- Team events excluded (\`isTeamEvent: true\`): ${teamEvents}`,
+    `- Standings rows carrying a \`players\` key: ${playersRows}, of which in team events: ${playersRowsInTeamEvents}`,
+    `- "Any location field" means a non-blank ${LOC_FIELDS.join(", ")}. Leader shares are of rows; location and country shares are of events. "Leader and country" is the share of rows that have a leader and belong to an event with a country.`,
+    "",
+    "| size bucket | events | rows | rows with leader | events with any location field | events with country | rows with leader and country |",
+    "|---|---:|---:|---:|---:|---:|---:|",
+    ...([...BUCKETS, "All"] as const).map((b) => {
+      const c = cells[b];
+      const label = b === "All" ? "**All**" : b;
+      return `| ${label} | ${c.events} | ${c.rows} | ${pct(c.leaderRows, c.rows)} | ${pct(c.locEvents, c.events)} | ${pct(c.countryEvents, c.events)} | ${pct(c.leaderCountryRows, c.rows)} |`;
+    }),
     "",
   );
 
