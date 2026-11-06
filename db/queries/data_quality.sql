@@ -567,3 +567,110 @@ where name_class = 'cedh' and coverage < 0.5
 group by normalized_name
 order by events desc, rows desc, normalized_name
 limit 10;
+
+-- name: Reporting bias: leader share in top-cut rows vs other rows, by event coverage (participant_count >= 16, topCut > 0)
+-- A top-cut row is one that played in the bracket (wins_bracket + losses_bracket > 0), so this does not
+-- rely on array order. A player whose cut pod drew may have both at 0 and count as non-top-cut.
+-- ratio = top-cut leader share / other leader share; well above 1 means top finishers report more.
+with per_event as (
+  select t.tid, count(*) as rows, count(e.leader) as leader_rows
+  from tournaments t
+  join entries e on e.tid = t.tid
+  where t.participant_count >= 16 and t.top_cut > 0
+  group by t.tid
+),
+grouped as (
+  select tid,
+    case
+      when leader_rows::numeric / rows >= 0.75 then '75%+ (baseline)'
+      when leader_rows > 0 then '1-74%'
+    end as coverage_group
+  from per_event
+),
+rows_flagged as (
+  select g.coverage_group, e.tid, e.leader is not null as has_leader,
+         (e.wins_bracket + e.losses_bracket > 0) as top_cut_row
+  from grouped g
+  join entries e on e.tid = g.tid
+  where g.coverage_group is not null
+)
+select
+  coverage_group,
+  count(distinct tid) as events,
+  count(*) filter (where top_cut_row) as top_cut_rows,
+  round(100.0 * count(*) filter (where top_cut_row and has_leader) / nullif(count(*) filter (where top_cut_row), 0), 1) as pct_top_cut_with_leader,
+  count(*) filter (where not top_cut_row) as other_rows,
+  round(100.0 * count(*) filter (where not top_cut_row and has_leader) / nullif(count(*) filter (where not top_cut_row), 0), 1) as pct_other_with_leader,
+  round(
+    (count(*) filter (where top_cut_row and has_leader)::numeric / nullif(count(*) filter (where top_cut_row), 0))
+    / nullif(count(*) filter (where not top_cut_row and has_leader)::numeric / nullif(count(*) filter (where not top_cut_row), 0), 0),
+    2
+  ) as ratio
+from rows_flagged
+group by coverage_group
+order by coverage_group;
+
+-- name: Share of leader rows from high-coverage events, by name class (participant_count >= 16)
+-- Uses the name classification defined above the class queries.
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+)
+select
+  coalesce(name_class, 'all') as name_class,
+  sum(leader_rows) as rows_with_leader,
+  round(100.0 * coalesce(sum(leader_rows) filter (where coverage >= 0.75), 0) / nullif(sum(leader_rows), 0), 1) as pct_from_75_plus_events,
+  round(100.0 * coalesce(sum(leader_rows) filter (where coverage >= 0.50), 0) / nullif(sum(leader_rows), 0), 1) as pct_from_50_plus_events
+from per_event
+group by grouping sets ((name_class), ())
+order by grouping(name_class), rows_with_leader desc;
+
+-- name: Unlabeled events at 1-74% leader coverage: 20 most common normalized names (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+)
+select
+  normalized_name,
+  count(*) as events,
+  sum(rows) as rows,
+  round(100.0 * avg(coverage), 1) as avg_coverage_pct
+from per_event
+where name_class = 'unlabeled' and leader_rows > 0 and coverage < 0.75
+group by normalized_name
+order by events desc, rows desc, normalized_name
+limit 20;
