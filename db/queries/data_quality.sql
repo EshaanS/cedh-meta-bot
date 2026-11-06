@@ -223,3 +223,103 @@ select
 from flags
 group by grouping sets ((month), ())
 order by grouping(month), 1;
+
+-- Name classification used by the next four queries (keep the CASE identical in all four).
+-- Precedence: test, then cedh, then casual, else unlabeled. Postgres regex uses \y for word
+-- boundaries (\b means backspace), so /\btest\b/i is written '\ytest\y'.
+--   test:   \ytest\y
+--   cedh:   cedh|c-edh|competitive
+--   casual: casual|fnm|bracket ?[1-4]|precon|budget
+
+-- name: Tournament name classes, full window (participant_count >= 16)
+with classified as (
+  select t.*,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+)
+select
+  c.name_class,
+  count(distinct c.tid) as tournaments,
+  count(e.tid) as rows,
+  round(100.0 * count(e.leader) / nullif(count(e.tid), 0), 1) as pct_rows_with_leader,
+  round(100.0 * count(distinct c.tid) filter (
+    where (c.lat is not null and c.lng is not null) or c.city is not null or c.state is not null
+       or coalesce(c.country, c.info_country) is not null
+  ) / count(distinct c.tid), 1) as pct_events_with_location
+from classified c
+join entries e on e.tid = c.tid
+group by 1
+order by tournaments desc;
+
+-- name: 30 most common unlabeled names, normalized (participant_count >= 16)
+-- Normalized = lowercased, digits removed, whitespace collapsed and trimmed.
+with classified as (
+  select t.*,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+)
+select
+  btrim(regexp_replace(regexp_replace(lower(coalesce(c.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+  count(distinct c.tid) as tournaments,
+  count(e.tid) as rows,
+  count(e.leader) as rows_with_leader
+from classified c
+join entries e on e.tid = c.tid
+where c.name_class = 'unlabeled'
+group by 1
+order by tournaments desc, rows desc, 1
+limit 30;
+
+-- name: British Columbia, Illinois, Nevada leader coverage with and without casual events (participant_count >= 16)
+-- State matches the full name or the postal code, case-insensitive, and country must be null or the
+-- expected country (pre-February 2026 events have no country).
+with regions(region, country, pattern) as (
+  values
+    ('British Columbia', 'Canada', '^(british columbia|bc)$'),
+    ('Illinois', 'United States', '^(illinois|il)$'),
+    ('Nevada', 'United States', '^(nevada|nv)$')
+),
+classified as (
+  select t.*, r.region,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  join regions r
+    on t.state ~* r.pattern
+   and coalesce(t.country, t.info_country, r.country) = r.country
+  where t.participant_count >= 16
+),
+scoped as (
+  select region, 'all classes' as scope, 1 as scope_order, tid, name_class from classified
+  union all
+  select region, 'excluding casual', 2, tid, name_class from classified where name_class <> 'casual'
+  union all
+  select region, 'casual only', 3, tid, name_class from classified where name_class = 'casual'
+)
+select
+  s.region,
+  s.scope,
+  count(distinct s.tid) as tournaments,
+  count(e.tid) as rows,
+  count(e.leader) as rows_with_leader,
+  round(100.0 * count(e.leader) / nullif(count(e.tid), 0), 1) as pct_rows_with_leader
+from scoped s
+join entries e on e.tid = s.tid
+group by s.region, s.scope, s.scope_order
+order by s.region, s.scope_order;
