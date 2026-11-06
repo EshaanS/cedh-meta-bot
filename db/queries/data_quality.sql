@@ -165,3 +165,61 @@ cross join bounds b
 left join per_window p3 on p3.region_type = tr.region_type and p3.region = tr.region and p3.months = 3
 left join per_window p6 on p6.region_type = tr.region_type and p6.region = tr.region and p6.months = 6
 order by case tr.region_type when 'country' then 0 else 1 end, rows_with_leader_6m desc, tr.region;
+
+-- name: Lat/lng presence among events that have a country, per month (participant_count >= 16)
+select
+  to_char(t.start_date at time zone 'UTC', 'YYYY-MM') as month,
+  count(*) as events_with_country,
+  count(*) filter (where t.lat is not null and t.lng is not null) as with_lat_lng,
+  round(100.0 * count(*) filter (where t.lat is not null and t.lng is not null) / count(*), 1) as pct_with_lat_lng
+from tournaments t
+where t.participant_count >= 16
+  and coalesce(t.country, t.info_country) is not null
+group by 1
+order by 1;
+
+-- name: Location signals for all events, per month and total (participant_count >= 16)
+-- The first five pct_ columns are exclusive buckets, checked in this order, and sum to ~100 (rounding):
+--   lat_lng: lat and lng present.
+--   us_state_no_lat_lng: no lat/lng; state matches a US state name or USPS code, and country is null or United States.
+--   other_state_no_lat_lng: no lat/lng; any other non-null state.
+--   country_only: no lat/lng, no state, country present.
+--   nothing: no lat/lng, no state, no country. City alone is not counted as a location.
+-- pct_us_state_any: state matches the US map regardless of lat/lng, so it overlaps the buckets.
+-- The map covers the 50 states only (no DC or territories), matched case-insensitively.
+with us_states(code, name) as (
+  values
+    ('AL', 'Alabama'), ('AK', 'Alaska'), ('AZ', 'Arizona'), ('AR', 'Arkansas'), ('CA', 'California'),
+    ('CO', 'Colorado'), ('CT', 'Connecticut'), ('DE', 'Delaware'), ('FL', 'Florida'), ('GA', 'Georgia'),
+    ('HI', 'Hawaii'), ('ID', 'Idaho'), ('IL', 'Illinois'), ('IN', 'Indiana'), ('IA', 'Iowa'),
+    ('KS', 'Kansas'), ('KY', 'Kentucky'), ('LA', 'Louisiana'), ('ME', 'Maine'), ('MD', 'Maryland'),
+    ('MA', 'Massachusetts'), ('MI', 'Michigan'), ('MN', 'Minnesota'), ('MS', 'Mississippi'), ('MO', 'Missouri'),
+    ('MT', 'Montana'), ('NE', 'Nebraska'), ('NV', 'Nevada'), ('NH', 'New Hampshire'), ('NJ', 'New Jersey'),
+    ('NM', 'New Mexico'), ('NY', 'New York'), ('NC', 'North Carolina'), ('ND', 'North Dakota'), ('OH', 'Ohio'),
+    ('OK', 'Oklahoma'), ('OR', 'Oregon'), ('PA', 'Pennsylvania'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'),
+    ('SD', 'South Dakota'), ('TN', 'Tennessee'), ('TX', 'Texas'), ('UT', 'Utah'), ('VT', 'Vermont'),
+    ('VA', 'Virginia'), ('WA', 'Washington'), ('WV', 'West Virginia'), ('WI', 'Wisconsin'), ('WY', 'Wyoming')
+),
+flags as (
+  select
+    to_char(t.start_date at time zone 'UTC', 'YYYY-MM') as month,
+    (t.lat is not null and t.lng is not null) as has_lat_lng,
+    (t.state is not null) as has_state,
+    (coalesce(t.country, t.info_country) is not null) as has_country,
+    (coalesce(t.country, t.info_country, 'United States') = 'United States'
+      and exists (select 1 from us_states s where upper(t.state) = s.code or lower(t.state) = lower(s.name))) as us_state
+  from tournaments t
+  where t.participant_count >= 16
+)
+select
+  coalesce(month, 'total') as month,
+  count(*) as events,
+  round(100.0 * count(*) filter (where has_lat_lng) / count(*), 1) as pct_lat_lng,
+  round(100.0 * count(*) filter (where not has_lat_lng and us_state) / count(*), 1) as pct_us_state_no_lat_lng,
+  round(100.0 * count(*) filter (where not has_lat_lng and has_state and not us_state) / count(*), 1) as pct_other_state_no_lat_lng,
+  round(100.0 * count(*) filter (where not has_lat_lng and not has_state and has_country) / count(*), 1) as pct_country_only,
+  round(100.0 * count(*) filter (where not has_lat_lng and not has_state and not has_country) / count(*), 1) as pct_nothing,
+  round(100.0 * count(*) filter (where us_state) / count(*), 1) as pct_us_state_any
+from flags
+group by grouping sets ((month), ())
+order by grouping(month), 1;
