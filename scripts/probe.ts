@@ -2,6 +2,7 @@
 // Reads one calendar month of EDH tournaments and prints aggregates as markdown to stdout.
 // No database access. Never prints player-identifying values.
 // Data provided by TopDeck.gg — https://topdeck.gg
+import { exitWithError } from "./lib/errors.js";
 
 const BASE = "https://topdeck.gg/api";
 const COLUMNS = ["wins", "draws", "losses", "winsSwiss", "winsBracket", "lossesSwiss", "lossesBracket", "byes"];
@@ -416,7 +417,4 @@ async function main() {
   log("Done.");
 }
 
-main().catch((err: unknown) => {
-  log(`probe failed: ${err instanceof Error ? err.message : String(err)}`);
-  process.exit(1);
-});
+main().catch((err: unknown) => exitWithError("probe", err));

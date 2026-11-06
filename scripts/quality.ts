@@ -2,10 +2,11 @@
 // The file is split at "-- name: <title>" comment lines; each block is one query.
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { connect } from "./lib/db.js";
+import { exitWithError } from "./lib/errors.js";
 
-const FILE = join(import.meta.dirname, "..", "db", "queries", "data_quality.sql");
+const FILE = fileURLToPath(new URL("../db/queries/data_quality.sql", import.meta.url));
 
 /** Splits the SQL file into titled queries. Handles CRLF line endings. */
 function splitQueries(source: string): { title: string; query: string }[] {
@@ -52,7 +53,4 @@ async function main() {
   }
 }
 
-main().catch((err: unknown) => {
-  process.stderr.write(`quality failed: ${err instanceof Error ? err.message : String(err)}\n`);
-  process.exit(1);
-});
+main().catch((err: unknown) => exitWithError("quality", err));

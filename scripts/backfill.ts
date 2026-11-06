@@ -8,6 +8,7 @@
 import { parseArgs } from "node:util";
 import { connect, type Sql } from "./lib/db.js";
 import { fetchBulkEdh, fullMonthWindows, isObj, log, num, sleep, text, type MonthWindow, type Obj } from "./lib/topdeck.js";
+import { exitWithError } from "./lib/errors.js";
 
 const DAY_MS = 86_400_000;
 const LOG_MIN_AGE_DAYS = 14;
@@ -251,7 +252,4 @@ async function main() {
   }
 }
 
-main().catch((err: unknown) => {
-  process.stderr.write(`backfill failed: ${err instanceof Error ? err.message : String(err)}\n`);
-  process.exit(1);
-});
+main().catch((err: unknown) => exitWithError("backfill", err));

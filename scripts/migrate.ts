@@ -3,9 +3,11 @@
 // Rerunning is a no-op.
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { connect } from "./lib/db.js";
+import { exitWithError } from "./lib/errors.js";
 
-const DIR = join(import.meta.dirname, "..", "db", "migrations");
+const DIR = fileURLToPath(new URL("../db/migrations/", import.meta.url));
 const NAME = /^\d{3}_[\w-]+\.sql$/;
 
 async function main() {
@@ -35,7 +37,4 @@ async function main() {
   }
 }
 
-main().catch((err: unknown) => {
-  process.stderr.write(`migrate failed: ${err instanceof Error ? err.message : String(err)}\n`);
-  process.exit(1);
-});
+main().catch((err: unknown) => exitWithError("migrate", err));

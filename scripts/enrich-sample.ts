@@ -5,6 +5,7 @@
 import { parseArgs } from "node:util";
 import { connect } from "./lib/db.js";
 import { fetchInfo, isObj, log, sleep, text } from "./lib/topdeck.js";
+import { exitWithError } from "./lib/errors.js";
 
 const INFO_PAUSE_MS = 1000;
 const OUTCOMES = ["country found", "location without country", "location null or absent", "request error"] as const;
@@ -100,7 +101,4 @@ async function main() {
   }
 }
 
-main().catch((err: unknown) => {
-  process.stderr.write(`enrich-sample failed: ${err instanceof Error ? err.message : String(err)}\n`);
-  process.exit(1);
-});
+main().catch((err: unknown) => exitWithError("enrich-sample", err));
