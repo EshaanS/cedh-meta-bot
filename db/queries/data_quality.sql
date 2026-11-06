@@ -323,3 +323,247 @@ from scoped s
 join entries e on e.tid = s.tid
 group by s.region, s.scope, s.scope_order
 order by s.region, s.scope_order;
+
+-- Per-event leader coverage = entries with a leader / all entries in the event. The next five
+-- queries share the name classification above and these buckets: 0%, 1-24% (above 0, below 25),
+-- 25-49%, 50-74%, 75-99% (75 or more, below 100), 100%.
+
+-- name: Per-event leader coverage histogram by name class, event counts (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+),
+bucketed as (
+  select p.*,
+    case
+      when p.leader_rows = 0 then '0%'
+      when p.leader_rows = p.rows then '100%'
+      when p.coverage < 0.25 then '1-24%'
+      when p.coverage < 0.50 then '25-49%'
+      when p.coverage < 0.75 then '50-74%'
+      else '75-99%'
+    end as bucket
+  from per_event p
+),
+buckets(bucket, ord) as (
+  values ('0%', 1), ('1-24%', 2), ('25-49%', 3), ('50-74%', 4), ('75-99%', 5), ('100%', 6)
+)
+select
+  b.bucket,
+  count(x.tid) filter (where x.name_class = 'cedh') as cedh,
+  count(x.tid) filter (where x.name_class = 'casual') as casual,
+  count(x.tid) filter (where x.name_class = 'unlabeled') as unlabeled
+from buckets b
+left join bucketed x on x.bucket = b.bucket
+group by b.bucket, b.ord
+order by b.ord;
+
+-- name: Unlabeled events: per-event leader coverage histogram (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+),
+bucketed as (
+  select p.*,
+    case
+      when p.leader_rows = 0 then '0%'
+      when p.leader_rows = p.rows then '100%'
+      when p.coverage < 0.25 then '1-24%'
+      when p.coverage < 0.50 then '25-49%'
+      when p.coverage < 0.75 then '50-74%'
+      else '75-99%'
+    end as bucket
+  from per_event p
+),
+buckets(bucket, ord) as (
+  values ('0%', 1), ('1-24%', 2), ('25-49%', 3), ('50-74%', 4), ('75-99%', 5), ('100%', 6)
+)
+select
+  b.bucket,
+  count(x.tid) as events,
+  round(100.0 * count(x.tid) / nullif(sum(count(x.tid)) over (), 0), 1) as pct_events,
+  coalesce(sum(x.rows), 0) as rows
+from buckets b
+left join bucketed x on x.bucket = b.bucket and x.name_class = 'unlabeled'
+group by b.bucket, b.ord
+order by b.ord;
+
+-- name: Unlabeled events: 15 most common normalized names at 0% and at 75%+ leader coverage (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+),
+bucketed as (
+  select p.*,
+    case
+      when p.leader_rows = 0 then '0%'
+      when p.leader_rows = p.rows then '100%'
+      when p.coverage < 0.25 then '1-24%'
+      when p.coverage < 0.50 then '25-49%'
+      when p.coverage < 0.75 then '50-74%'
+      else '75-99%'
+    end as bucket
+  from per_event p
+),
+buckets(bucket, ord) as (
+  values ('0%', 1), ('1-24%', 2), ('25-49%', 3), ('50-74%', 4), ('75-99%', 5), ('100%', 6)
+),
+grouped as (
+  select
+    case when bucket = '0%' then '0%' else '75%+' end as coverage_group,
+    normalized_name,
+    count(*) as events,
+    sum(rows) as rows
+  from bucketed
+  where name_class = 'unlabeled' and bucket in ('0%', '75-99%', '100%')
+  group by 1, 2
+)
+select coverage_group, normalized_name, events, rows
+from (
+  select g.*, row_number() over (partition by coverage_group order by events desc, rows desc, normalized_name) as rn
+  from grouped g
+) ranked
+where rn <= 15
+order by coverage_group, rn;
+
+-- name: cedh-class events excluded by a "leader coverage >= 50%" rule (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+),
+bucketed as (
+  select p.*,
+    case
+      when p.leader_rows = 0 then '0%'
+      when p.leader_rows = p.rows then '100%'
+      when p.coverage < 0.25 then '1-24%'
+      when p.coverage < 0.50 then '25-49%'
+      when p.coverage < 0.75 then '50-74%'
+      else '75-99%'
+    end as bucket
+  from per_event p
+),
+buckets(bucket, ord) as (
+  values ('0%', 1), ('1-24%', 2), ('25-49%', 3), ('50-74%', 4), ('75-99%', 5), ('100%', 6)
+)
+select
+  count(*) as cedh_events,
+  count(*) filter (where coverage < 0.5) as excluded_events,
+  round(100.0 * count(*) filter (where coverage < 0.5) / nullif(count(*), 0), 1) as pct_events_excluded,
+  coalesce(sum(rows) filter (where coverage < 0.5), 0) as excluded_rows,
+  coalesce(sum(leader_rows) filter (where coverage < 0.5), 0) as excluded_rows_with_leader,
+  round(100.0 * coalesce(sum(leader_rows) filter (where coverage < 0.5), 0) / nullif(sum(leader_rows), 0), 1) as pct_of_cedh_rows_with_leader
+from per_event
+where name_class = 'cedh';
+
+-- name: 10 most common normalized names among cedh-class events below 50% leader coverage (participant_count >= 16)
+with classified as (
+  select t.tid,
+    btrim(regexp_replace(regexp_replace(lower(coalesce(t.name, '')), '[0-9]+', '', 'g'), '\s+', ' ', 'g')) as normalized_name,
+    case
+      when coalesce(t.name, '') ~* '\ytest\y' then 'test'
+      when coalesce(t.name, '') ~* 'cedh|c-edh|competitive' then 'cedh'
+      when coalesce(t.name, '') ~* 'casual|fnm|bracket ?[1-4]|precon|budget' then 'casual'
+      else 'unlabeled'
+    end as name_class
+  from tournaments t
+  where t.participant_count >= 16
+),
+per_event as (
+  select c.tid, c.normalized_name, c.name_class,
+    count(*) as rows,
+    count(e.leader) as leader_rows,
+    count(e.leader)::numeric / count(*) as coverage
+  from classified c
+  join entries e on e.tid = c.tid
+  group by c.tid, c.normalized_name, c.name_class
+),
+bucketed as (
+  select p.*,
+    case
+      when p.leader_rows = 0 then '0%'
+      when p.leader_rows = p.rows then '100%'
+      when p.coverage < 0.25 then '1-24%'
+      when p.coverage < 0.50 then '25-49%'
+      when p.coverage < 0.75 then '50-74%'
+      else '75-99%'
+    end as bucket
+  from per_event p
+),
+buckets(bucket, ord) as (
+  values ('0%', 1), ('1-24%', 2), ('25-49%', 3), ('50-74%', 4), ('75-99%', 5), ('100%', 6)
+)
+select normalized_name, count(*) as events, sum(rows) as rows, sum(leader_rows) as rows_with_leader
+from per_event
+where name_class = 'cedh' and coverage < 0.5
+group by normalized_name
+order by events desc, rows desc, normalized_name
+limit 10;
