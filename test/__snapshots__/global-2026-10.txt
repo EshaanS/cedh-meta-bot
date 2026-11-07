@@ -1,0 +1,24 @@
+Global — cEDH meta, October 2026
+1971 qualifying events (6 months) · 69% of entries with decklists
+
+Winners — October (32+ players)
+• 150p · MBG Commanderpalooza #3 (TimeTwister event) · Kraum / Tymna the Weaver
+• 119p · BAKED ZITI 4: Goldsabertooth’s NY cEDH · Dack Fayden, Helping Hand
+• 105p · 1st annual 1stCKMA cEDH Tournament 100% PROXY FRI… · Kinnan, Bonder Prodigy
++85 more
+
+Most played (6 months)
+1. Kraum / Tymna the Weaver — 7.7%
+2. Kinnan, Bonder Prodigy — 7.5%
+3. Rograkh / Thrasios — 5.5%
+
+Best results (adjusted PPG, 30+ entries)
+1. Dack Fayden, Helping Hand — 1.62 (n = 97)
+2. Shang-Chi, Master of Kung Fu — 1.47 (n = 119)
+3. Scion of the Ur-Dragon — 1.46 (n = 300)
+
+Rising (share vs prior 3 months)
+Jace, Multiverse Architect — new
+Geist of Saint Thalia — new
+
+Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)
