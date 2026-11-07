@@ -12,14 +12,19 @@
     "migrate": "tsx --env-file-if-exists=.env scripts/migrate.ts",
     "backfill": "tsx --env-file-if-exists=.env scripts/backfill.ts",
     "enrich-sample": "tsx --env-file-if-exists=.env scripts/enrich-sample.ts",
-    "quality": "tsx --env-file-if-exists=.env scripts/quality.ts"
+    "quality": "tsx --env-file-if-exists=.env scripts/quality.ts",
+    "geocode": "tsx --env-file-if-exists=.env scripts/geocode.ts",
+    "classify": "tsx --env-file-if-exists=.env scripts/classify.ts",
+    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run geocode"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
+    "@types/which-polygon": "^2.2.5",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "postgres": "^3.4.9"
+    "postgres": "^3.4.9",
+    "which-polygon": "^2.2.1"
   }
 }

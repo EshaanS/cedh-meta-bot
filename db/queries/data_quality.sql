@@ -674,3 +674,59 @@ where name_class = 'unlabeled' and leader_rows > 0 and coverage < 0.75
 group by normalized_name
 order by events desc, rows desc, normalized_name
 limit 20;
+
+-- name: Geocoding coverage (participant_count >= 16)
+-- geocoded = a country was resolved from lat/lng (exact polygon hit or nearby search).
+select
+  count(*) as events,
+  count(*) filter (where lat is not null and lng is not null) as with_lat_lng,
+  count(*) filter (where geo_source = 'exact') as exact,
+  count(*) filter (where geo_source = 'nearby') as nearby,
+  count(*) filter (where geo_source = 'unmatched') as unmatched,
+  count(*) filter (where lat is not null and lng is not null and geo_checked_at is null) as not_yet_geocoded,
+  count(*) filter (where lat is null or lng is null) as no_lat_lng,
+  round(100.0 * count(*) filter (where geo_country_code is not null) / nullif(count(*), 0), 1) as pct_geocoded
+from tournaments
+where participant_count >= 16;
+
+-- name: Events and qualifying entries per region, last 6 complete months
+-- Window: the 6 months ending at the latest month with data before the current UTC month.
+-- A tournament is in a region if a region_members row matches its geocoded country and, when set, its
+-- admin-1 code or admin-1 group code. The global region matches every tournament, geocoded or not.
+-- Qualifying = qualifying_entries view (16+ players, event_class cedh or unlabeled_competitive).
+with bounds as (
+  select date_trunc('month', max(start_date at time zone 'UTC')) as last_month
+  from tournaments
+  where start_date < date_trunc('month', now() at time zone 'UTC') at time zone 'UTC'
+),
+window_tournaments as (
+  select t.*
+  from tournaments t, bounds b
+  where date_trunc('month', t.start_date at time zone 'UTC') between b.last_month - interval '5 months' and b.last_month
+),
+region_tournaments as (
+  select r.id as region_id, t.tid, t.participant_count, t.event_class
+  from regions r
+  join window_tournaments t
+    on r.type = 'global'
+    or exists (
+      select 1 from region_members m
+      where m.region_id = r.id
+        and m.country_code = t.geo_country_code
+        and (m.admin1_code is null or m.admin1_code = t.geo_admin1_code)
+        and (m.admin1_group_code is null or m.admin1_group_code = t.geo_admin1_group_code)
+    )
+)
+select
+  r.id as region,
+  r.type,
+  (select to_char(last_month - interval '5 months', 'YYYY-MM') || '..' || to_char(last_month, 'YYYY-MM') from bounds) as months,
+  count(distinct rt.tid) filter (where rt.participant_count >= 16) as events_16plus,
+  count(distinct rt.tid) filter (where rt.participant_count >= 16 and rt.event_class in ('cedh', 'unlabeled_competitive')) as qualifying_events,
+  count(q.tid) as qualifying_entries,
+  count(q.leader) as qualifying_entries_with_leader
+from regions r
+left join region_tournaments rt on rt.region_id = r.id
+left join qualifying_entries q on q.tid = rt.tid
+group by r.id, r.type
+order by case r.type when 'global' then 0 when 'macro' then 1 else 2 end, qualifying_entries desc;

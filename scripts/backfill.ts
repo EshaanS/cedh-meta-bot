@@ -161,6 +161,16 @@ async function ingestWindow(sql: Sql, w: MonthWindow, shouldLog: boolean): Promi
           city = excluded.city,
           state = excluded.state,
           country = excluded.country,
+          -- A moved venue must be geocoded again: clear the geo fields when lat/lng change.
+          -- (Right-hand sides here read the row as it was before this update.)
+          geo_country_code      = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_country_code end,
+          geo_country_name      = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_country_name end,
+          geo_admin1_code       = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_admin1_code end,
+          geo_admin1_name       = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_admin1_name end,
+          geo_admin1_group_code = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_admin1_group_code end,
+          geo_admin1_group_name = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_admin1_group_name end,
+          geo_source            = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_source end,
+          geo_checked_at        = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_checked_at end,
           ingested_at = now()`;
     }
     for (const chunk of chunks(entries, ENTRY_CHUNK)) {
