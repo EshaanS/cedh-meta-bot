@@ -4,7 +4,7 @@ Discord bot that posts weekly or monthly cEDH meta reports, filtered to a region
 
 ## Current milestone
 
-Milestone 3: region catalog, reportability, and v1 stat queries. Milestones 1 (ingestion, data quality) and 2 (classification, geocoding, regions) are done. Do not write Discord code, scaffold Next.js, or compute meta stats until explicitly told.
+Milestone 4: monthly post composer (no Discord HTTP yet). Milestones 1 (ingestion, data quality), 2 (classification, geocoding, regions) and 3 (region catalog, reportability, stat functions) are done. Do not write Discord code, scaffold Next.js, or compute meta stats until explicitly told.
 
 ## Pipeline
 
@@ -14,6 +14,7 @@ Milestone 3: region catalog, reportability, and v1 stat queries. Milestones 1 (i
 - Stats read from the `qualifying_entries` view (16+ players, `event_class` in cedh or unlabeled_competitive).
 - `regions` adds every country, admin-1 group and admin-1 unit with a qualifying event in the last 12 months (ids like `us`, `es-cataluna`, `us-wa`). It never deletes regions or changes seeded ones. Fallback parents: admin-1 -> group -> country -> macro -> global.
 - Stats are SQL functions taking `(region_id, end_month)`: `region_reportability`, `resolve_region`, `stat_meta_share`, `stat_ppg`, `stat_conversion`, `stat_growth`, `stat_notable_results`, `stat_coverage`. `npm run report -- --region <id> --month YYYY-MM` prints them for review.
+- `scripts/lib/post.ts` composes the monthly post: `loadPostData` reads the stat functions, `composePost` (pure) returns a Discord embed and a text preview. Display thresholds and caps are in `POST_CONFIG`; posts stay under a 1,000-character content budget and Discord's embed limits, and organizer text (event names, locations) is sanitized. `npm run preview -- --region <id> --month YYYY-MM` prints a post; `npm test` runs the composer tests on fixtures in `test/fixtures` (no database).
 
 ## Stack
 
