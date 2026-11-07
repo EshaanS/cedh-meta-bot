@@ -67,8 +67,19 @@ Milestone 2: data model for event classification and regions. Milestone 1 (inges
 ## Stat definitions
 
 - Stat definitions follow https://cedhstats.org/about. Any deviation must be listed below with its reason.
-- Deviation list: not filled in yet. In November 2026 Claude Code was blocked from fetching the page in a cloud session, so the comparison has not been made. Until it is, treat these choices of ours as pending comparison, not as confirmed deviations:
-  - qualifying events need 16+ players;
-  - qualifying events are `event_class` cedh or unlabeled_competitive (name labels plus series leader coverage >= 25%);
-  - regions come from reverse-geocoded lat/lng, and events without lat/lng only count toward the global region;
-  - partner pairs ("A / B") are not yet validated against pair-commander rules.
+- Comparison source: the user's reading of cedhstats.org/about, given to Claude Code on 2026-11-07 (Claude Code could not fetch the page from the cloud session).
+
+### Same as cedhstats
+- Points per game: PPG = (5W + 1D) / (W + L + D).
+- Neutral baseline: 1.25 - 0.25 x draw rate (a random seat in a 4-player pod).
+- Shrinkage: adj = (n x PPG + 20 x 1.25) / (n + 20), with n = games played (W + L + D). Note: the prior is the fixed 1.25, not the draw-adjusted baseline, so in high-draw fields shrunk scores sit slightly above neutral.
+- Deck stats only for commanders with at least 0.2% meta share.
+- Entries with an unknown commander (no `leader`) are excluded from commander stats.
+
+### Deviations, each with its reason
+1. Event filter. cedhstats includes all 16+ events; we also exclude `event_class` casual, unlabeled_casual and test. Reason: casual and bracket nights are ~14% of 16+ events (user's 12-month run) and would otherwise appear in winners and highlights. Counting unlabeled_casual and test too, the filter removed 38.8% of 16+ events in local May–October 2026 data.
+2. Region. cedhstats uses normalized location strings; we reverse-geocode lat/lng with Natural Earth admin-1. Reason: every located event has coordinates, while the strings are inconsistent (Cataluña/Catalunya/Catalonia, CA/California).
+3. Top-cut membership. cedhstats uses standing <= top_cut; we use bracket games played (wins_bracket + losses_bracket > 0). Reason: the bulk endpoint has no standing field, and array order is not verified as rank. Known gap: a player whose top-cut pod drew counts as not top cut.
+4. Partner validation. cedhstats excludes invalid partner pairs using Scryfall `oracletag:pair-commander`; ours is pending (TODO in the `qualifying_entries` view). Fetching Scryfall would need its own exception to the data-source rule.
+5. Not implemented: player rating, entry points, Deck of the Month, Rising Star, Floor/Veterans/Ceiling, and all pod and seat stats. Reason: they need player identity (pending TopDeck's answer on its terms) and/or round data, which we don't ingest.
+6. Recency. cedhstats refreshes the previous month during the first week of the new month; we re-fetch every month that ended less than 14 days ago on each run.
