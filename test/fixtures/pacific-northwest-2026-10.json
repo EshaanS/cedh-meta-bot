@@ -472,132 +472,154 @@
     {
       "commander": "Shang-Chi, Master of Kung Fu",
       "lastMonthEntries": 5,
+      "prior3AvgEntries": 1,
       "shareGrowth": 2.9074960127591707,
       "isNew": false
     },
     {
       "commander": "Chatterfang, Squirrel General",
       "lastMonthEntries": 5,
+      "prior3AvgEntries": 2,
       "shareGrowth": 0.9537480063795853,
       "isNew": false
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
       "lastMonthEntries": 21,
+      "prior3AvgEntries": 9.333333333333334,
       "shareGrowth": 0.7583732057416268,
       "isNew": false
     },
     {
       "commander": "Vivi Ornitier",
       "lastMonthEntries": 9,
+      "prior3AvgEntries": 4.333333333333333,
       "shareGrowth": 0.6231137283768864,
       "isNew": false
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
       "lastMonthEntries": 13,
+      "prior3AvgEntries": 7.333333333333333,
       "shareGrowth": 0.38538494997825157,
       "isNew": false
     },
     {
       "commander": "Winota, Joiner of Forces",
       "lastMonthEntries": 9,
+      "prior3AvgEntries": 5.333333333333333,
       "shareGrowth": 0.31877990430622005,
       "isNew": false
     },
     {
       "commander": "Sisay, Weatherlight Captain",
       "lastMonthEntries": 21,
+      "prior3AvgEntries": 13,
       "shareGrowth": 0.26242178873757815,
       "isNew": false
     },
     {
       "commander": "Thrasios, Triton Hero / Tymna the Weaver",
       "lastMonthEntries": 16,
+      "prior3AvgEntries": 10.333333333333334,
       "shareGrowth": 0.21006328137058183,
       "isNew": false
     },
     {
       "commander": "Tivit, Seller of Secrets",
       "lastMonthEntries": 7,
+      "prior3AvgEntries": 4.666666666666667,
       "shareGrowth": 0.1722488038277512,
       "isNew": false
     },
     {
       "commander": "Ral, Monsoon Mage",
       "lastMonthEntries": 10,
+      "prior3AvgEntries": 7.666666666666667,
       "shareGrowth": 0.019346785937174982,
       "isNew": false
     },
     {
       "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
       "lastMonthEntries": 9,
+      "prior3AvgEntries": 7,
       "shareGrowth": 0.004784688995215447,
       "isNew": false
     },
     {
       "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
       "lastMonthEntries": 27,
+      "prior3AvgEntries": 22.333333333333332,
       "shareGrowth": -0.0552024566164393,
       "isNew": false
     },
     {
       "commander": "Kefka, Court Mage",
       "lastMonthEntries": 7,
+      "prior3AvgEntries": 6,
       "shareGrowth": -0.08825093035619358,
       "isNew": false
     },
     {
       "commander": "Kinnan, Bonder Prodigy",
       "lastMonthEntries": 25,
+      "prior3AvgEntries": 21.666666666666668,
       "shareGrowth": -0.09827015090172986,
       "isNew": false
     },
     {
       "commander": "Scion of the Ur-Dragon",
       "lastMonthEntries": 5,
+      "prior3AvgEntries": 4.333333333333333,
       "shareGrowth": -0.09827015090172986,
       "isNew": false
     },
     {
       "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
       "lastMonthEntries": 8,
+      "prior3AvgEntries": 7,
       "shareGrowth": -0.10685805422647532,
       "isNew": false
     },
     {
       "commander": "Magda, Brazen Outlaw",
       "lastMonthEntries": 12,
+      "prior3AvgEntries": 10.666666666666666,
       "shareGrowth": -0.1208133971291867,
       "isNew": false
     },
     {
       "commander": "Tayam, Luminous Enigma",
       "lastMonthEntries": 9,
+      "prior3AvgEntries": 8.333333333333334,
       "shareGrowth": -0.1559808612440191,
       "isNew": false
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
       "lastMonthEntries": 22,
+      "prior3AvgEntries": 21,
       "shareGrowth": -0.18128654970760227,
       "isNew": false
     },
     {
       "commander": "Etali, Primal Conqueror",
       "lastMonthEntries": 8,
+      "prior3AvgEntries": 9.333333333333334,
       "shareGrowth": -0.3301435406698565,
       "isNew": false
     },
     {
       "commander": "Crystal, Inhuman Princess",
       "lastMonthEntries": 5,
+      "prior3AvgEntries": 6.666666666666667,
       "shareGrowth": -0.4138755980861244,
       "isNew": false
     },
     {
       "commander": "Vraska, Soul of Stone",
       "lastMonthEntries": 5,
+      "prior3AvgEntries": 0,
       "shareGrowth": null,
       "isNew": true
     }

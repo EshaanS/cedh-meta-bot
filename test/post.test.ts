@@ -9,6 +9,7 @@ import {
   contentLength,
   DISCORD_LIMITS,
   discordLimitViolations,
+  monthlyAvg,
   POST_CONFIG,
   sanitizeOrganizerText,
   shortenCommander,
@@ -127,4 +128,25 @@ test("non-reportable region shows the coverage note and no commander sections", 
   const { embed } = composePost(data);
   assert.match(embed.description, /Not enough decklists yet for commander stats\./);
   assert.deepEqual(embed.fields.map((f) => f.name.split(" ")[0]), ["Winners", "Sources"]);
+});
+
+test("monthlyAvg rounds to whole numbers and shows <1 below 1", () => {
+  assert.equal(monthlyAvg(0), "<1");
+  assert.equal(monthlyAvg(0.67), "<1");
+  assert.equal(monthlyAvg(1), "1");
+  assert.equal(monthlyAvg(2.5), "3");
+  assert.equal(monthlyAvg(7.33), "7");
+});
+
+test("rising lines show entry counts: growing and new decks", () => {
+  const data = loadFixture("pacific-northwest-2026-10");
+  data.growth = [
+    { commander: "Kinnan, Bonder Prodigy", lastMonthEntries: 12, prior3AvgEntries: 0.33, shareGrowth: 0.5, isNew: false },
+    { commander: "Jace, Multiverse Architect", lastMonthEntries: 11, prior3AvgEntries: 0, shareGrowth: null, isNew: true },
+  ];
+  const rising = composePost(data).embed.fields.find((f) => f.name.startsWith("Rising"))!.value.split("\n");
+  assert.deepEqual(rising, [
+    "Jace, Multiverse Architect — 11 entries in October, new",
+    "Kinnan, Bonder Prodigy — 12 entries in October (avg <1/month)",
+  ]);
 });

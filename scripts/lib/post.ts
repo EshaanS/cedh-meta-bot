@@ -26,7 +26,7 @@ export type PostData = {
   results: { eventName: string | null; participantCount: number; location: string | null; result: string; resultCommanders: string | null }[];
   metaShare: { commander: string; entries: number; metaShare: number }[];
   ppg: { commander: string; entries: number; ppg: number; shrunkPpg: number }[];
-  growth: { commander: string; lastMonthEntries: number; shareGrowth: number | null; isNew: boolean }[];
+  growth: { commander: string; lastMonthEntries: number; prior3AvgEntries: number; shareGrowth: number | null; isNew: boolean }[];
 };
 
 export type EmbedField = { name: string; value: string; inline?: boolean };
@@ -61,6 +61,8 @@ export function shortenCommander(name: string): string {
 }
 
 const pct = (x: number, digits = 1) => `${(100 * x).toFixed(digits)}%`;
+/** Prior-3-month average entries: nearest whole number, or "<1" below 1. */
+export const monthlyAvg = (avg: number) => (avg < 1 ? "<1" : String(Math.round(avg)));
 const monthLabel = (month: string) => {
   const [y, m] = month.split("-");
   return `${MONTHS[Number(m) - 1]} ${y}`;
@@ -125,8 +127,12 @@ function buildSections(data: PostData, c: PostConfig, caps: { winners: number; m
     .slice(0, caps.rising);
   if (rising.length) {
     sections.push({
-      name: "Rising (share vs prior 3 months)",
-      lines: rising.map((g) => `${shortenCommander(g.commander)} — ${g.isNew ? "new" : `+${(100 * g.shareGrowth!).toFixed(0)}% share`}`),
+      name: "Rising (by share growth vs prior 3 months)",
+      lines: rising.map((g) =>
+        g.isNew
+          ? `${shortenCommander(g.commander)} — ${g.lastMonthEntries} entries in ${mon}, new`
+          : `${shortenCommander(g.commander)} — ${g.lastMonthEntries} entries in ${mon} (avg ${monthlyAvg(g.prior3AvgEntries)}/month)`,
+      ),
     });
   }
   return sections;
@@ -204,8 +210,8 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select commander, entries, meta_share from stat_meta_share(${r}, ${end}::date) limit 20`;
   const ppg = await sql<{ commander: string; entries: string; ppg: number; shrunk_ppg: number }[]>`
     select commander, entries, ppg, shrunk_ppg from stat_ppg(${r}, ${end}::date)`;
-  const growth = await sql<{ commander: string; last_month_entries: string; share_growth: number | null; is_new: boolean }[]>`
-    select commander, last_month_entries, share_growth, is_new from stat_growth(${r}, ${end}::date)`;
+  const growth = await sql<{ commander: string; last_month_entries: string; prior3_avg_entries: number; share_growth: number | null; is_new: boolean }[]>`
+    select commander, last_month_entries, prior3_avg_entries, share_growth, is_new from stat_growth(${r}, ${end}::date)`;
 
   return {
     month,
@@ -222,7 +228,8 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     metaShare: meta.map((m) => ({ commander: m.commander, entries: Number(m.entries), metaShare: m.meta_share })),
     ppg: ppg.map((p) => ({ commander: p.commander, entries: Number(p.entries), ppg: p.ppg, shrunkPpg: p.shrunk_ppg })),
     growth: growth.map((g) => ({
-      commander: g.commander, lastMonthEntries: Number(g.last_month_entries), shareGrowth: g.share_growth, isNew: g.is_new,
+      commander: g.commander, lastMonthEntries: Number(g.last_month_entries), prior3AvgEntries: Number(g.prior3_avg_entries),
+      shareGrowth: g.share_growth, isNew: g.is_new,
     })),
   };
 }

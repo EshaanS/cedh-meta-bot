@@ -17,8 +17,8 @@ Best results (adjusted PPG, 30+ entries)
 2. Shang-Chi, Master of Kung Fu — 1.47 (n = 119)
 3. Scion of the Ur-Dragon — 1.46 (n = 300)
 
-Rising (share vs prior 3 months)
-Jace, Multiverse Architect — new
-Geist of Saint Thalia — new
+Rising (by share growth vs prior 3 months)
+Jace, Multiverse Architect — 19 entries in October, new
+Geist of Saint Thalia — 14 entries in October, new
 
 Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)
