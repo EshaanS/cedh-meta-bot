@@ -15,7 +15,9 @@
     "quality": "tsx --env-file-if-exists=.env scripts/quality.ts",
     "geocode": "tsx --env-file-if-exists=.env scripts/geocode.ts",
     "classify": "tsx --env-file-if-exists=.env scripts/classify.ts",
-    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run geocode"
+    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run geocode && npm run regions",
+    "regions": "tsx --env-file-if-exists=.env scripts/regions.ts",
+    "report": "tsx --env-file-if-exists=.env scripts/report.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
