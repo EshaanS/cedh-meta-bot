@@ -99,9 +99,10 @@ async function main() {
         share_growth: g.is_new ? "new" : signedPct(g.share_growth),
       })));
 
-    const notable = await sql<{ event_name: string | null; participant_count: number; location: string | null; top_cut_commanders: string | null }[]>`
+    const notable = await sql<{ event_name: string | null; participant_count: number; location: string | null; result: string; result_commanders: string | null; top_cut_commanders: string | null }[]>`
       select * from stat_notable_results(${r}, ${month}::date)`;
-    section(`Notable results in ${values.month} (qualifying events with 32+ players)`, ["participant_count", "event_name", "location", "top_cut_commanders"], notable);
+    section(`Notable results in ${values.month} (qualifying events with 32+ players)`, ["participant_count", "event_name", "location", "result", "result_commanders", "top_cut_commanders"], notable,
+      "result: winner = the single top-cut entry with the most bracket wins and no bracket losses; final drawn = 2+ such entries tied.");
   } finally {
     await sql.end();
   }
