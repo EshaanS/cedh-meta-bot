@@ -4,14 +4,16 @@ Discord bot that posts weekly or monthly cEDH meta reports, filtered to a region
 
 ## Current milestone
 
-Milestone 2: data model for event classification and regions. Milestone 1 (ingestion and data-quality tabulation) is done. Do not write Discord code, scaffold Next.js, or compute meta stats until explicitly told.
+Milestone 3: region catalog, reportability, and v1 stat queries. Milestones 1 (ingestion, data quality) and 2 (classification, geocoding, regions) are done. Do not write Discord code, scaffold Next.js, or compute meta stats until explicitly told.
 
 ## Pipeline
 
-- `npm run migrate`, then `npm run refresh` (backfill the last 2 full months, then classify, then geocode; stops on the first failure). Use `npm run backfill -- --months N` for longer history.
+- `npm run migrate`, then `npm run refresh` (backfill the last 2 full months, then classify, geocode, and regions; stops on the first failure). Use `npm run backfill -- --months N` for longer history.
 - `classify` recomputes `event_class`, `series_key` and `leader_coverage` for all tournaments and must run after every backfill: new events change series averages. `series_overrides` wins over the computed class.
 - `geocode` derives country, admin-1 and admin-1 group from lat/lng only; location strings are never used for regions. It needs the boundary file in `data/` (see Hard rules). Backfill clears the geo fields when a tournament's lat/lng change.
 - Stats read from the `qualifying_entries` view (16+ players, `event_class` in cedh or unlabeled_competitive).
+- `regions` adds every country, admin-1 group and admin-1 unit with a qualifying event in the last 12 months (ids like `us`, `es-cataluna`, `us-wa`). It never deletes regions or changes seeded ones. Fallback parents: admin-1 -> group -> country -> macro -> global.
+- Stats are SQL functions taking `(region_id, end_month)`: `region_reportability`, `resolve_region`, `stat_meta_share`, `stat_ppg`, `stat_conversion`, `stat_growth`, `stat_notable_results`, `stat_coverage`. `npm run report -- --region <id> --month YYYY-MM` prints them for review.
 
 ## Stack
 
