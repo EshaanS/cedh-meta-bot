@@ -4,7 +4,7 @@ Discord bot that posts weekly or monthly cEDH meta reports, filtered to a region
 
 ## Current milestone
 
-Milestone 4: monthly post composer (no Discord HTTP yet). Milestones 1 (ingestion, data quality), 2 (classification, geocoding, regions) and 3 (region catalog, reportability, stat functions) are done. Do not write Discord code, scaffold Next.js, or compute meta stats until explicitly told.
+Milestone 5: the Discord app on Vercel, gated to one private test server. Milestones 1–4 (ingestion, classification and geocoding, region catalog and stats, post composer) are done. Do not open the bot to other servers (ALLOW_ALL_GUILDS, global command registration) until the user approves.
 
 ## Pipeline
 
@@ -15,13 +15,18 @@ Milestone 4: monthly post composer (no Discord HTTP yet). Milestones 1 (ingestio
 - `regions` adds every country, admin-1 group and admin-1 unit with a qualifying event in the last 12 months (ids like `us`, `es-cataluna`, `us-wa`). It never deletes regions or changes seeded ones. Fallback parents: admin-1 -> group -> country -> macro -> global.
 - Stats are SQL functions taking `(region_id, end_month)`: `region_reportability`, `resolve_region`, `stat_meta_share`, `stat_ppg`, `stat_conversion`, `stat_growth`, `stat_notable_results`, `stat_coverage`. `npm run report -- --region <id> --month YYYY-MM` prints them for review.
 - `scripts/lib/post.ts` composes the monthly post: `loadPostData` reads the stat functions, `composePost` (pure) returns a Discord embed and a text preview. Display thresholds and caps are in `POST_CONFIG`; posts stay under a 1,000-character content budget and Discord's embed limits, and organizer text (event names, locations) is sanitized. `npm run preview -- --region <id> --month YYYY-MM` prints a post; `npm test` runs the composer tests on fixtures in `test/fixtures` (no database).
+- Discord app: `guild_configs` holds each server's region (default global), channel and last posted month. `regions.selectable` controls what `/region set` offers (every country; groups in ES, IT, GB, FR, PT; admin-1 in US, CA, DE, AU). Commands: `/region set|show`, `/channel set`, `/preview`, admin-only (Manage Server), deferred when they touch the DB. The cron posts the previous month's report on or after the 15th, only when `ingest_log` has that month, claims each guild atomically (at most one post per month), sends every message with `allowed_mentions: { parse: [] }`, and prunes configs for guilds the bot has left (there is no HTTP event for removal).
+- Guild gate: `ALLOWED_GUILD_IDS` (comma-separated) fails closed; only `ALLOW_ALL_GUILDS=true` opens the bot to every server. Register commands with `npm run register-commands -- --guild <id>`; `--global` needs `--confirm-global`. Setup steps: `docs/deploy.md`.
+- Tests: `npm test`. The Postgres-backed tests in `test/discord-db.test.ts` run only when `TEST_DATABASE_URL` is set.
 
 ## Stack
 
 - TypeScript, Node 22.21+, scripts run with tsx
 - Postgres on Supabase, accessed with postgres.js. No ORM, no Prisma, no supabase-js.
 - Migrations are numbered plain SQL files in db/migrations, applied by a small script
-- Later, not now: Vercel, with Next.js route handlers for Discord interactions and a daily cron
+- Next.js 16 (app router, pinned 16.4.3) on Vercel: `app/api/interactions` (signed Discord interactions), `app/api/cron` (daily, `vercel.json`), and an install/privacy page. Server code is in `src/server/`. No discord.js: plain REST over fetch; Ed25519 via Node crypto.
+- Relative imports have no file extension (`./lib/db`): Next's Turbopack does not map `.js` imports to `.ts` files; `tsx` and `moduleResolution: bundler` handle extensionless imports.
+- On Vercel, `DATABASE_URL` is the Supabase transaction pooler (port 6543); `connect()` already sets `prepare: false`.
 
 ## Environments
 
@@ -29,7 +34,7 @@ Milestone 4: monthly post composer (no Discord HTTP yet). Milestones 1 (ingestio
 
 ## Hard rules
 
-- The bot and scripts never access cedhstats.org, topdeck.gg HTML pages, or anything other than the documented TopDeck API. Two exceptions:
+- Data comes only from the documented TopDeck API. The bot also calls the Discord API to answer commands and deliver posts, and uses Supabase as its database. The bot and scripts never access cedhstats.org, topdeck.gg HTML pages, or any other data source. Two exceptions:
   - Claude Code may read https://cedhstats.org/about as documentation for stat definitions. Code never fetches cedhstats.org.
   - The Natural Earth boundary file is downloaded once, by hand, into gitignored `data/`, pinned to tag v5.1.2 and verified by SHA-256 in `scripts/geocode.ts`: `curl -o data/ne_10m_admin_1_states_provinces.geojson https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_1_states_provinces.geojson`. Scripts never download it.
 - Never request or store player names, player IDs, Discord fields, or decklists. Always pass `columns` explicitly. Whitelist fields before any DB write and drop everything else.
