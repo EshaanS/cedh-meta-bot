@@ -145,9 +145,9 @@ async function main() {
           geo_source = u.src,
           geo_checked_at = now()
         from unnest(
-          ${sql.array(col("tid"))}::text[], ${sql.array(col("countryCode"))}::text[], ${sql.array(col("countryName"))}::text[],
-          ${sql.array(col("admin1Code"))}::text[], ${sql.array(col("admin1Name"))}::text[],
-          ${sql.array(col("groupCode"))}::text[], ${sql.array(col("groupName"))}::text[], ${sql.array(col("source"))}::text[]
+          ${sql.array(col("tid"), 1009)}::text[], ${sql.array(col("countryCode"), 1009)}::text[], ${sql.array(col("countryName"), 1009)}::text[],
+          ${sql.array(col("admin1Code"), 1009)}::text[], ${sql.array(col("admin1Name"), 1009)}::text[],
+          ${sql.array(col("groupCode"), 1009)}::text[], ${sql.array(col("groupName"), 1009)}::text[], ${sql.array(col("source"), 1009)}::text[]
         ) as u(tid, cc, cn, a1, a1n, g, gn, src)
         where t.tid = u.tid`;
     }
