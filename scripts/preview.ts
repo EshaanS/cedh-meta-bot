@@ -3,9 +3,9 @@
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
-import { composePost, contentLength, loadPostData, POST_CONFIG } from "./lib/post.js";
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
+import { composePost, contentLength, loadPostData, POST_CONFIG } from "./lib/post";
 
 async function main() {
   const { values } = parseArgs({ options: { region: { type: "string" }, month: { type: "string" }, "save-fixture": { type: "string" } } });

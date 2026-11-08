@@ -2,10 +2,15 @@
 // least one qualifying event in the 12 months ending at the latest month with data before the current
 // UTC month. Idempotent; never deletes regions (server configs may reference them) and never changes
 // hand-seeded rows. Parents: admin-1 -> its group (if any) -> country -> macro (if any) -> global.
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
+// Also sets `selectable` on auto rows (see SELECTABLE_*_COUNTRIES).
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
 
-type RegionRow = { id: string; display_name: string; type: "country" | "admin1_group" | "admin1"; parent_region_id: string };
+type RegionRow = { id: string; display_name: string; type: "country" | "admin1_group" | "admin1"; parent_region_id: string; selectable: boolean };
+
+/** Which auto regions a server may pick in /region set. Every country is selectable. */
+const SELECTABLE_GROUP_COUNTRIES = new Set(["ES", "IT", "GB", "FR", "PT"]);
+const SELECTABLE_ADMIN1_COUNTRIES = new Set(["US", "CA", "DE", "AU"]);
 type MemberRow = { region_id: string; country_code: string; admin1_code: string | null; admin1_group_code: string | null };
 
 const englishRegionNames = new Intl.DisplayNames(["en"], { type: "region" });
@@ -73,21 +78,21 @@ async function main() {
     for (const u of units) {
       const country = u.cc.toLowerCase();
       add(
-        { id: country, display_name: countryDisplayName(u.cc, u.cn), type: "country", parent_region_id: macroOf.get(u.cc) ?? "global" },
+        { id: country, display_name: countryDisplayName(u.cc, u.cn), type: "country", parent_region_id: macroOf.get(u.cc) ?? "global", selectable: true },
         { region_id: country, country_code: u.cc, admin1_code: null, admin1_group_code: null },
       );
     }
     for (const u of units) {
       if (!u.g || !u.gn) continue;
       add(
-        { id: u.g.toLowerCase(), display_name: u.gn, type: "admin1_group", parent_region_id: u.cc.toLowerCase() },
+        { id: u.g.toLowerCase(), display_name: u.gn, type: "admin1_group", parent_region_id: u.cc.toLowerCase(), selectable: SELECTABLE_GROUP_COUNTRIES.has(u.cc) },
         { region_id: u.g.toLowerCase(), country_code: u.cc, admin1_code: null, admin1_group_code: u.g },
       );
     }
     for (const u of units) {
       if (!u.a1 || !u.a1n) continue;
       add(
-        { id: u.a1.toLowerCase(), display_name: u.a1n, type: "admin1", parent_region_id: (u.g ?? u.cc).toLowerCase() },
+        { id: u.a1.toLowerCase(), display_name: u.a1n, type: "admin1", parent_region_id: (u.g ?? u.cc).toLowerCase(), selectable: SELECTABLE_ADMIN1_COUNTRIES.has(u.cc) },
         { region_id: u.a1.toLowerCase(), country_code: u.cc, admin1_code: u.a1, admin1_group_code: null },
       );
     }
@@ -109,13 +114,15 @@ async function main() {
       for (const type of order) {
         for (const r of [...regions.values()].filter((x) => x.type === type)) {
           const res = await tx`
-            insert into regions (id, display_name, type, parent_region_id, source)
-            values (${r.id}, ${r.display_name}, ${r.type}, ${r.parent_region_id}, 'auto')
+            insert into regions (id, display_name, type, parent_region_id, source, selectable)
+            values (${r.id}, ${r.display_name}, ${r.type}, ${r.parent_region_id}, 'auto', ${r.selectable})
             on conflict (id) do update set
               display_name = excluded.display_name,
-              parent_region_id = excluded.parent_region_id
+              parent_region_id = excluded.parent_region_id,
+              selectable = excluded.selectable
             where regions.source = 'auto'
-              and (regions.display_name, regions.parent_region_id) is distinct from (excluded.display_name, excluded.parent_region_id)
+              and (regions.display_name, regions.parent_region_id, regions.selectable)
+                  is distinct from (excluded.display_name, excluded.parent_region_id, excluded.selectable)
             returning (xmax = 0) as inserted`;
           if (res.length > 0) {
             if (res[0]!.inserted) counts.inserted++;

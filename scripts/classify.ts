@@ -6,8 +6,8 @@
 // coverage. Word boundaries use Postgres \y (\b means backspace in Postgres regex).
 // Series coverage is the unweighted mean of event leader coverage over the series' events with 16+ players,
 // falling back to all of its events when it has none.
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
 
 const UNLABELED_COMPETITIVE_MIN_COVERAGE = 0.25;
 

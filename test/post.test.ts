@@ -14,7 +14,7 @@ import {
   sanitizeOrganizerText,
   shortenCommander,
   type PostData,
-} from "../scripts/lib/post.js";
+} from "../scripts/lib/post";
 
 const FIXTURES = ["pacific-northwest-2026-10", "global-2026-10", "si-2026-10"];
 const fixturePath = (name: string) => fileURLToPath(new URL(`./fixtures/${name}.json`, import.meta.url));

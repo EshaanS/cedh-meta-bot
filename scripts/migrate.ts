@@ -4,8 +4,8 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
 
 const DIR = fileURLToPath(new URL("../db/migrations/", import.meta.url));
 const NAME = /^\d{3}_[\w-]+\.sql$/;

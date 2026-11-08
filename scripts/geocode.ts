@@ -8,9 +8,9 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import whichPolygon from "which-polygon";
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
-import { log } from "./lib/topdeck.js";
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
+import { log } from "./lib/topdeck";
 
 const DEFAULT_FILE = fileURLToPath(new URL("../data/ne_10m_admin_1_states_provinces.geojson", import.meta.url));
 const SOURCE_URL =

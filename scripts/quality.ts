@@ -3,9 +3,9 @@
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
-import { connect } from "./lib/db.js";
-import { renderTable } from "./lib/table.js";
-import { exitWithError } from "./lib/errors.js";
+import { connect } from "./lib/db";
+import { renderTable } from "./lib/table";
+import { exitWithError } from "./lib/errors";
 
 const FILE = fileURLToPath(new URL("../db/queries/data_quality.sql", import.meta.url));
 

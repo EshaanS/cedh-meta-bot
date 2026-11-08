@@ -1,0 +1,32 @@
+// Install and privacy page. Permissions: View Channel (1024) + Send Messages (2048) + Embed Links (16384).
+export const dynamic = "force-dynamic";
+
+const PERMISSIONS = 1024 + 2048 + 16384;
+
+export default function Home() {
+  const appId = process.env.DISCORD_APP_ID;
+  const contact = process.env.CONTACT_EMAIL;
+  const installUrl = appId
+    ? `https://discord.com/oauth2/authorize?client_id=${encodeURIComponent(appId)}&scope=bot%20applications.commands&permissions=${PERMISSIONS}`
+    : null;
+  return (
+    <main>
+      <h1>Field Report</h1>
+      <p>A Discord bot that posts a monthly cEDH meta report for the region your server chooses.</p>
+      {installUrl ? <p><a href={installUrl}>Add Field Report to a server</a></p> : <p>Install link unavailable (app not configured).</p>}
+      <p>It asks only for View Channel, Send Messages and Embed Links. Commands are limited to members with Manage Server.</p>
+
+      <h2>Privacy</h2>
+      <p>
+        For each server we store the server ID, the chosen channel ID, the chosen region, and the last month a report was posted.
+        We store nothing about server members. Removing the bot deletes the server&apos;s settings within a day.
+      </p>
+      <p>Tournament data comes from public TopDeck.gg results. We do not store player names, player IDs, or decklists.</p>
+      <p>Contact: {contact ? <a href={`mailto:${contact}`}>{contact}</a> : "not yet published"}</p>
+
+      <p>
+        Data provided by <a href="https://topdeck.gg">TopDeck.gg</a>. Stat methods follow <a href="https://cedhstats.org/about">cedhstats.org</a>.
+      </p>
+    </main>
+  );
+}

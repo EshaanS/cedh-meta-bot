@@ -6,9 +6,9 @@
 // windows are re-fetched on every run. All writes are upserts, so reruns leave row counts unchanged.
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { parseArgs } from "node:util";
-import { connect, type Sql } from "./lib/db.js";
-import { fetchBulkEdh, fullMonthWindows, isObj, log, num, sleep, text, type MonthWindow, type Obj } from "./lib/topdeck.js";
-import { exitWithError } from "./lib/errors.js";
+import { connect, type Sql } from "./lib/db";
+import { fetchBulkEdh, fullMonthWindows, isObj, log, num, sleep, text, type MonthWindow, type Obj } from "./lib/topdeck";
+import { exitWithError } from "./lib/errors";
 
 const DAY_MS = 86_400_000;
 const LOG_MIN_AGE_DAYS = 14;

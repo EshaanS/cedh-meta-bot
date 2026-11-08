@@ -3,9 +3,9 @@
 // Usage: report --region <id> --month YYYY-MM
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { parseArgs } from "node:util";
-import { connect } from "./lib/db.js";
-import { exitWithError } from "./lib/errors.js";
-import { renderTable } from "./lib/table.js";
+import { connect } from "./lib/db";
+import { exitWithError } from "./lib/errors";
+import { renderTable } from "./lib/table";
 
 const pct = (x: number | null, digits = 1) => (x === null ? "" : `${(100 * x).toFixed(digits)}%`);
 const signedPct = (x: number | null) => (x === null ? "" : `${x >= 0 ? "+" : ""}${(100 * x).toFixed(0)}%`);

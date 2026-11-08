@@ -1,7 +1,7 @@
 // Monthly post composer: turns one region and month into a Discord embed object and a plain-text preview.
 // loadPostData reads the database; composePost is pure and works on the saved data (test fixtures use it).
 // No Discord HTTP here. Every post carries "Data provided by TopDeck.gg" with a link (CLAUDE.md hard rule).
-import type { Sql } from "./db.js";
+import type { Sql } from "./db";
 
 export const POST_CONFIG = {
   bestResultsMinEntries: 30,

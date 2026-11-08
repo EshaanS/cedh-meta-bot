@@ -3,9 +3,9 @@
 // Usage: enrich-sample [--limit 50]
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { parseArgs } from "node:util";
-import { connect } from "./lib/db.js";
-import { fetchInfo, isObj, log, sleep, text } from "./lib/topdeck.js";
-import { exitWithError } from "./lib/errors.js";
+import { connect } from "./lib/db";
+import { fetchInfo, isObj, log, sleep, text } from "./lib/topdeck";
+import { exitWithError } from "./lib/errors";
 
 const INFO_PAUSE_MS = 1000;
 const OUTCOMES = ["country found", "location without country", "location null or absent", "request error"] as const;
