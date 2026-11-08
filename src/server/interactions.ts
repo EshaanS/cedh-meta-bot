@@ -15,7 +15,6 @@ const RESPONSE_DEFERRED = 5;
 const RESPONSE_AUTOCOMPLETE = 8;
 const EPHEMERAL = 64;
 
-const ATTRIBUTION = "Data provided by [TopDeck.gg](<https://topdeck.gg>)";
 const REGION_CACHE_MS = 10 * 60 * 1000;
 
 type Option = { name: string; type: number; value?: string | number | boolean; focused?: boolean; options?: Option[] };
@@ -34,8 +33,9 @@ export type InteractionDeps = {
 };
 export type InteractionResult = { response: unknown; background?: () => Promise<void> };
 
-const ephemeral = (content: string) => ({ type: RESPONSE_MESSAGE, data: { content: `${content}\n${ATTRIBUTION}`, flags: EPHEMERAL } });
-const reply = (content: string): MessagePayload => ({ content: `${content}\n${ATTRIBUTION}` });
+// Config replies show no TopDeck data, so they carry no attribution; /preview's embed has the Sources field.
+const ephemeral = (content: string) => ({ type: RESPONSE_MESSAGE, data: { content, flags: EPHEMERAL } });
+const reply = (content: string): MessagePayload => ({ content });
 
 // ---------- region search (autocomplete) ----------
 
@@ -46,21 +46,12 @@ const fold = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCas
 
 async function selectableRegions(sql: Sql, now: number): Promise<RegionChoice[]> {
   if (regionCache && now - regionCache.at < REGION_CACHE_MS) return regionCache.rows;
-  const rows = await sql<{ id: string; display_name: string; type: string; country_name: string | null }[]>`
-    select r.id, r.display_name, r.type, c.display_name as country_name
-    from regions r
-    left join regions c on c.type = 'country' and c.id = split_part(r.id, '-', 1) and r.type in ('admin1', 'admin1_group')
-    where r.selectable`;
-  const label = (r: (typeof rows)[number]) => {
-    if (r.type === "macro") return `${r.display_name} (continent)`;
-    if (r.type === "country") return `${r.display_name} (country)`;
-    if (r.type === "custom") return `${r.display_name} (custom region)`;
-    if (r.country_name) return `${r.display_name}, ${r.country_name}`;
-    return r.display_name;
-  };
+  // region_label never shows the region type; sub-national regions carry their country.
+  const rows = await sql<{ id: string; label: string; display_name: string; type: string }[]>`
+    select id, region_label(id) as label, display_name, type from regions where selectable`;
   regionCache = {
     at: now,
-    rows: rows.map((r) => ({ id: r.id, label: label(r).slice(0, 100), search: fold(`${r.display_name} ${r.id}`), rank: TYPE_RANK[r.type] ?? 9 })),
+    rows: rows.map((r) => ({ id: r.id, label: r.label.slice(0, 100), search: fold(`${r.label} ${r.id}`), rank: TYPE_RANK[r.type] ?? 9 })),
   };
   return regionCache.rows;
 }
@@ -86,14 +77,14 @@ async function regionSet(deps: InteractionDeps, guildId: string, value: unknown)
   const sql = deps.sql();
   const id = String(value ?? "").trim().toLowerCase();
   const [region] = await sql<{ id: string; display_name: string }[]>`
-    select id, display_name from regions where id = ${id} and selectable`;
+    select id, region_label(id) as display_name from regions where id = ${id} and selectable`;
   if (!region) return reply("That isn't a region I can report on. Start typing and pick one from the list.");
   await sql`
     insert into guild_configs (guild_id, region_id) values (${guildId}, ${region.id})
     on conflict (guild_id) do update set region_id = excluded.region_id, updated_at = now()`;
   const month = previousMonth(deps.now());
   const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
-    select rr.steps_up, r.display_name from resolve_region(${region.id}, ${monthStart(month)}::date) rr join regions r on r.id = rr.region_id`;
+    select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${region.id}, ${monthStart(month)}::date) rr`;
   const lines = [`Region set to ${region.display_name}.`];
   if (resolved && resolved.steps_up > 0) {
     lines.push(`There isn't enough data for ${region.display_name} yet, so reports will show ${resolved.display_name} until there is.`);
@@ -105,12 +96,12 @@ async function regionShow(deps: InteractionDeps, guildId: string): Promise<Messa
   const sql = deps.sql();
   const now = deps.now();
   const [cfg] = await sql<{ region_id: string; display_name: string; channel_id: string | null; last_posted: string | null }[]>`
-    select g.region_id, r.display_name, g.channel_id, g.last_posted_month::text as last_posted
-    from guild_configs g join regions r on r.id = g.region_id where g.guild_id = ${guildId}`;
+    select g.region_id, region_label(g.region_id) as display_name, g.channel_id, g.last_posted_month::text as last_posted
+    from guild_configs g where g.guild_id = ${guildId}`;
   const regionId = cfg?.region_id ?? "global";
   const target = previousMonth(now);
   const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
-    select rr.steps_up, r.display_name from resolve_region(${regionId}, ${monthStart(target)}::date) rr join regions r on r.id = rr.region_id`;
+    select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${regionId}, ${monthStart(target)}::date) rr`;
   const lines = [`Region: ${cfg?.display_name ?? "Global"}${cfg ? "" : " (default)"}`];
   if (resolved && resolved.steps_up > 0) lines.push(`Reports currently show ${resolved.display_name} (not enough data for the region yet).`);
   lines.push(`Channel: ${cfg?.channel_id ? `<#${cfg.channel_id}>` : "not set (use /channel set)"}`);
@@ -135,7 +126,7 @@ async function channelSet(deps: InteractionDeps, i: Interaction, guildId: string
   if (!channel || ![0, 5].includes(channel.type)) return reply("Pick a text or announcement channel.");
   try {
     await deps.discord.createMessage(channelId, {
-      content: `Field Report will post the monthly cEDH meta report in this channel.\n${ATTRIBUTION}`,
+      content: "Field Report will post the monthly cEDH meta report in this channel.",
     });
   } catch (err) {
     if (err instanceof DiscordError && (err.code === DISCORD_ERRORS.missingAccess || err.code === DISCORD_ERRORS.missingPermissions || err.status === 403)) {

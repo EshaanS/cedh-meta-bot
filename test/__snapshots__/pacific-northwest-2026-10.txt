@@ -1,24 +1,55 @@
 Pacific Northwest — cEDH meta, October 2026
-114 qualifying events (6 months) · 76% of entries with decklists
 
-Winners — October (32+ players)
+Events — October: 19 (+0% vs September)
+Players: 534 (+5%)
+Draw rate: 21%
+Largest event: 66 players · Guardian Games CEDH Monthly PDX
+
+Winners — October (largest events)
 • 66p · Guardian Games CEDH Monthly PDX · Kraum / Tymna the Weaver
 • 44p · Gem State CEDH Ad Naus for a Cause! · Tasigur, the Golden Fang
 • 43p · Mind Full Games: October's Monthly 1k Event · Francisco / Rograkh
-+3 more
+• 34p · Olympic Commander Challenger Series 1k Vol 4 - 20… · Azami, Lady of Scrolls
+• 32p · Commander Invitational Qualifier Cardboard Battle… · Kraum / Tymna the Weaver
+• 32p · Guardian Games PDX CEDH Halloween · Lumra, Bellow of the Woods
+
+Top-cut appearances — October
+1. Kraum / Tymna the Weaver — 14
+2. Kinnan, Bonder Prodigy — 11
+3. Rograkh / Silas Renn — 5
+4. Thrasios / Tymna the Weaver — 5
+5. Sisay, Weatherlight Captain — 4
 
 Most played (6 months)
-1. Kraum / Tymna the Weaver — 7.2%
-2. Kinnan, Bonder Prodigy — 7.0%
-3. Rograkh / Thrasios — 6.5%
+1. Kraum / Tymna the Weaver — 7.2% –
+2. Kinnan, Bonder Prodigy — 7.0% –
+3. Rograkh / Thrasios — 6.5% –
+4. Rograkh / Silas Renn — 4.1% –
+5. Sisay, Weatherlight Captain — 4.1% –
+6. Dargo / Tymna the Weaver — 2.8% –
+7. Thrasios / Tymna the Weaver — 2.7% –
+8. Magda, Brazen Outlaw — 2.7% –
+9. Ral, Monsoon Mage — 2.6% –
+10. Etali, Primal Conqueror — 2.5% –
 
 Best results (adjusted PPG, 30+ entries)
 1. Kinnan, Bonder Prodigy — 1.42 (n = 179)
 2. Ishai / Rograkh — 1.40 (n = 62)
 3. Tivit, Seller of Secrets — 1.36 (n = 44)
+4. Rograkh / Thrasios — 1.33 (n = 166)
+5. Etali, Primal Conqueror — 1.29 (n = 63)
+
+Top-cut conversion (baseline 25%)
+1. Kinnan, Bonder Prodigy — 37% (n = 171)
+2. Thrasios / Yoshimaru — 33% (n = 40)
+3. Kefka, Court Mage — 31% (n = 42)
+4. Etali, Primal Conqueror — 30% (n = 60)
+5. Ishai / Rograkh — 29% (n = 59)
 
 Rising (by share growth vs prior 3 months)
 Rograkh / Silas Renn — 21 entries in October (avg 9/month)
 Ob Nixilis, Captive Kingpin — 13 entries in October (avg 7/month)
+Sisay, Weatherlight Captain — 21 entries in October (avg 13/month)
 
+114 qualifying events over 6 months · 76% of entries with decklists
 Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

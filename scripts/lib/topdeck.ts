@@ -87,3 +87,26 @@ export async function fetchBulkEdh(w: MonthWindow): Promise<unknown[]> {
 export async function fetchInfo(tid: string): Promise<unknown> {
   return JSON.parse(await request(`/v2/tournaments/${encodeURIComponent(tid)}/info`, { method: "GET" }));
 }
+
+export type StandingOne = { status: "found" | "no_standing_1" | "no_commander"; leader: string | null };
+
+/**
+ * Reads only the standing-1 row's `leader` from a standings response. Everything else in the response
+ * (player names, IDs, decklists) is ignored and never returned.
+ */
+export function pickStandingOne(rows: unknown): StandingOne {
+  const list = Array.isArray(rows) ? rows : [];
+  const first = list.find((r) => isObj(r) && Number(r.standing) === 1);
+  if (!first || !isObj(first)) return { status: "no_standing_1", leader: null };
+  const leader = text(first.leader);
+  return leader ? { status: "found", leader } : { status: "no_commander", leader: null };
+}
+
+/**
+ * GET /v2/tournaments/{tid}/standings, reduced to the standing-1 commander. The endpoint ignores `columns`
+ * and returns player names, IDs and decklists; only `standing` and `leader` are read, and the parsed response
+ * goes out of scope here.
+ */
+export async function fetchStandingOne(tid: string): Promise<StandingOne> {
+  return pickStandingOne(JSON.parse(await request(`/v2/tournaments/${encodeURIComponent(tid)}/standings`, { method: "GET" })));
+}
