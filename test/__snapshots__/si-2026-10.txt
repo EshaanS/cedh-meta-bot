@@ -1,0 +1,24 @@
+Europe — cEDH meta, October 2026
+Showing Europe: Slovenia didn't have enough data.
+272 qualifying events (6 months) · 87% of entries with decklists
+
+Winners — October (32+ players)
+• 96p · CEDH Norte Bilbao + Zaragoza + Pamplona · Arcum Dagsson
+• 77p · 1.cEDH069 Major Die Fabrik · Rograkh / Thrasios
++16 more
+
+Most played (6 months)
+1. Kraum / Tymna the Weaver — 9.5%
+2. Kinnan, Bonder Prodigy — 7.9%
+3. Rograkh / Silas Renn — 6.5%
+
+Best results (adjusted PPG, 30+ entries)
+1. Scion of the Ur-Dragon — 1.58 (n = 70)
+2. Rocco, Cabaretti Caterer — 1.47 (n = 59)
+3. Kodama of the East Tree / Tymna the Weaver — 1.44 (n = 35)
+
+Rising (by share growth vs prior 3 months)
+Dack Fayden, Helping Hand — 19 entries in October, new
+Zirda, the Dawnwaker — 14 entries in October (avg 2/month)
+
+Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

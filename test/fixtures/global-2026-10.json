@@ -1,0 +1,2347 @@
+{
+  "month": "2026-10",
+  "requested": {
+    "id": "global",
+    "displayName": "Global"
+  },
+  "resolved": {
+    "id": "global",
+    "displayName": "Global",
+    "stepsUp": 0,
+    "reportable": true
+  },
+  "coverage": {
+    "qualifyingEvents": 1971,
+    "pctEntriesWithLeader": 69.22793316686497
+  },
+  "results": [
+    {
+      "eventName": "MBG Commanderpalooza #3 (TimeTwister event)",
+      "participantCount": 150,
+      "location": "Michigan, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "BAKED ZITI 4: Goldsabertooth’s NY cEDH",
+      "participantCount": 119,
+      "location": "New York, United States",
+      "result": "winner",
+      "resultCommanders": "Dack Fayden, Helping Hand"
+    },
+    {
+      "eventName": "1st annual 1stCKMA cEDH Tournament *100% PROXY FRIENDLY* *GAEA'S CRADLE*",
+      "participantCount": 105,
+      "location": "Arkansas, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "CEDH Norte Bilbao + Zaragoza + Pamplona",
+      "participantCount": 96,
+      "location": "Navarra, Spain",
+      "result": "winner",
+      "resultCommanders": "Arcum Dagsson"
+    },
+    {
+      "eventName": "Collectible Ventures: S.N.L. / Mages 10K Birthday Bash",
+      "participantCount": 94,
+      "location": "Texas, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "Steel City Green Chile Slopper Tournament Series I",
+      "participantCount": 93,
+      "location": "Colorado, United States",
+      "result": "winner",
+      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver"
+    },
+    {
+      "eventName": "Perfect Storm Comics & Games - Tabernacle 10K",
+      "participantCount": 91,
+      "location": "Indiana, United States",
+      "result": "winner",
+      "resultCommanders": "Krark, the Thumbless / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "Quantum Nexus' Highlander 10K",
+      "participantCount": 84,
+      "location": "Kuala Lumpur, Malaysia",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "FOIL Gaea's Cradle cEDH 6k",
+      "participantCount": 79,
+      "location": "New York, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "1.cEDH069 Major @Die Fabrik",
+      "participantCount": 77,
+      "location": "Hessen, Germany",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "CCS $20,000 cEDH Invitational Qualifier #5",
+      "participantCount": 76,
+      "location": "Texas, United States",
+      "result": "winner",
+      "resultCommanders": "Bjorna, Nightfall Alchemist / Wernog, Rider's Chaplain"
+    },
+    {
+      "eventName": "Cian Colony Memorial Tournament 4",
+      "participantCount": 72,
+      "location": "Wisconsin, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Mulligan Championship Series - October w/ Guaranteed Volcanic Island",
+      "participantCount": 69,
+      "location": "Pennsylvania, United States",
+      "result": "winner",
+      "resultCommanders": "Dack Fayden, Helping Hand"
+    },
+    {
+      "eventName": "CEDH Monthly Dual Land Tournament - October",
+      "participantCount": 68,
+      "location": "North Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "King T'Challa"
+    },
+    {
+      "eventName": "Land, Go: Sunshine Showdown $10k+ cEDH",
+      "participantCount": 67,
+      "location": "Florida, United States",
+      "result": "winner",
+      "resultCommanders": "Ral, Monsoon Mage"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - Final Fortune Gaming",
+      "participantCount": 66,
+      "location": "Virginia, United States",
+      "result": "winner",
+      "resultCommanders": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh"
+    },
+    {
+      "eventName": "Guardian Games CEDH Monthly PDX",
+      "participantCount": 66,
+      "location": "Oregon, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "OBG & Draw Dawgz Presents: Dawg Pile CEDH Tournament",
+      "participantCount": 65,
+      "location": "California, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Road to the Coliseum: Halloween Party up to $7K",
+      "participantCount": 65,
+      "location": "Tennessee, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Spells and Scares CEDH Tournament",
+      "participantCount": 65,
+      "location": "Ohio, United States",
+      "result": "winner",
+      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver"
+    },
+    {
+      "eventName": "CEDH Dual Tournament 9 - October 3rd",
+      "participantCount": 62,
+      "location": "Ontario, Canada",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Commandergeddon 10.5 - Mini Commandergeddon!",
+      "participantCount": 62,
+      "location": "Queensland, Australia",
+      "result": "winner",
+      "resultCommanders": "Magda, Brazen Outlaw"
+    },
+    {
+      "eventName": "The Fool's Gold CEDH 1K",
+      "participantCount": 61,
+      "location": "Nevada, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "BellsCon CEDH Tournament",
+      "participantCount": 60,
+      "location": "Pennsylvania, United States",
+      "result": "winner",
+      "resultCommanders": "Hashaton, Scarab's Fist"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - Riddle & Rune",
+      "participantCount": 59,
+      "location": "Alabama, United States",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "Sparky's Need for Cedh | Tropical Island",
+      "participantCount": 58,
+      "location": "Ohio, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "TITANS OF THE UNDERGROUND  INVITATIONAL",
+      "participantCount": 56,
+      "location": "Ohio, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "Beijing Spotlight cedh",
+      "participantCount": 55,
+      "location": null,
+      "result": "winner",
+      "resultCommanders": "unknown"
+    },
+    {
+      "eventName": "The Warsaw Pact 2.0 - cEDH European Championship Qualifier",
+      "participantCount": 55,
+      "location": "Masovian, Poland",
+      "result": "winner",
+      "resultCommanders": "Zirda, the Dawnwaker"
+    },
+    {
+      "eventName": "CEDH at New City Brewery Part 3",
+      "participantCount": 54,
+      "location": "Massachusetts, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Imperial Siege Nuremberg",
+      "participantCount": 54,
+      "location": "Bayern, Germany",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "Mortal-Kraumbat",
+      "participantCount": 54,
+      "location": "North Dakota, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "Blast Off Gaming Whispers From The Archives cEDH Tournament!",
+      "participantCount": 53,
+      "location": "Kentucky, United States",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "cEDH Shuffle Pt.3 Revenge of the Shuffle",
+      "participantCount": 53,
+      "location": "Maryland, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Eye of The Tiger (Lion) CEDH Tournament- Win a Lion's Eye Diamond",
+      "participantCount": 52,
+      "location": "Arizona, United States",
+      "result": "winner",
+      "resultCommanders": "unknown"
+    },
+    {
+      "eventName": "La CASTanyada cEDH | La Competència",
+      "participantCount": 52,
+      "location": "Barcelona, Spain",
+      "result": "winner",
+      "resultCommanders": "Dack Fayden, Helping Hand"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - East Coast Gaming",
+      "participantCount": 51,
+      "location": "North Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "Ral, Monsoon Mage"
+    },
+    {
+      "eventName": "King of Games Series 19: The Overhaul",
+      "participantCount": 51,
+      "location": "Ontario, Canada",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "TAP THAT TUNDRA - EU CHAMPIONSHIP QUALIFIER",
+      "participantCount": 51,
+      "location": "Limburg, Belgium",
+      "result": "winner",
+      "resultCommanders": "Yuriko, the Tiger's Shadow"
+    },
+    {
+      "eventName": "[518] Northern Wardens Fringe Fest: The Third",
+      "participantCount": 51,
+      "location": "New York, United States",
+      "result": "winner",
+      "resultCommanders": "Tom, Bert, and William"
+    },
+    {
+      "eventName": "CEDH SABANA - Cedh x Dual 2da edición VOLCANIC ISLAND",
+      "participantCount": 50,
+      "location": "Cundinamarca, Colombia",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Legionmania",
+      "participantCount": 50,
+      "location": "California, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "The Haunted Badlands",
+      "participantCount": 50,
+      "location": "Minnesota, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "Asgard Monthly CEDH Tournament - October 2026",
+      "participantCount": 49,
+      "location": "Texas, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "European Qualifier CEDH Octubre",
+      "participantCount": 47,
+      "location": "Madrid, Spain",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "Bob Koepke Memorial Tournament: A CEDH Tournament Benefitting 988 Lifeline",
+      "participantCount": 46,
+      "location": "South Dakota, United States",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - The Gathering Place",
+      "participantCount": 45,
+      "location": "North Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "Marneus Calgar"
+    },
+    {
+      "eventName": "WCG Grand CEDH Cup! Oct 11th ($50/Full Proxy)",
+      "participantCount": 45,
+      "location": "Georgia, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Gem State CEDH | Ad Naus for a Cause!",
+      "participantCount": 44,
+      "location": "Idaho, United States",
+      "result": "winner",
+      "resultCommanders": "Tasigur, the Golden Fang"
+    },
+    {
+      "eventName": "Piece of Cake (unofficial Czech cEDH championship)",
+      "participantCount": 44,
+      "location": "Prague, Czechia",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "Mind Full Games: October's Monthly 1k Event",
+      "participantCount": 43,
+      "location": "Washington, United States",
+      "result": "winner",
+      "resultCommanders": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh"
+    },
+    {
+      "eventName": "Sonoma Con cEDH $3K",
+      "participantCount": 43,
+      "location": "California, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "Black Sun Games - Western Maryland CEDH Showdown 3",
+      "participantCount": 42,
+      "location": "Maryland, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "LITTLE PARIS SIEGE III",
+      "participantCount": 42,
+      "location": "Sachsen, Germany",
+      "result": "winner",
+      "resultCommanders": "Crystal, Inhuman Princess"
+    },
+    {
+      "eventName": "Take the Crown 04",
+      "participantCount": 42,
+      "location": "California, United States",
+      "result": "winner",
+      "resultCommanders": "Rocco, Cabaretti Caterer"
+    },
+    {
+      "eventName": "Trainer J's 100% Proxy Legal CEDH Tournament",
+      "participantCount": 42,
+      "location": "Arkansas, United States",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "2do Clasificatorio Nacional cEDH 2026 Sede La Serena",
+      "participantCount": 41,
+      "location": "Coquimbo, Chile",
+      "result": "winner",
+      "resultCommanders": "Tivit, Seller of Secrets"
+    },
+    {
+      "eventName": "Mana Burn II - European cEDH Championship Qualifier",
+      "participantCount": 41,
+      "location": "Roma, Italy",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "Andorra frikiing days CEDH",
+      "participantCount": 40,
+      "location": "Encamp, Andorra",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "Level 7 Englewood cedh",
+      "participantCount": 40,
+      "location": "Colorado, United States",
+      "result": "winner",
+      "resultCommanders": "Dack Fayden, Helping Hand"
+    },
+    {
+      "eventName": "SEA Regional Fest 2026 - Sat cEDH",
+      "participantCount": 40,
+      "location": "South East, Singapore",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "eventName": "Mario's Birthday Madness",
+      "participantCount": 39,
+      "location": "Oklahoma, United States",
+      "result": "winner",
+      "resultCommanders": "Shang-Chi, Master of Kung Fu"
+    },
+    {
+      "eventName": "cEDH Nationals Qualifier | Hildesheim",
+      "participantCount": 39,
+      "location": "Niedersachsen, Germany",
+      "result": "winner",
+      "resultCommanders": "Crystal, Inhuman Princess"
+    },
+    {
+      "eventName": "10.Rhein-Sieg Championship CEDH Tournament   -Qualifier CEDH nationals Germany-",
+      "participantCount": 38,
+      "location": "Nordrhein-Westfalen, Germany",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "Hellspawn Booster Box Tournament",
+      "participantCount": 38,
+      "location": "California, United States",
+      "result": "winner",
+      "resultCommanders": "Malcolm, Keen-Eyed Navigator / Tymna the Weaver"
+    },
+    {
+      "eventName": "Level 7 Englewood Cedh Weeky But I have nothing Funny to Make The Name Super Long.",
+      "participantCount": 38,
+      "location": "Colorado, United States",
+      "result": "winner",
+      "resultCommanders": "unknown"
+    },
+    {
+      "eventName": "Sharkcon 2",
+      "participantCount": 38,
+      "location": "Hovedstaden, Denmark",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "2do Clasificatorio Nacional cEDH 2026 Sede Antofagasta",
+      "participantCount": 37,
+      "location": "Antofagasta, Chile",
+      "result": "winner",
+      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - The Geeky Oasis",
+      "participantCount": 37,
+      "location": "Arkansas, United States",
+      "result": "winner",
+      "resultCommanders": "Sisay, Weatherlight Captain"
+    },
+    {
+      "eventName": "Four Horsemen's 16th Anniversary cEDH Tournament! (1st place Grim Monolith or Intuition!)",
+      "participantCount": 37,
+      "location": "West Virginia, United States",
+      "result": "winner",
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "eventName": "DERPYPALOOZA II",
+      "participantCount": 36,
+      "location": "Ontario, Canada",
+      "result": "winner",
+      "resultCommanders": "Dargo, the Shipwrecker / Ishai, Ojutai Dragonspeaker"
+    },
+    {
+      "eventName": "Duelos Honra - cEDH European Championship Invitational",
+      "participantCount": 36,
+      "location": "Lisboa, Portugal",
+      "result": "winner",
+      "resultCommanders": "Zur the Enchanter"
+    },
+    {
+      "eventName": "LVO cEDH Tournament by SeaEDH",
+      "participantCount": 36,
+      "location": "Nevada, United States",
+      "result": "winner",
+      "resultCommanders": "Tivit, Seller of Secrets"
+    },
+    {
+      "eventName": "Stack Wars",
+      "participantCount": 35,
+      "location": "Oklahoma, United States",
+      "result": "winner",
+      "resultCommanders": "Dack Fayden, Helping Hand"
+    },
+    {
+      "eventName": "Olympic Commander Challenger Series 1k Vol 4 - 2026",
+      "participantCount": 34,
+      "location": "Washington, United States",
+      "result": "winner",
+      "resultCommanders": "Azami, Lady of Scrolls"
+    },
+    {
+      "eventName": "Volcanic Island Vendetta",
+      "participantCount": 34,
+      "location": "Indiana, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Cedh Mox Diamond tournament",
+      "participantCount": 33,
+      "location": "Florida, United States",
+      "result": "winner",
+      "resultCommanders": "Vivi Ornitier"
+    },
+    {
+      "eventName": "Grim Monolith, Chrome Mox, Mox Amber, Mana Vault",
+      "participantCount": 33,
+      "location": "Texas, United States",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "Krypton Comics Fall $2,600 CEDH Championship",
+      "participantCount": 33,
+      "location": "Nebraska, United States",
+      "result": "winner",
+      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver"
+    },
+    {
+      "eventName": "TOG Presents: Another 757 Cedh Tournament",
+      "participantCount": 33,
+      "location": "Virginia, United States",
+      "result": "winner",
+      "resultCommanders": "Aang, at the Crossroads"
+    },
+    {
+      "eventName": "“Eye of the Lion” & Land Go Black Lotus Qualifier",
+      "participantCount": 33,
+      "location": "South Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful"
+    },
+    {
+      "eventName": "Cathedral Cup EU Qualifier",
+      "participantCount": 32,
+      "location": "Sheffield, United Kingdom",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier - Worldfire Games",
+      "participantCount": 32,
+      "location": "South Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "Esior, Wardwing Familiar / Tymna the Weaver"
+    },
+    {
+      "eventName": "Commander Invitational Qualifier Cardboard Battlegrounds",
+      "participantCount": 32,
+      "location": "Oregon, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "eventName": "Guardian Games PDX CEDH Halloween",
+      "participantCount": 32,
+      "location": "Oregon, United States",
+      "result": "winner",
+      "resultCommanders": "Lumra, Bellow of the Woods"
+    },
+    {
+      "eventName": "Monthly cEDH im Lotusvale [Qualifier for cEDH European Championship & cEDH Nationals Germany 2027]",
+      "participantCount": 32,
+      "location": "Nordrhein-Westfalen, Germany",
+      "result": "winner",
+      "resultCommanders": "Kinnan, Bonder Prodigy"
+    },
+    {
+      "eventName": "WBAC - October Qualifier + Win a Dual",
+      "participantCount": 32,
+      "location": "Royal Borough of Windsor and Maidenhead, United Kingdom",
+      "result": "winner",
+      "resultCommanders": "Kodama of the East Tree / Tymna the Weaver"
+    },
+    {
+      "eventName": "cEDH Win-A-Dual at Gamers' Haunt",
+      "participantCount": 32,
+      "location": "North Carolina, United States",
+      "result": "winner",
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    }
+  ],
+  "metaShare": [
+    {
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "entries": 3187,
+      "metaShare": 0.07715025781306738
+    },
+    {
+      "commander": "Kinnan, Bonder Prodigy",
+      "entries": 3081,
+      "metaShare": 0.07458423103924085
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "entries": 2257,
+      "metaShare": 0.05463700404270256
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "entries": 1987,
+      "metaShare": 0.04810089810937084
+    },
+    {
+      "commander": "Sisay, Weatherlight Captain",
+      "entries": 1756,
+      "metaShare": 0.042508896366409255
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
+      "entries": 1288,
+      "metaShare": 0.03117964608196761
+    },
+    {
+      "commander": "Ral, Monsoon Mage",
+      "entries": 964,
+      "metaShare": 0.023336318961969547
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
+      "entries": 925,
+      "metaShare": 0.02239221477159941
+    },
+    {
+      "commander": "Vivi Ornitier",
+      "entries": 897,
+      "metaShare": 0.021714396378513155
+    },
+    {
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
+      "entries": 855,
+      "metaShare": 0.020697668788883777
+    },
+    {
+      "commander": "Etali, Primal Conqueror",
+      "entries": 847,
+      "metaShare": 0.020504006390859135
+    },
+    {
+      "commander": "Magda, Brazen Outlaw",
+      "entries": 838,
+      "metaShare": 0.02028613619308141
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
+      "entries": 666,
+      "metaShare": 0.016122394635551575
+    },
+    {
+      "commander": "Tayam, Luminous Enigma",
+      "entries": 652,
+      "metaShare": 0.015783485439008448
+    },
+    {
+      "commander": "Crystal, Inhuman Princess",
+      "entries": 611,
+      "metaShare": 0.01479096564913215
+    },
+    {
+      "commander": "Ob Nixilis, Captive Kingpin",
+      "entries": 578,
+      "metaShare": 0.013992108257280495
+    },
+    {
+      "commander": "Nick Fury, Agent of S.H.I.E.L.D.",
+      "entries": 540,
+      "metaShare": 0.01307221186666344
+    },
+    {
+      "commander": "Kefka, Court Mage",
+      "entries": 509,
+      "metaShare": 0.012321770074317945
+    },
+    {
+      "commander": "Tivit, Seller of Secrets",
+      "entries": 500,
+      "metaShare": 0.012103899876540222
+    },
+    {
+      "commander": "Winota, Joiner of Forces",
+      "entries": 416,
+      "metaShare": 0.010070444697281465
+    }
+  ],
+  "ppg": [
+    {
+      "commander": "Dack Fayden, Helping Hand",
+      "entries": 97,
+      "ppg": 1.7002141327623126,
+      "shrunkPpg": 1.6232544519482421
+    },
+    {
+      "commander": "Shang-Chi, Master of Kung Fu",
+      "entries": 119,
+      "ppg": 1.5044563279857397,
+      "shrunkPpg": 1.4678439066928275
+    },
+    {
+      "commander": "Scion of the Ur-Dragon",
+      "entries": 300,
+      "ppg": 1.4725829725829727,
+      "shrunkPpg": 1.4586715367965368
+    },
+    {
+      "commander": "Kediss, Emberclaw Familiar / Malcolm, Keen-Eyed Navigator",
+      "entries": 148,
+      "ppg": 1.4805755395683453,
+      "shrunkPpg": 1.4531260705721136
+    },
+    {
+      "commander": "Jhoira, Ageless Innovator",
+      "entries": 106,
+      "ppg": 1.4854771784232366,
+      "shrunkPpg": 1.4480998485147862
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Reyhan, Last of the Abzan",
+      "entries": 89,
+      "ppg": 1.4722955145118735,
+      "shrunkPpg": 1.4315073467115298
+    },
+    {
+      "commander": "Arcum Dagsson",
+      "entries": 349,
+      "ppg": 1.430254184748915,
+      "shrunkPpg": 1.4204843102367786
+    },
+    {
+      "commander": "Nick Fury, Agent of S.H.I.E.L.D.",
+      "entries": 540,
+      "ppg": 1.4190031152647975,
+      "shrunkPpg": 1.4129672897196262
+    },
+    {
+      "commander": "Bjorna, Nightfall Alchemist / Wernog, Rider's Chaplain",
+      "entries": 107,
+      "ppg": 1.4282786885245902,
+      "shrunkPpg": 1.4002033045049698
+    },
+    {
+      "commander": "Super-Skrull",
+      "entries": 87,
+      "ppg": 1.4009779951100245,
+      "shrunkPpg": 1.372757809108151
+    },
+    {
+      "commander": "Magda, Brazen Outlaw",
+      "entries": 838,
+      "ppg": 1.3738703847146914,
+      "shrunkPpg": 1.3709829631595702
+    },
+    {
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "entries": 3187,
+      "ppg": 1.3706519545179305,
+      "shrunkPpg": 1.369899525740145
+    },
+    {
+      "commander": "Rocco, Cabaretti Caterer",
+      "entries": 263,
+      "ppg": 1.3782426778242678,
+      "shrunkPpg": 1.3691795910522346
+    },
+    {
+      "commander": "Sisay, Weatherlight Captain",
+      "entries": 1756,
+      "ppg": 1.3568887253097779,
+      "shrunkPpg": 1.3556850234481814
+    },
+    {
+      "commander": "Dihada, Binder of Wills",
+      "entries": 176,
+      "ppg": 1.357234314980794,
+      "shrunkPpg": 1.3462920379419376
+    },
+    {
+      "commander": "Derevi, Empyrial Tactician",
+      "entries": 196,
+      "ppg": 1.3490870032223417,
+      "shrunkPpg": 1.3399122807017545
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "entries": 2257,
+      "ppg": 1.3374038461538462,
+      "shrunkPpg": 1.3366361356035268
+    },
+    {
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
+      "entries": 855,
+      "ppg": 1.3329113924050633,
+      "shrunkPpg": 1.3310162748643761
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Tymna the Weaver",
+      "entries": 152,
+      "ppg": 1.3411420204978037,
+      "shrunkPpg": 1.330544111137594
+    },
+    {
+      "commander": "Kinnan, Bonder Prodigy",
+      "entries": 3081,
+      "ppg": 1.3254413000840573,
+      "shrunkPpg": 1.3249547389741956
+    },
+    {
+      "commander": "Zirda, the Dawnwaker",
+      "entries": 278,
+      "ppg": 1.32625786163522,
+      "shrunkPpg": 1.3211398843442657
+    },
+    {
+      "commander": "Crystal, Inhuman Princess",
+      "entries": 611,
+      "ppg": 1.316131360519668,
+      "shrunkPpg": 1.3140352793621508
+    },
+    {
+      "commander": "Rowan, Scion of War",
+      "entries": 296,
+      "ppg": 1.3105726872246697,
+      "shrunkPpg": 1.3067389728433614
+    },
+    {
+      "commander": "Rakdos, the Muscle",
+      "entries": 139,
+      "ppg": 1.3035714285714286,
+      "shrunkPpg": 1.2968328840970351
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Tana, the Bloodsower",
+      "entries": 170,
+      "ppg": 1.2959697732997482,
+      "shrunkPpg": 1.2911308497945115
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
+      "entries": 1288,
+      "ppg": 1.2833696198291744,
+      "shrunkPpg": 1.282859380993866
+    },
+    {
+      "commander": "Tayam, Luminous Enigma",
+      "entries": 652,
+      "ppg": 1.2786774628879891,
+      "shrunkPpg": 1.2778239669687037
+    },
+    {
+      "commander": "Tivit, Seller of Secrets",
+      "entries": 500,
+      "ppg": 1.2739848282016957,
+      "shrunkPpg": 1.2730623348093226
+    },
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "entries": 148,
+      "ppg": 1.2574850299401197,
+      "shrunkPpg": 1.2565939549472482
+    },
+    {
+      "commander": "Leonardo, the Balance / Michelangelo, the Heart",
+      "entries": 167,
+      "ppg": 1.2546419098143236,
+      "shrunkPpg": 1.254145448871615
+    },
+    {
+      "commander": "The Cabbage Merchant",
+      "entries": 256,
+      "ppg": 1.2493438320209973,
+      "shrunkPpg": 1.2493913804252728
+    },
+    {
+      "commander": "Kenrith, the Returned King",
+      "entries": 253,
+      "ppg": 1.2427440633245384,
+      "shrunkPpg": 1.2432756337769533
+    },
+    {
+      "commander": "Ral, Monsoon Mage",
+      "entries": 964,
+      "ppg": 1.2407794015309672,
+      "shrunkPpg": 1.2409668120689556
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "entries": 1987,
+      "ppg": 1.2391183346320829,
+      "shrunkPpg": 1.239226771755829
+    },
+    {
+      "commander": "Akiri, Line-Slinger / Thrasios, Triton Hero",
+      "entries": 106,
+      "ppg": 1.2250996015936255,
+      "shrunkPpg": 1.2290520457851135
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Vial Smasher the Fierce",
+      "entries": 215,
+      "ppg": 1.2227772227772227,
+      "shrunkPpg": 1.2250940548812888
+    },
+    {
+      "commander": "Gwenom, Remorseless",
+      "entries": 140,
+      "ppg": 1.2167721518987342,
+      "shrunkPpg": 1.2209256329113924
+    },
+    {
+      "commander": "Tevesh Szat, Doom of Fools / Thrasios, Triton Hero",
+      "entries": 130,
+      "ppg": 1.2113144758735441,
+      "shrunkPpg": 1.2164725457570718
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Vial Smasher the Fierce",
+      "entries": 363,
+      "ppg": 1.2111990261716372,
+      "shrunkPpg": 1.2132251866848676
+    },
+    {
+      "commander": "Winota, Joiner of Forces",
+      "entries": 416,
+      "ppg": 1.1975239167135623,
+      "shrunkPpg": 1.1999310764973439
+    },
+    {
+      "commander": "Aang, at the Crossroads",
+      "entries": 214,
+      "ppg": 1.194736842105263,
+      "shrunkPpg": 1.199460188933873
+    },
+    {
+      "commander": "Atraxa, Grand Unifier",
+      "entries": 187,
+      "ppg": 1.1897627965043696,
+      "shrunkPpg": 1.195582816165783
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
+      "entries": 925,
+      "ppg": 1.1833844701439697,
+      "shrunkPpg": 1.1847943226276951
+    },
+    {
+      "commander": "Brigid, Clachan's Heart",
+      "entries": 375,
+      "ppg": 1.1800367421922842,
+      "shrunkPpg": 1.1835791856255862
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
+      "entries": 666,
+      "ppg": 1.1812191103789127,
+      "shrunkPpg": 1.1832243841287986
+    },
+    {
+      "commander": "Inalla, Archmage Ritualist",
+      "entries": 267,
+      "ppg": 1.1753246753246753,
+      "shrunkPpg": 1.1805285307027469
+    },
+    {
+      "commander": "Zhulodok, Void Gorger",
+      "entries": 123,
+      "ppg": 1.1499051233396584,
+      "shrunkPpg": 1.1639044067886573
+    },
+    {
+      "commander": "King T'Challa",
+      "entries": 88,
+      "ppg": 1.1395348837209303,
+      "shrunkPpg": 1.159991386735573
+    },
+    {
+      "commander": "Vivi Ornitier",
+      "entries": 897,
+      "ppg": 1.154018412540433,
+      "shrunkPpg": 1.1561117950368247
+    },
+    {
+      "commander": "Terra, Magical Adept",
+      "entries": 255,
+      "ppg": 1.1288288288288288,
+      "shrunkPpg": 1.1376412776412776
+    },
+    {
+      "commander": "Heliod, the Radiant Dawn",
+      "entries": 105,
+      "ppg": 1.1140350877192982,
+      "shrunkPpg": 1.1357894736842105
+    },
+    {
+      "commander": "Kefka, Court Mage",
+      "entries": 509,
+      "ppg": 1.1310961968680089,
+      "shrunkPpg": 1.135591614755797
+    },
+    {
+      "commander": "Marneus Calgar",
+      "entries": 286,
+      "ppg": 1.117174959871589,
+      "shrunkPpg": 1.1258563350433806
+    },
+    {
+      "commander": "Helga, Skittish Seer",
+      "entries": 106,
+      "ppg": 1.0976645435244161,
+      "shrunkPpg": 1.1218447747110167
+    },
+    {
+      "commander": "Lumra, Bellow of the Woods",
+      "entries": 407,
+      "ppg": 1.112884834663626,
+      "shrunkPpg": 1.119307090651278
+    },
+    {
+      "commander": "The Gitrog Monster",
+      "entries": 184,
+      "ppg": 1.104679802955665,
+      "shrunkPpg": 1.1189268810972666
+    },
+    {
+      "commander": "The Wandering Minstrel",
+      "entries": 212,
+      "ppg": 1.0901001112347053,
+      "shrunkPpg": 1.1038845844041272
+    },
+    {
+      "commander": "K'rrik, Son of Yawgmoth",
+      "entries": 368,
+      "ppg": 1.088199513381995,
+      "shrunkPpg": 1.0965397446509644
+    },
+    {
+      "commander": "Hashaton, Scarab's Fist",
+      "entries": 138,
+      "ppg": 1.0608695652173914,
+      "shrunkPpg": 1.0848101265822785
+    },
+    {
+      "commander": "Korvold, Fae-Cursed King",
+      "entries": 125,
+      "ppg": 1.0519713261648747,
+      "shrunkPpg": 1.0792856260042023
+    },
+    {
+      "commander": "Krark, the Thumbless / Sakashima of a Thousand Faces",
+      "entries": 154,
+      "ppg": 1.0537459283387622,
+      "shrunkPpg": 1.0763038676101688
+    },
+    {
+      "commander": "Maralen, Fae Ascendant",
+      "entries": 103,
+      "ppg": 1.025462962962963,
+      "shrunkPpg": 1.0619730502860585
+    },
+    {
+      "commander": "Norman Osborn",
+      "entries": 121,
+      "ppg": 1.0057142857142858,
+      "shrunkPpg": 1.0403647416413373
+    },
+    {
+      "commander": "Najeela, the Blade-Blossom",
+      "entries": 120,
+      "ppg": 1.0038022813688212,
+      "shrunkPpg": 1.038973384030418
+    },
+    {
+      "commander": "Raph & Mikey, Troublemakers",
+      "entries": 233,
+      "ppg": 1.0172239108409322,
+      "shrunkPpg": 1.0356251827112142
+    },
+    {
+      "commander": "Zur the Enchanter",
+      "entries": 86,
+      "ppg": 0.9836512261580381,
+      "shrunkPpg": 1.033905711788597
+    },
+    {
+      "commander": "Yuriko, the Tiger's Shadow",
+      "entries": 248,
+      "ppg": 1.0131950989632421,
+      "shrunkPpg": 1.0308671065032988
+    },
+    {
+      "commander": "Ob Nixilis, Captive Kingpin",
+      "entries": 578,
+      "ppg": 1.0100931677018634,
+      "shrunkPpg": 1.0181168075780553
+    },
+    {
+      "commander": "Stella Lee, Wild Card",
+      "entries": 138,
+      "ppg": 0.9822294022617124,
+      "shrunkPpg": 1.0161244146336474
+    },
+    {
+      "commander": "Glarb, Calamity's Augur",
+      "entries": 272,
+      "ppg": 0.994017094017094,
+      "shrunkPpg": 1.0115501697693479
+    },
+    {
+      "commander": "Etali, Primal Conqueror",
+      "entries": 847,
+      "ppg": 0.9877049180327869,
+      "shrunkPpg": 0.9937555542950064
+    },
+    {
+      "commander": "Talion, the Kindly Lord",
+      "entries": 89,
+      "ppg": 0.872,
+      "shrunkPpg": 0.9413577981651376
+    },
+    {
+      "commander": "Urza, Lord High Artificer",
+      "entries": 201,
+      "ppg": 0.8410372040586246,
+      "shrunkPpg": 0.8780474118361246
+    },
+    {
+      "commander": "Y'shtola, Night's Blessed",
+      "entries": 124,
+      "ppg": 0.6605316973415133,
+      "shrunkPpg": 0.7424022949329697
+    }
+  ],
+  "growth": [
+    {
+      "commander": "Dack Fayden, Helping Hand",
+      "lastMonthEntries": 93,
+      "prior3AvgEntries": 1.3333333333333333,
+      "shareGrowth": 62.231368610610886,
+      "isNew": false
+    },
+    {
+      "commander": "Vraska, Soul of Stone",
+      "lastMonthEntries": 35,
+      "prior3AvgEntries": 1,
+      "shareGrowth": 30.729002170199017,
+      "isNew": false
+    },
+    {
+      "commander": "Sai, Master Thopterist",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareGrowth": 12.598143787228148,
+      "isNew": false
+    },
+    {
+      "commander": "Commodore Guff",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 1,
+      "shareGrowth": 6.252343353188347,
+      "isNew": false
+    },
+    {
+      "commander": "Shiko and Narset, Unified",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 1.3333333333333333,
+      "shareGrowth": 5.1191647042526665,
+      "isNew": false
+    },
+    {
+      "commander": "Council of Reeds",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 1,
+      "shareGrowth": 3.532714595742716,
+      "isNew": false
+    },
+    {
+      "commander": "Terra, Herald of Hope",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareGrowth": 3.3514060119130082,
+      "isNew": false
+    },
+    {
+      "commander": "The Queen of Dale",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 1.3333333333333333,
+      "shareGrowth": 3.079443136168444,
+      "isNew": false
+    },
+    {
+      "commander": "Killian, Decisive Mentor",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 2.6666666666666665,
+      "shareGrowth": 2.399535946807037,
+      "isNew": false
+    },
+    {
+      "commander": "Jacob Hauken, Inspector",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 3.3333333333333335,
+      "shareGrowth": 1.9915916331901928,
+      "isNew": false
+    },
+    {
+      "commander": "Francisco, Fowl Marauder / Malcolm, Keen-Eyed Navigator",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareGrowth": 1.71962875744563,
+      "isNew": false
+    },
+    {
+      "commander": "Inspirit, Flagship Vessel",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareGrowth": 1.71962875744563,
+      "isNew": false
+    },
+    {
+      "commander": "Magus Lucea Kane",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareGrowth": 1.71962875744563,
+      "isNew": false
+    },
+    {
+      "commander": "Raffine, Scheming Seer",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareGrowth": 1.71962875744563,
+      "isNew": false
+    },
+    {
+      "commander": "The Fantastic Four",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 2,
+      "shareGrowth": 1.7196287574456295,
+      "isNew": false
+    },
+    {
+      "commander": "Shang-Chi, Master of Kung Fu",
+      "lastMonthEntries": 56,
+      "prior3AvgEntries": 21,
+      "shareGrowth": 1.4174477843961153,
+      "isNew": false
+    },
+    {
+      "commander": "Teferi, Temporal Archmage",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 2.3333333333333335,
+      "shareGrowth": 1.3311103635248251,
+      "isNew": false
+    },
+    {
+      "commander": "Thor, Guardian of Midgard",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 2,
+      "shareGrowth": 1.266357297871358,
+      "isNew": false
+    },
+    {
+      "commander": "Rocco, Cabaretti Caterer",
+      "lastMonthEntries": 72,
+      "prior3AvgEntries": 32.333333333333336,
+      "shareGrowth": 1.0186935106812918,
+      "isNew": false
+    },
+    {
+      "commander": "Captain America, Team Leader",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 2.3333333333333335,
+      "shareGrowth": 0.9425919696040213,
+      "isNew": false
+    },
+    {
+      "commander": "Maelstrom Wanderer",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 2.3333333333333335,
+      "shareGrowth": 0.9425919696040213,
+      "isNew": false
+    },
+    {
+      "commander": "Voja, Jaws of the Conclave",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 2.3333333333333335,
+      "shareGrowth": 0.9425919696040213,
+      "isNew": false
+    },
+    {
+      "commander": "King T'Challa",
+      "lastMonthEntries": 36,
+      "prior3AvgEntries": 17,
+      "shareGrowth": 0.9197379464322091,
+      "isNew": false
+    },
+    {
+      "commander": "Ratadrabik of Urborg",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 3.3333333333333335,
+      "shareGrowth": 0.903740130211941,
+      "isNew": false
+    },
+    {
+      "commander": "Hei Bai, Forest Guardian",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 4.333333333333333,
+      "shareGrowth": 0.8828199090008204,
+      "isNew": false
+    },
+    {
+      "commander": "Hearthhull, the Worldseed",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 5.333333333333333,
+      "shareGrowth": 0.8697447707438704,
+      "isNew": false
+    },
+    {
+      "commander": "Jhoira, Weatherlight Captain",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 4,
+      "shareGrowth": 0.8130858382970867,
+      "isNew": false
+    },
+    {
+      "commander": "Pantlaza, Sun-Favored",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 4,
+      "shareGrowth": 0.8130858382970867,
+      "isNew": false
+    },
+    {
+      "commander": "Sephiroth, Fabled SOLDIER",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 3.6666666666666665,
+      "shareGrowth": 0.7306728456472189,
+      "isNew": false
+    },
+    {
+      "commander": "Hashaton, Scarab's Fist",
+      "lastMonthEntries": 43,
+      "prior3AvgEntries": 23,
+      "shareGrowth": 0.6948411097124938,
+      "isNew": false
+    },
+    {
+      "commander": "Krark, the Thumbless / Thrasios, Triton Hero",
+      "lastMonthEntries": 17,
+      "prior3AvgEntries": 9.333333333333334,
+      "shareGrowth": 0.6512031741634181,
+      "isNew": false
+    },
+    {
+      "commander": "Ashling, the Limitless",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 6.666666666666667,
+      "shareGrowth": 0.6317772544673779,
+      "isNew": false
+    },
+    {
+      "commander": "Erinis, Gloom Stalker / Street Urchin",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 3.3333333333333335,
+      "shareGrowth": 0.6317772544673779,
+      "isNew": false
+    },
+    {
+      "commander": "Rootha, Mastering the Moment",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 3.3333333333333335,
+      "shareGrowth": 0.6317772544673779,
+      "isNew": false
+    },
+    {
+      "commander": "Ashling, Flame Dancer",
+      "lastMonthEntries": 16,
+      "prior3AvgEntries": 9,
+      "shareGrowth": 0.6116318562640768,
+      "isNew": false
+    },
+    {
+      "commander": "Baylen, the Haymaker",
+      "lastMonthEntries": 26,
+      "prior3AvgEntries": 14.666666666666666,
+      "shareGrowth": 0.6070533566724177,
+      "isNew": false
+    },
+    {
+      "commander": "Super-Skrull",
+      "lastMonthEntries": 31,
+      "prior3AvgEntries": 17.666666666666668,
+      "shareGrowth": 0.5907262543549909,
+      "isNew": false
+    },
+    {
+      "commander": "Jetmir, Nexus of Revels",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 4.666666666666667,
+      "shareGrowth": 0.5540735756832171,
+      "isNew": false
+    },
+    {
+      "commander": "Mm'menon, the Right Hand",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 4.666666666666667,
+      "shareGrowth": 0.5540735756832171,
+      "isNew": false
+    },
+    {
+      "commander": "Flubs, the Fool",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 7,
+      "shareGrowth": 0.5540735756832167,
+      "isNew": false
+    },
+    {
+      "commander": "Yeva, Nature's Herald",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 5.333333333333333,
+      "shareGrowth": 0.5297911760631666,
+      "isNew": false
+    },
+    {
+      "commander": "Kaalia of the Vast",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 6,
+      "shareGrowth": 0.5109048652475721,
+      "isNew": false
+    },
+    {
+      "commander": "Rona, Herald of Invasion",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 4.333333333333333,
+      "shareGrowth": 0.4644154847784161,
+      "isNew": false
+    },
+    {
+      "commander": "Shorikai, Genesis Engine",
+      "lastMonthEntries": 15,
+      "prior3AvgEntries": 9.333333333333334,
+      "shareGrowth": 0.4569439772030157,
+      "isNew": false
+    },
+    {
+      "commander": "Witherbloom, the Balancer",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 6.333333333333333,
+      "shareGrowth": 0.43138355655033145,
+      "isNew": false
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Tymna the Weaver",
+      "lastMonthEntries": 16,
+      "prior3AvgEntries": 10.333333333333334,
+      "shareGrowth": 0.4036793586816154,
+      "isNew": false
+    },
+    {
+      "commander": "Yisan, the Wanderer Bard",
+      "lastMonthEntries": 22,
+      "prior3AvgEntries": 14.666666666666666,
+      "shareGrowth": 0.35981437872281496,
+      "isNew": false
+    },
+    {
+      "commander": "Jhoira, Ageless Innovator",
+      "lastMonthEntries": 26,
+      "prior3AvgEntries": 17.333333333333332,
+      "shareGrowth": 0.35981437872281474,
+      "isNew": false
+    },
+    {
+      "commander": "Lotho, Corrupt Shirriff",
+      "lastMonthEntries": 17,
+      "prior3AvgEntries": 11.333333333333334,
+      "shareGrowth": 0.35981437872281474,
+      "isNew": false
+    },
+    {
+      "commander": "Elsha of the Infinite",
+      "lastMonthEntries": 13,
+      "prior3AvgEntries": 8.666666666666666,
+      "shareGrowth": 0.35981437872281474,
+      "isNew": false
+    },
+    {
+      "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 8,
+      "shareGrowth": 0.35981437872281474,
+      "isNew": false
+    },
+    {
+      "commander": "Francisco, Fowl Marauder / Thrasios, Triton Hero",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 6,
+      "shareGrowth": 0.35981437872281474,
+      "isNew": false
+    },
+    {
+      "commander": "Halana, Kessig Ranger / Tymna the Weaver",
+      "lastMonthEntries": 14,
+      "prior3AvgEntries": 10,
+      "shareGrowth": 0.26916008680796044,
+      "isNew": false
+    },
+    {
+      "commander": "Bruce Banner",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 8.666666666666666,
+      "shareGrowth": 0.2552132726672136,
+      "isNew": false
+    },
+    {
+      "commander": "The Great Goblin",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 4.333333333333333,
+      "shareGrowth": 0.2552132726672136,
+      "isNew": false
+    },
+    {
+      "commander": "The Ur-Dragon",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 4.333333333333333,
+      "shareGrowth": 0.2552132726672136,
+      "isNew": false
+    },
+    {
+      "commander": "Urza, Lord High Artificer",
+      "lastMonthEntries": 37,
+      "prior3AvgEntries": 27.333333333333332,
+      "shareGrowth": 0.22714956128644248,
+      "isNew": false
+    },
+    {
+      "commander": "Akiri, Line-Slinger / Thrasios, Triton Hero",
+      "lastMonthEntries": 20,
+      "prior3AvgEntries": 15,
+      "shareGrowth": 0.20872389219805743,
+      "isNew": false
+    },
+    {
+      "commander": "Kodama of the East Tree / Tymna the Weaver",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 8.333333333333334,
+      "shareGrowth": 0.19663665327607704,
+      "isNew": false
+    },
+    {
+      "commander": "Marneus Calgar",
+      "lastMonthEntries": 62,
+      "prior3AvgEntries": 47.333333333333336,
+      "shareGrowth": 0.18744354198330293,
+      "isNew": false
+    },
+    {
+      "commander": "Zirda, the Dawnwaker",
+      "lastMonthEntries": 56,
+      "prior3AvgEntries": 43,
+      "shareGrowth": 0.18061403423996314,
+      "isNew": false
+    },
+    {
+      "commander": "Sythis, Harvest's Hand",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 4.666666666666667,
+      "shareGrowth": 0.16555518176241257,
+      "isNew": false
+    },
+    {
+      "commander": "Helga, Skittish Seer",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 16.666666666666668,
+      "shareGrowth": 0.14224407812716433,
+      "isNew": false
+    },
+    {
+      "commander": "Orvar, the All-Form",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 4,
+      "shareGrowth": 0.133178648935679,
+      "isNew": false
+    },
+    {
+      "commander": "Slicer, Hired Muscle",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 4,
+      "shareGrowth": 0.133178648935679,
+      "isNew": false
+    },
+    {
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "lastMonthEntries": 599,
+      "prior3AvgEntries": 479.3333333333333,
+      "shareGrowth": 0.13286343929758826,
+      "isNew": false
+    },
+    {
+      "commander": "Sisay, Weatherlight Captain",
+      "lastMonthEntries": 358,
+      "prior3AvgEntries": 290.6666666666667,
+      "shareGrowth": 0.11654483390543047,
+      "isNew": false
+    },
+    {
+      "commander": "Nick Fury, Agent of S.H.I.E.L.D.",
+      "lastMonthEntries": 149,
+      "prior3AvgEntries": 124,
+      "shareGrowth": 0.08931366897687854,
+      "isNew": false
+    },
+    {
+      "commander": "Ellivere of the Wild Court",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 6.666666666666667,
+      "shareGrowth": 0.08785150297825206,
+      "isNew": false
+    },
+    {
+      "commander": "Tana, the Bloodsower / Tymna the Weaver",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 10,
+      "shareGrowth": 0.08785150297825184,
+      "isNew": false
+    },
+    {
+      "commander": "Captain Sisay",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 5,
+      "shareGrowth": 0.08785150297825184,
+      "isNew": false
+    },
+    {
+      "commander": "Plagon, Lord of the Beach",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 5,
+      "shareGrowth": 0.08785150297825184,
+      "isNew": false
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
+      "lastMonthEntries": 253,
+      "prior3AvgEntries": 212,
+      "shareGrowth": 0.08186489879519532,
+      "isNew": false
+    },
+    {
+      "commander": "Derevi, Empyrial Tactician",
+      "lastMonthEntries": 35,
+      "prior3AvgEntries": 29.333333333333332,
+      "shareGrowth": 0.08167052852951184,
+      "isNew": false
+    },
+    {
+      "commander": "Tayam, Luminous Enigma",
+      "lastMonthEntries": 137,
+      "prior3AvgEntries": 116.33333333333333,
+      "shareGrowth": 0.06759065836690903,
+      "isNew": false
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "lastMonthEntries": 345,
+      "prior3AvgEntries": 293.3333333333333,
+      "shareGrowth": 0.06621809240766141,
+      "isNew": false
+    },
+    {
+      "commander": "Talion, the Kindly Lord",
+      "lastMonthEntries": 16,
+      "prior3AvgEntries": 13.666666666666666,
+      "shareGrowth": 0.06131853949097743,
+      "isNew": false
+    },
+    {
+      "commander": "Doctor Doom, Unrivaled",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 4.333333333333333,
+      "shareGrowth": 0.04601106055601134,
+      "isNew": false
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
+      "lastMonthEntries": 131,
+      "prior3AvgEntries": 114.33333333333333,
+      "shareGrowth": 0.03869203272704791,
+      "isNew": false
+    },
+    {
+      "commander": "Vivi Ornitier",
+      "lastMonthEntries": 165,
+      "prior3AvgEntries": 145.66666666666666,
+      "shareGrowth": 0.026862116655672397,
+      "isNew": false
+    },
+    {
+      "commander": "Kinnan, Bonder Prodigy",
+      "lastMonthEntries": 546,
+      "prior3AvgEntries": 483.6666666666667,
+      "shareGrowth": 0.023375121685260902,
+      "isNew": false
+    },
+    {
+      "commander": "Korvold, Fae-Cursed King",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 18.666666666666668,
+      "shareGrowth": 0.019860784042111,
+      "isNew": false
+    },
+    {
+      "commander": "The Master of Keys",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 5.333333333333333,
+      "shareGrowth": 0.019860784042111,
+      "isNew": false
+    },
+    {
+      "commander": "Winota, Joiner of Forces",
+      "lastMonthEntries": 77,
+      "prior3AvgEntries": 68.66666666666667,
+      "shareGrowth": 0.016560263705405198,
+      "isNew": false
+    },
+    {
+      "commander": "Selvala, Heart of the Wilds",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 9,
+      "shareGrowth": 0.007269910165047966,
+      "isNew": false
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "lastMonthEntries": 392,
+      "prior3AvgEntries": 355,
+      "shareGrowth": 0.0010276741020533997,
+      "isNew": false
+    },
+    {
+      "commander": "Dihada, Binder of Wills",
+      "lastMonthEntries": 29,
+      "prior3AvgEntries": 26.333333333333332,
+      "shareGrowth": -0.001655266254135923,
+      "isNew": false
+    },
+    {
+      "commander": "Y'shtola, Night's Blessed",
+      "lastMonthEntries": 22,
+      "prior3AvgEntries": 20,
+      "shareGrowth": -0.0028027889366024628,
+      "isNew": false
+    },
+    {
+      "commander": "Prismari, the Inspiration",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 9.333333333333334,
+      "shareGrowth": -0.028704015197989374,
+      "isNew": false
+    },
+    {
+      "commander": "Tasigur, the Golden Fang",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 9.333333333333334,
+      "shareGrowth": -0.028704015197989374,
+      "isNew": false
+    },
+    {
+      "commander": "Magda, Brazen Outlaw",
+      "lastMonthEntries": 145,
+      "prior3AvgEntries": 136.33333333333334,
+      "shareGrowth": -0.03582843562441007,
+      "isNew": false
+    },
+    {
+      "commander": "Quintorius, History Chaser",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 5.666666666666667,
+      "shareGrowth": -0.04013102678389546,
+      "isNew": false
+    },
+    {
+      "commander": "Marath, Will of the Wild",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 6.666666666666667,
+      "shareGrowth": -0.0481299348940295,
+      "isNew": false
+    },
+    {
+      "commander": "Tameshi, Reality Architect",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 6.666666666666667,
+      "shareGrowth": -0.0481299348940295,
+      "isNew": false
+    },
+    {
+      "commander": "Glarb, Calamity's Augur",
+      "lastMonthEntries": 43,
+      "prior3AvgEntries": 41,
+      "shareGrowth": -0.04923547503933279,
+      "isNew": false
+    },
+    {
+      "commander": "Najeela, the Blade-Blossom",
+      "lastMonthEntries": 18,
+      "prior3AvgEntries": 17.333333333333332,
+      "shareGrowth": -0.05859004549958979,
+      "isNew": false
+    },
+    {
+      "commander": "Raph & Mikey, Troublemakers",
+      "lastMonthEntries": 36,
+      "prior3AvgEntries": 35.666666666666664,
+      "shareGrowth": -0.08498471712109668,
+      "isNew": false
+    },
+    {
+      "commander": "Lumra, Bellow of the Woods",
+      "lastMonthEntries": 60,
+      "prior3AvgEntries": 59.666666666666664,
+      "shareGrowth": -0.0883925952696214,
+      "isNew": false
+    },
+    {
+      "commander": "Yuriko, the Tiger's Shadow",
+      "lastMonthEntries": 38,
+      "prior3AvgEntries": 38,
+      "shareGrowth": -0.09345708085145665,
+      "isNew": false
+    },
+    {
+      "commander": "Norman Osborn",
+      "lastMonthEntries": 19,
+      "prior3AvgEntries": 19,
+      "shareGrowth": -0.09345708085145665,
+      "isNew": false
+    },
+    {
+      "commander": "Invisible Woman",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 5,
+      "shareGrowth": -0.09345708085145676,
+      "isNew": false
+    },
+    {
+      "commander": "Toph, the First Metalbender",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 5,
+      "shareGrowth": -0.09345708085145676,
+      "isNew": false
+    },
+    {
+      "commander": "Oswald Fiddlebender",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 12,
+      "shareGrowth": -0.09345708085145688,
+      "isNew": false
+    },
+    {
+      "commander": "Ms. Bumbleflower",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 6,
+      "shareGrowth": -0.09345708085145688,
+      "isNew": false
+    },
+    {
+      "commander": "Narset, Enlightened Master",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 6,
+      "shareGrowth": -0.09345708085145688,
+      "isNew": false
+    },
+    {
+      "commander": "Crystal, Inhuman Princess",
+      "lastMonthEntries": 144,
+      "prior3AvgEntries": 144.66666666666666,
+      "shareGrowth": -0.09763469799039015,
+      "isNew": false
+    },
+    {
+      "commander": "Rowan, Scion of War",
+      "lastMonthEntries": 47,
+      "prior3AvgEntries": 48,
+      "shareGrowth": -0.11234339166705143,
+      "isNew": false
+    },
+    {
+      "commander": "K'rrik, Son of Yawgmoth",
+      "lastMonthEntries": 59,
+      "prior3AvgEntries": 60.333333333333336,
+      "shareGrowth": -0.11349117851219814,
+      "isNew": false
+    },
+    {
+      "commander": "Ob Nixilis, Captive Kingpin",
+      "lastMonthEntries": 93,
+      "prior3AvgEntries": 95.66666666666667,
+      "shareGrowth": -0.11872656988695629,
+      "isNew": false
+    },
+    {
+      "commander": "Rakdos, the Muscle",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 21.666666666666668,
+      "shareGrowth": -0.12135070913295043,
+      "isNew": false
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Vial Smasher the Fierce",
+      "lastMonthEntries": 52,
+      "prior3AvgEntries": 53.666666666666664,
+      "shareGrowth": -0.12161058765731214,
+      "isNew": false
+    },
+    {
+      "commander": "The Gitrog Monster",
+      "lastMonthEntries": 31,
+      "prior3AvgEntries": 32,
+      "shareGrowth": -0.1217865470748487,
+      "isNew": false
+    },
+    {
+      "commander": "Esika, God of the Tree",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 10.333333333333334,
+      "shareGrowth": -0.12270040082399036,
+      "isNew": false
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Tymna the Weaver",
+      "lastMonthEntries": 19,
+      "prior3AvgEntries": 19.666666666666668,
+      "shareGrowth": -0.12418734929717012,
+      "isNew": false
+    },
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "lastMonthEntries": 25,
+      "prior3AvgEntries": 26.333333333333332,
+      "shareGrowth": -0.13935798815011724,
+      "isNew": false
+    },
+    {
+      "commander": "Fire Lord Azula",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 6.333333333333333,
+      "shareGrowth": -0.1411698660698012,
+      "isNew": false
+    },
+    {
+      "commander": "Gyruda, Doom of Depths",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 10.666666666666666,
+      "shareGrowth": -0.15011601329824076,
+      "isNew": false
+    },
+    {
+      "commander": "Frodo, Adventurous Hobbit / Sam, Loyal Attendant",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 5.333333333333333,
+      "shareGrowth": -0.15011601329824076,
+      "isNew": false
+    },
+    {
+      "commander": "Inalla, Archmage Ritualist",
+      "lastMonthEntries": 38,
+      "prior3AvgEntries": 41,
+      "shareGrowth": -0.1597894895696429,
+      "isNew": false
+    },
+    {
+      "commander": "Kediss, Emberclaw Familiar / Malcolm, Keen-Eyed Navigator",
+      "lastMonthEntries": 22,
+      "prior3AvgEntries": 24,
+      "shareGrowth": -0.16900232411383542,
+      "isNew": false
+    },
+    {
+      "commander": "Reyhan, Last of the Abzan / Rograkh, Son of Rohgahh",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 12,
+      "shareGrowth": -0.16900232411383542,
+      "isNew": false
+    },
+    {
+      "commander": "Muxus, Goblin Grandee",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 7.666666666666667,
+      "shareGrowth": -0.17228689990785184,
+      "isNew": false
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
+      "lastMonthEntries": 124,
+      "prior3AvgEntries": 136.33333333333334,
+      "shareGrowth": -0.17546707598225408,
+      "isNew": false
+    },
+    {
+      "commander": "Sami, Wildcat Captain",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 10,
+      "shareGrowth": -0.18411137276631118,
+      "isNew": false
+    },
+    {
+      "commander": "The Wandering Minstrel",
+      "lastMonthEntries": 24,
+      "prior3AvgEntries": 27.333333333333332,
+      "shareGrowth": -0.2040110953817671,
+      "isNew": false
+    },
+    {
+      "commander": "Zur the Enchanter",
+      "lastMonthEntries": 12,
+      "prior3AvgEntries": 13.666666666666666,
+      "shareGrowth": -0.2040110953817671,
+      "isNew": false
+    },
+    {
+      "commander": "Kefka, Court Mage",
+      "lastMonthEntries": 67,
+      "prior3AvgEntries": 76.33333333333333,
+      "shareGrowth": -0.20430075655520885,
+      "isNew": false
+    },
+    {
+      "commander": "Scion of the Ur-Dragon",
+      "lastMonthEntries": 49,
+      "prior3AvgEntries": 56,
+      "shareGrowth": -0.20677494574502475,
+      "isNew": false
+    },
+    {
+      "commander": "Tivit, Seller of Secrets",
+      "lastMonthEntries": 69,
+      "prior3AvgEntries": 79.66666666666667,
+      "shareGrowth": -0.21483521228557134,
+      "isNew": false
+    },
+    {
+      "commander": "Ral, Monsoon Mage",
+      "lastMonthEntries": 131,
+      "prior3AvgEntries": 151.66666666666666,
+      "shareGrowth": -0.2169860060980715,
+      "isNew": false
+    },
+    {
+      "commander": "Brigid, Clachan's Heart",
+      "lastMonthEntries": 50,
+      "prior3AvgEntries": 58,
+      "shareGrowth": -0.2184974834926352,
+      "isNew": false
+    },
+    {
+      "commander": "Gwenom, Remorseless",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 24.666666666666668,
+      "shareGrowth": -0.2282134607248889,
+      "isNew": false
+    },
+    {
+      "commander": "Terra, Magical Adept",
+      "lastMonthEntries": 34,
+      "prior3AvgEntries": 40,
+      "shareGrowth": -0.22943851872373822,
+      "isNew": false
+    },
+    {
+      "commander": "Heliod, the Radiant Dawn",
+      "lastMonthEntries": 15,
+      "prior3AvgEntries": 17.666666666666668,
+      "shareGrowth": -0.23029374789274637,
+      "isNew": false
+    },
+    {
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
+      "lastMonthEntries": 100,
+      "prior3AvgEntries": 120,
+      "shareGrowth": -0.24454756737621408,
+      "isNew": false
+    },
+    {
+      "commander": "Krark, the Thumbless / Sakashima of a Thousand Faces",
+      "lastMonthEntries": 19,
+      "prior3AvgEntries": 23.333333333333332,
+      "shareGrowth": -0.2618150515504719,
+      "isNew": false
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Tana, the Bloodsower",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 26,
+      "shareGrowth": -0.26779225761079206,
+      "isNew": false
+    },
+    {
+      "commander": "Godo, Bandit Warlord",
+      "lastMonthEntries": 10,
+      "prior3AvgEntries": 12.666666666666666,
+      "shareGrowth": -0.2843082217248343,
+      "isNew": false
+    },
+    {
+      "commander": "Breya, Etherium Shaper",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 6.333333333333333,
+      "shareGrowth": -0.2843082217248343,
+      "isNew": false
+    },
+    {
+      "commander": "Krark, the Thumbless / Silas Renn, Seeker Adept",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 7.666666666666667,
+      "shareGrowth": -0.2905316284924445,
+      "isNew": false
+    },
+    {
+      "commander": "Doctor Doom, King of Latveria",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 6.666666666666667,
+      "shareGrowth": -0.3200928106385925,
+      "isNew": false
+    },
+    {
+      "commander": "Atraxa, Grand Unifier",
+      "lastMonthEntries": 23,
+      "prior3AvgEntries": 31,
+      "shareGrowth": -0.327403640631726,
+      "isNew": false
+    },
+    {
+      "commander": "Stella Lee, Wild Card",
+      "lastMonthEntries": 17,
+      "prior3AvgEntries": 23,
+      "shareGrowth": -0.329946538020642,
+      "isNew": false
+    },
+    {
+      "commander": "Arcum Dagsson",
+      "lastMonthEntries": 43,
+      "prior3AvgEntries": 58.333333333333336,
+      "shareGrowth": -0.33174836245621664,
+      "isNew": false
+    },
+    {
+      "commander": "Animar, Soul of Elements",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 9.666666666666666,
+      "shareGrowth": -0.34353788613381353,
+      "isNew": false
+    },
+    {
+      "commander": "Etali, Primal Conqueror",
+      "lastMonthEntries": 98,
+      "prior3AvgEntries": 135.66666666666666,
+      "shareGrowth": -0.3451508151605118,
+      "isNew": false
+    },
+    {
+      "commander": "Iron Man, Titan of Innovation",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 8.333333333333334,
+      "shareGrowth": -0.347289098213049,
+      "isNew": false
+    },
+    {
+      "commander": "Yawgmoth, Thran Physician",
+      "lastMonthEntries": 6,
+      "prior3AvgEntries": 8.333333333333334,
+      "shareGrowth": -0.347289098213049,
+      "isNew": false
+    },
+    {
+      "commander": "Zhulodok, Void Gorger",
+      "lastMonthEntries": 13,
+      "prior3AvgEntries": 19.333333333333332,
+      "shareGrowth": -0.39042803712425544,
+      "isNew": false
+    },
+    {
+      "commander": "Bjorna, Nightfall Alchemist / Wernog, Rider's Chaplain",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 16.666666666666668,
+      "shareGrowth": -0.4016816733619615,
+      "isNew": false
+    },
+    {
+      "commander": "Leonardo, the Balance / Michelangelo, the Heart",
+      "lastMonthEntries": 17,
+      "prior3AvgEntries": 26.666666666666668,
+      "shareGrowth": -0.42207888904280366,
+      "isNew": false
+    },
+    {
+      "commander": "Maralen, Fae Ascendant",
+      "lastMonthEntries": 9,
+      "prior3AvgEntries": 15.666666666666666,
+      "shareGrowth": -0.47922002516998585,
+      "isNew": false
+    },
+    {
+      "commander": "Tevesh Szat, Doom of Fools / Thrasios, Triton Hero",
+      "lastMonthEntries": 11,
+      "prior3AvgEntries": 19.333333333333332,
+      "shareGrowth": -0.4842083391051393,
+      "isNew": false
+    },
+    {
+      "commander": "Kenrith, the Returned King",
+      "lastMonthEntries": 21,
+      "prior3AvgEntries": 37,
+      "shareGrowth": -0.4854756404832592,
+      "isNew": false
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Reyhan, Last of the Abzan",
+      "lastMonthEntries": 8,
+      "prior3AvgEntries": 16,
+      "shareGrowth": -0.5467285404257283,
+      "isNew": false
+    },
+    {
+      "commander": "The Cabbage Merchant",
+      "lastMonthEntries": 22,
+      "prior3AvgEntries": 46.333333333333336,
+      "shareGrowth": -0.5695551606920586,
+      "isNew": false
+    },
+    {
+      "commander": "Clan Crafter / Jaheira, Friend of the Forest",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 11.333333333333334,
+      "shareGrowth": -0.6000545944932898,
+      "isNew": false
+    },
+    {
+      "commander": "Aang, at the Crossroads",
+      "lastMonthEntries": 16,
+      "prior3AvgEntries": 37.666666666666664,
+      "shareGrowth": -0.614919821954601,
+      "isNew": false
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Vial Smasher the Fierce",
+      "lastMonthEntries": 16,
+      "prior3AvgEntries": 38,
+      "shareGrowth": -0.618297718253245,
+      "isNew": false
+    },
+    {
+      "commander": "Celes, Rune Knight",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 12,
+      "shareGrowth": -0.6222737836881069,
+      "isNew": false
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Tevesh Szat, Doom of Fools",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 12,
+      "shareGrowth": -0.6222737836881069,
+      "isNew": false
+    },
+    {
+      "commander": "Jace, Multiverse Architect",
+      "lastMonthEntries": 19,
+      "prior3AvgEntries": 0,
+      "shareGrowth": null,
+      "isNew": true
+    },
+    {
+      "commander": "Geist of Saint Thalia",
+      "lastMonthEntries": 14,
+      "prior3AvgEntries": 0,
+      "shareGrowth": null,
+      "isNew": true
+    },
+    {
+      "commander": "Ghalta, Primal Hunger",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 0,
+      "shareGrowth": null,
+      "isNew": true
+    },
+    {
+      "commander": "Niv-Mizzet, Ghost Counsel",
+      "lastMonthEntries": 7,
+      "prior3AvgEntries": 0,
+      "shareGrowth": null,
+      "isNew": true
+    },
+    {
+      "commander": "Ghoulcaller Gisa",
+      "lastMonthEntries": 5,
+      "prior3AvgEntries": 0,
+      "shareGrowth": null,
+      "isNew": true
+    }
+  ]
+}

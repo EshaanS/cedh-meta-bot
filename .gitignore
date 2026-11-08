@@ -1,1 +1,7 @@
 .env
+node_modules
+quality-*.txt
+data/
+.next/
+next-env.d.ts
+tsconfig.tsbuildinfo
