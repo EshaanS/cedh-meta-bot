@@ -21,8 +21,15 @@ export const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== nu
 export const num = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
 /** Trimmed string, or null when the value is not a string or is blank. */
 export const text = (v: unknown): string | null => (typeof v === "string" && v.trim() !== "" ? v.trim() : null);
-/** TopDeck player id as text, or null when absent. */
-export const playerId = (v: unknown): string | null => (typeof v === "number" && Number.isFinite(v) ? String(v) : text(v));
+/**
+ * TopDeck account id, or null. Only 28-character ids are kept: observed November 2026, every 20-character id
+ * (82,394 of them) appears in exactly one event, so those are per-event ids for players without an account.
+ * They can't link a player across events and can't carry an opt-out, so they are treated as no player.
+ */
+export const playerId = (v: unknown): string | null => {
+  const id = text(v);
+  return id !== null && /^[A-Za-z0-9]{28}$/.test(id) ? id : null;
+};
 /** Player display name, or null when missing or "Deleted User" (a removed player). */
 export const playerName = (v: unknown): string | null => {
   const name = text(v);

@@ -7,6 +7,7 @@
 import { parseArgs } from "node:util";
 import { connect } from "./lib/db";
 import { exitWithError } from "./lib/errors";
+import { playerId } from "./lib/topdeck";
 
 const USAGE = 'usage: optout add <player_id> [--note "text"] | optout remove <player_id> | optout list';
 
@@ -16,6 +17,10 @@ async function main() {
   const id = rawId?.trim();
   if (!command || !["add", "remove", "list"].includes(command) || (command !== "list" && !id) || positionals.length > 2) {
     throw new Error(USAGE);
+  }
+  // Only account ids are stored (see playerId in lib/topdeck.ts), so only they can be opted out.
+  if (command !== "list" && playerId(id) === null) {
+    throw new Error("player_id must be a 28-character TopDeck account id. Players without an account are never named.");
   }
 
   const sql = connect();
