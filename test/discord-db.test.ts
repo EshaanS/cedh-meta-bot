@@ -29,7 +29,16 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
         editOriginal: async (_app: string, _token: string, payload: { content?: string; embeds?: unknown[] }) => {
           edits.push(payload);
         },
-        listGuildIds: async () => [...realGuilds, ...(opts.guilds ?? [])],
+        listGuildIds: async () => {
+          // The bot is still in every server this file doesn't own: real ones, and other test files' servers
+          // (test/custom-regions-db.test.ts runs at the same time and its servers own custom regions, which
+          // the prune step would otherwise delete).
+          const others = await sql<{ id: string }[]>`
+            select guild_id as id from guild_configs where guild_id not like 'test-%'
+            union
+            select owner_guild_id from regions where owner_guild_id is not null and owner_guild_id not like 'test-%'`;
+          return [...new Set([...realGuilds, ...(opts.guilds ?? []), ...others.map((o) => o.id)])];
+        },
         putCommands: async () => null,
       },
     };

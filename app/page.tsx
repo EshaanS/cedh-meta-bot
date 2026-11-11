@@ -22,6 +22,10 @@ export default function Home() {
         We store nothing about server members. Removing the bot deletes the server&apos;s settings within a day.
       </p>
       <p>
+        If a server admin builds a custom region, we store the name they gave it and the places in it (cities, states, countries).
+        These belong to that server, are not visible to any other server, hold no user data, and are deleted with the server&apos;s settings.
+      </p>
+      <p>
         Tournament data comes from public TopDeck.gg results. For players with a TopDeck account we store only the TopDeck player ID and display name,
         refreshed from TopDeck, to name event winners and top performers. We do not store decklists or Discord details.
       </p>

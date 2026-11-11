@@ -60,6 +60,24 @@ The second call posts once to your test channel. Run it again: `posted` is empty
 ## 7. Removal
 Kick the bot from the test server. The next cron run lists the bot's guilds and deletes that server's settings.
 
+## Custom regions
+A server admin can build a region from places and use it as the server's region. Needs migration 015; after
+deploying it, register the commands again (`npm run register-commands -- --guild <id>`) so Discord learns the
+new subcommands.
+
+- `/region create name:Seattle Metro`, then `/region add place:…` for each place. Start typing and pick from the
+  list: cities appear only when they have events in the data, labelled with state, country and event count.
+  States, countries, continents and Pacific Northwest can be added too.
+- `/region set` lists the server's own regions first. `/region show` lists the places and says where commander
+  stats come from. `/region remove`, `/region delete` and `/region list` do what they say.
+- A city is where the venue is, not the metro area around it: there are no events in Seattle itself, but there
+  are in Tacoma, Issaquah and Lacey. Build a metro from the cities the list offers.
+- A small region shows its own events, winners and players. Most played, Best results and Top-cut conversion
+  come from the smallest standard region around it (for example Washington) until it has enough decklists, and
+  the post says so.
+- Limits: 5 custom regions per server, 25 places per region, names up to 40 characters (`REGION_CONFIG` in
+  `src/server/custom-regions.ts`).
+
 ## Player data and opt-outs
 Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,
 keep names current, and honor privacy requests (`docs/permissions.md`).

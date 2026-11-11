@@ -1,9 +1,14 @@
-// Discord interaction handling: PING, region autocomplete, and the admin slash commands.
-// Commands that touch the database are deferred (ephemeral); the work runs afterwards and edits the reply.
+// Discord interaction handling: PING, autocomplete (regions, places, a server's custom regions), and the admin
+// slash commands. Commands that touch the database are deferred (ephemeral); the work runs afterwards and edits
+// the reply.
 import type { Sql } from "../../scripts/lib/db";
 import { redact } from "../../scripts/lib/errors";
 import { composePost, loadPostData } from "../../scripts/lib/post";
 import { isGuildAllowed, monthName, POST_FROM_DAY, previousMonth } from "./config";
+import {
+  addPlace, createRegion, deleteRegion, findGuildRegion, fold, listGuildRegions, matchPlaces, placeOptions, REGION_CONFIG, RegionError,
+  regionPlaces, removePlace, resolvePlace, statsSourceLine, targetRegion, type GuildRegion,
+} from "./custom-regions";
 import { DISCORD_ERRORS, DiscordError, type DiscordClient, type MessagePayload } from "./discord";
 
 const PING = 1;
@@ -32,6 +37,7 @@ export type InteractionDeps = {
   now: () => Date;
 };
 export type InteractionResult = { response: unknown; background?: () => Promise<void> };
+type Choice = { name: string; value: string };
 
 // Config replies show no TopDeck data, so they carry no attribution; /preview's embed has the Sources field.
 const ephemeral = (content: string) => ({ type: RESPONSE_MESSAGE, data: { content, flags: EPHEMERAL } });
@@ -42,13 +48,13 @@ const reply = (content: string): MessagePayload => ({ content });
 type RegionChoice = { id: string; label: string; search: string; rank: number };
 let regionCache: { at: number; rows: RegionChoice[] } | null = null;
 const TYPE_RANK: Record<string, number> = { global: 0, macro: 1, country: 2, custom: 3, admin1_group: 4, admin1: 5 };
-const fold = (s: string) => s.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
 
+/** Standard regions only: a server's own custom regions are read separately and never cached across servers. */
 async function selectableRegions(sql: Sql, now: number): Promise<RegionChoice[]> {
   if (regionCache && now - regionCache.at < REGION_CACHE_MS) return regionCache.rows;
   // region_label never shows the region type; sub-national regions carry their country.
   const rows = await sql<{ id: string; label: string; display_name: string; type: string }[]>`
-    select id, region_label(id) as label, display_name, type from regions where selectable`;
+    select id, region_label(id) as label, display_name, type from regions where selectable and owner_guild_id is null`;
   regionCache = {
     at: now,
     rows: rows.map((r) => ({ id: r.id, label: r.label.slice(0, 100), search: fold(`${r.label} ${r.id}`), rank: TYPE_RANK[r.type] ?? 9 })),
@@ -56,7 +62,7 @@ async function selectableRegions(sql: Sql, now: number): Promise<RegionChoice[]>
   return regionCache.rows;
 }
 
-export function matchRegions(rows: RegionChoice[], query: string, limit = 25): { name: string; value: string }[] {
+export function matchRegions(rows: RegionChoice[], query: string, limit = 25): Choice[] {
   const q = fold(query.trim());
   return rows
     .map((r) => ({ r, starts: q === "" || r.search.startsWith(q) || r.search.includes(` ${q}`), hit: q === "" || r.search.includes(q) }))
@@ -66,23 +72,74 @@ export function matchRegions(rows: RegionChoice[], query: string, limit = 25): {
     .map((x) => ({ name: x.r.label, value: x.r.id }));
 }
 
+/** This server's custom regions matching what was typed. `suffix` marks them in the /region set list. */
+export function matchGuildRegions(rows: GuildRegion[], query: string, suffix = ""): Choice[] {
+  const q = fold(query.trim());
+  return rows
+    .filter((r) => q === "" || fold(r.name).includes(q))
+    .slice(0, REGION_CONFIG.choiceMax)
+    .map((r) => ({ name: `${r.name}${suffix}`.slice(0, REGION_CONFIG.choiceTextMax), value: r.id }));
+}
+
+const OWN_SUFFIX = " — this server";
+
+async function autocomplete(deps: InteractionDeps, i: Interaction, guildId: string): Promise<Choice[]> {
+  const sub = subcommand(i);
+  const focused = sub?.options?.find((o) => o.focused);
+  if (i.data?.name !== "region" || !sub || !focused) return [];
+  const sql = deps.sql();
+  const now = deps.now().getTime();
+  const typed = String(focused.value ?? "");
+
+  if (sub.name === "set") {
+    // The server's own regions first, then the standard ones.
+    const own = matchGuildRegions(await listGuildRegions(sql, guildId), typed, OWN_SUFFIX);
+    return [...own, ...matchRegions(await selectableRegions(sql, now), typed)].slice(0, REGION_CONFIG.choiceMax);
+  }
+  if (focused.name === "region") return matchGuildRegions(await listGuildRegions(sql, guildId), typed);
+  if (sub.name === "add" && focused.name === "place") return matchPlaces(await placeOptions(sql, now), typed);
+  if (sub.name === "remove" && focused.name === "place") {
+    const region = await targetRegion(sql, guildId, optionValue(sub.options, "region")).catch(() => null);
+    if (!region) return [];
+    const q = fold(typed.trim());
+    return (await regionPlaces(sql, region.id))
+      .filter((p) => q === "" || fold(p.label).includes(q))
+      .slice(0, REGION_CONFIG.choiceMax)
+      .map((p) => ({ name: p.label.slice(0, REGION_CONFIG.choiceTextMax), value: `p:${p.id}` }));
+  }
+  return [];
+}
+
 // ---------- commands ----------
 
 const subcommand = (i: Interaction) => i.data?.options?.[0];
 const optionValue = (opts: Option[] | undefined, name: string) => opts?.find((o) => o.name === name)?.value;
 const monthStart = (yyyyMm: string) => `${yyyyMm}-01`;
 const currentMonth = (now: Date) => `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
+const places = (n: number) => `${n} ${n === 1 ? "place" : "places"}`;
 
 async function regionSet(deps: InteractionDeps, guildId: string, value: unknown): Promise<MessagePayload> {
   const sql = deps.sql();
-  const id = String(value ?? "").trim().toLowerCase();
+  const month = previousMonth(deps.now());
+
+  // One of this server's own regions (by the id a choice carries, or by name with or without the list suffix).
+  const typed = String(value ?? "").trim();
+  const own = await findGuildRegion(sql, guildId, typed.endsWith(OWN_SUFFIX) ? typed.slice(0, -OWN_SUFFIX.length) : typed);
+  if (own) {
+    if (own.places === 0) return reply(`${own.name} has no places yet. Add some with /region add, then run /region set again.`);
+    await sql`
+      insert into guild_configs (guild_id, region_id) values (${guildId}, ${own.id})
+      on conflict (guild_id) do update set region_id = excluded.region_id, updated_at = now()`;
+    return reply([`Region set to ${own.name}.`, await statsSourceLine(sql, own, month)].join("\n"));
+  }
+
+  const id = typed.toLowerCase();
   const [region] = await sql<{ id: string; display_name: string }[]>`
-    select id, region_label(id) as display_name from regions where id = ${id} and selectable`;
+    select id, region_label(id) as display_name from regions where id = ${id} and selectable and owner_guild_id is null`;
   if (!region) return reply("That isn't a region I can report on. Start typing and pick one from the list.");
   await sql`
     insert into guild_configs (guild_id, region_id) values (${guildId}, ${region.id})
     on conflict (guild_id) do update set region_id = excluded.region_id, updated_at = now()`;
-  const month = previousMonth(deps.now());
   const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
     select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${region.id}, ${monthStart(month)}::date) rr`;
   const lines = [`Region set to ${region.display_name}.`];
@@ -100,10 +157,17 @@ async function regionShow(deps: InteractionDeps, guildId: string): Promise<Messa
     from guild_configs g where g.guild_id = ${guildId}`;
   const regionId = cfg?.region_id ?? "global";
   const target = previousMonth(now);
-  const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
-    select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${regionId}, ${monthStart(target)}::date) rr`;
   const lines = [`Region: ${cfg?.display_name ?? "Global"}${cfg ? "" : " (default)"}`];
-  if (resolved && resolved.steps_up > 0) lines.push(`Reports currently show ${resolved.display_name} (not enough data for the region yet).`);
+  const own = (await listGuildRegions(sql, guildId)).find((r) => r.id === regionId);
+  if (own) {
+    const list = await regionPlaces(sql, own.id);
+    lines.push(list.length ? `Places (${list.length}): ${list.map((p) => p.label).join("; ")}` : "Places: none yet (use /region add)");
+    lines.push(await statsSourceLine(sql, own, target));
+  } else {
+    const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
+      select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${regionId}, ${monthStart(target)}::date) rr`;
+    if (resolved && resolved.steps_up > 0) lines.push(`Reports currently show ${resolved.display_name} (not enough data for the region yet).`);
+  }
   lines.push(`Channel: ${cfg?.channel_id ? `<#${cfg.channel_id}>` : "not set (use /channel set)"}`);
   lines.push(`Last report posted: ${cfg?.last_posted ? monthName(cfg.last_posted.slice(0, 7)) + " " + cfg.last_posted.slice(0, 4) : "none yet"}`);
   if (cfg?.channel_id) {
@@ -118,6 +182,54 @@ async function regionShow(deps: InteractionDeps, guildId: string): Promise<Messa
     }
   }
   return reply(lines.join("\n"));
+}
+
+// ---------- custom regions ----------
+
+async function regionCreate(deps: InteractionDeps, guildId: string, name: unknown): Promise<MessagePayload> {
+  const region = await createRegion(deps.sql(), guildId, name);
+  return reply(`Created ${region.name}. Add places with /region add, then choose it with /region set.`);
+}
+
+async function regionAdd(deps: InteractionDeps, guildId: string, placeValue: unknown, regionValue: unknown): Promise<MessagePayload> {
+  const sql = deps.sql();
+  const region = await targetRegion(sql, guildId, regionValue);
+  const place = await resolvePlace(sql, deps.now().getTime(), placeValue);
+  await addPlace(sql, guildId, region, place);
+  return reply(`Added ${place.label} to ${region.name} (${places(region.places + 1)} of ${REGION_CONFIG.maxPlacesPerRegion}).`);
+}
+
+async function regionRemove(deps: InteractionDeps, guildId: string, placeValue: unknown, regionValue: unknown): Promise<MessagePayload> {
+  const sql = deps.sql();
+  const region = await targetRegion(sql, guildId, regionValue);
+  const label = await removePlace(sql, guildId, region, placeValue);
+  const lines = [`Removed ${label} from ${region.name}.`];
+  if (region.places - 1 === 0) lines.push(`${region.name} has no places left, so its reports will have no events until you add some.`);
+  return reply(lines.join("\n"));
+}
+
+async function regionDelete(deps: InteractionDeps, guildId: string, regionValue: unknown): Promise<MessagePayload> {
+  const sql = deps.sql();
+  const region = await findGuildRegion(sql, guildId, regionValue);
+  if (!region) return reply("This server has no custom region with that name. Use /region list to see them.");
+  const wasCurrent = await deleteRegion(sql, guildId, region);
+  const lines = [`Deleted ${region.name}.`];
+  if (wasCurrent) lines.push("It was this server's region, so the region is now Global. Use /region set to choose another.");
+  return reply(lines.join("\n"));
+}
+
+async function regionList(deps: InteractionDeps, guildId: string): Promise<MessagePayload> {
+  const sql = deps.sql();
+  const all = await listGuildRegions(sql, guildId);
+  if (all.length === 0) return reply("This server has no custom regions. Create one with /region create, then add places with /region add.");
+  const [cfg] = await sql<{ region_id: string }[]>`select region_id from guild_configs where guild_id = ${guildId}`;
+  const lines = [`Custom regions (${all.length} of ${REGION_CONFIG.maxRegionsPerGuild}):`];
+  for (const r of all) {
+    const list = await regionPlaces(sql, r.id);
+    const current = r.id === cfg?.region_id ? " (this server's region)" : "";
+    lines.push(`• ${r.name}${current}: ${list.length ? list.map((p) => p.label).join("; ") : "no places yet"}`);
+  }
+  return reply(lines.join("\n").slice(0, 1900));
 }
 
 async function channelSet(deps: InteractionDeps, i: Interaction, guildId: string, value: unknown): Promise<MessagePayload> {
@@ -159,10 +271,16 @@ export async function handleInteraction(i: Interaction, deps: InteractionDeps): 
   if (i.type === PING) return { response: { type: RESPONSE_PONG } };
 
   if (i.type === AUTOCOMPLETE) {
-    if (!isGuildAllowed(deps.allowlist, i.guild_id)) return { response: { type: RESPONSE_AUTOCOMPLETE, data: { choices: [] } } };
-    const focused = subcommand(i)?.options?.find((o) => o.focused);
-    const rows = await selectableRegions(deps.sql(), deps.now().getTime());
-    return { response: { type: RESPONSE_AUTOCOMPLETE, data: { choices: matchRegions(rows, String(focused?.value ?? "")) } } };
+    let choices: Choice[] = [];
+    if (i.guild_id && isGuildAllowed(deps.allowlist, i.guild_id)) {
+      try {
+        choices = await autocomplete(deps, i, i.guild_id);
+      } catch (err) {
+        // Autocomplete has 3 seconds and no way to show an error: log it and offer nothing.
+        console.error(redact(err instanceof Error ? (err.stack ?? err.message) : String(err)));
+      }
+    }
+    return { response: { type: RESPONSE_AUTOCOMPLETE, data: { choices } } };
   }
 
   if (i.type !== APPLICATION_COMMAND || !i.data) return { response: ephemeral("Unsupported interaction.") };
@@ -171,10 +289,17 @@ export async function handleInteraction(i: Interaction, deps: InteractionDeps): 
 
   const guildId = i.guild_id;
   const sub = subcommand(i);
+  const opt = (name: string) => optionValue(sub?.options, name);
   let work: (() => Promise<MessagePayload>) | null = null;
-  if (i.data.name === "region" && sub?.name === "set") work = () => regionSet(deps, guildId, optionValue(sub.options, "region"));
-  else if (i.data.name === "region" && sub?.name === "show") work = () => regionShow(deps, guildId);
-  else if (i.data.name === "channel" && sub?.name === "set") work = () => channelSet(deps, i, guildId, optionValue(sub.options, "channel"));
+  if (i.data.name === "region") {
+    if (sub?.name === "set") work = () => regionSet(deps, guildId, opt("region"));
+    else if (sub?.name === "show") work = () => regionShow(deps, guildId);
+    else if (sub?.name === "create") work = () => regionCreate(deps, guildId, opt("name"));
+    else if (sub?.name === "add") work = () => regionAdd(deps, guildId, opt("place"), opt("region"));
+    else if (sub?.name === "remove") work = () => regionRemove(deps, guildId, opt("place"), opt("region"));
+    else if (sub?.name === "delete") work = () => regionDelete(deps, guildId, opt("region"));
+    else if (sub?.name === "list") work = () => regionList(deps, guildId);
+  } else if (i.data.name === "channel" && sub?.name === "set") work = () => channelSet(deps, i, guildId, opt("channel"));
   else if (i.data.name === "preview") work = () => preview(deps, guildId);
   if (!work) return { response: ephemeral("Unknown command.") };
 
@@ -185,6 +310,11 @@ export async function handleInteraction(i: Interaction, deps: InteractionDeps): 
       try {
         await deps.discord.editOriginal(deps.appId, i.token, await run());
       } catch (err) {
+        // A RegionError is a message for the admin (a limit, a name clash, a place that isn't in the data).
+        if (err instanceof RegionError) {
+          await deps.discord.editOriginal(deps.appId, i.token, reply(err.message)).catch(() => {});
+          return;
+        }
         console.error(redact(err instanceof Error ? (err.stack ?? err.message) : String(err)));
         await deps.discord.editOriginal(deps.appId, i.token, reply("Something went wrong. Please try again later.")).catch(() => {});
       }

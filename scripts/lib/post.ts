@@ -17,6 +17,10 @@ export const POST_CONFIG = {
   /** Top-cut appearances line: 2 = "157 cuts · 9.1% of cuts vs 7.9% of field", 1 = "157 cuts · 1.15× its field
    *  share", 0 = "157 cuts". When the post is over budget the level steps down before any line is trimmed. */
   topCutDetail: 2,
+  /** In a mixed-scope post (a small custom region) the two shares are shown only when the month has at least
+   *  this many top cuts; below it "1 cut · 10.0% of cuts vs 2.3% of field" is noise. Standard regions are not
+   *  affected. */
+  topCutShareMinCuts: 30,
   mostPlayedMax: 10,
   bestResultsMax: 5,
   bestResultsMinEntries: 30,
@@ -67,6 +71,13 @@ export type PostData = {
   month: string; // YYYY-MM
   requested: { id: string; label: string };
   resolved: { id: string; label: string; stepsUp: number; reportable: boolean };
+  /**
+   * Only for a server's custom region that is not reportable itself. Then `resolved` is the custom region and
+   * the fact sections (scene, winners, players, top-cut appearances, coverage) describe it, while metaShare,
+   * ppg, conversion and baselineConversion come from this region: the smallest standard region containing every
+   * place of the custom one, or the first reportable region above that. Absent for every standard region.
+   */
+  statsRegion?: StatsRegion;
   scene: {
     events: number; players: number; prevEvents: number; prevPlayers: number;
     largestEventName: string | null; largestEventPlayers: number | null; drawRate: number | null;
@@ -91,6 +102,9 @@ export type PostData = {
    *  first qualifying entry anywhere in our data, or null when unknown. */
   trend: { commander: string; lastMonthEntries: number; prior3AvgEntries: number; shareChange: number | null; isNew: boolean; firstSeen: string | null }[];
 };
+
+/** `label` is the full region label ("Washington (United States)"); `shortLabel` is the bare name for headers. */
+export type StatsRegion = { id: string; label: string; shortLabel: string; reportable: boolean };
 
 export type EmbedField = { name: string; value: string; inline?: boolean };
 export type Embed = { title: string; description?: string; color?: number; fields: EmbedField[] };
@@ -263,7 +277,13 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     });
   }
 
-  if (!data.resolved.reportable) return s;
+  // Mixed scope (a custom region that isn't reportable): top-cut appearances are facts about its own events
+  // and still show; the three statistical sections come from statsRegion and name it in their headers; rising
+  // and cooling commanders need the region's own trend, so they are left out.
+  const stats = data.statsRegion;
+  if (!data.resolved.reportable && !stats) return s;
+  const statsOk = stats ? stats.reportable : true;
+  const from = stats ? ` — ${stats.shortLabel}` : "";
 
   const top = data.topCutAppearances.slice(0, caps.topCut);
   if (top.length) {
@@ -274,6 +294,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
         const cuts = `${shortenCommander(t.commander)} — ${plural(t.topCutEntries, "cut", "cuts")}`;
         // Share of the month's top cuts against share of the field in the events that had a cut.
         if (caps.topCutDetail < 1 || t.totalTopCutEntries <= 0 || t.totalFieldEntries <= 0 || t.fieldEntries <= 0) return cuts;
+        if (stats && t.totalTopCutEntries < c.topCutShareMinCuts) return cuts;
         const cutShare = t.topCutEntries / t.totalTopCutEntries;
         const fieldShare = t.fieldEntries / t.totalFieldEntries;
         return caps.topCutDetail >= 2
@@ -283,26 +304,26 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     });
   }
 
-  const most = data.metaShare.slice(0, caps.mostPlayed);
+  const most = statsOk ? data.metaShare.slice(0, caps.mostPlayed) : [];
   if (most.length) {
     // A snapshot of the 6-month window; movement is shown by Rising and Cooling commanders.
     s.push({
       key: "mostPlayed", block: "decks", numbered: true,
-      name: "Most played (6 months)",
+      name: `Most played${from} (6 months)`,
       lines: most.map((m) => `${shortenCommander(m.commander)} — ${pct(m.metaShare)}`),
     });
   }
 
-  const best = data.ppg.filter((p) => p.entries >= c.bestResultsMinEntries).sort((a, b) => b.shrunkPpg - a.shrunkPpg).slice(0, caps.best);
+  const best = statsOk ? data.ppg.filter((p) => p.entries >= c.bestResultsMinEntries).sort((a, b) => b.shrunkPpg - a.shrunkPpg).slice(0, caps.best) : [];
   if (best.length) {
     s.push({
       key: "best", block: "decks", numbered: true,
-      name: `Best results (adjusted PPG, ${c.bestResultsMinEntries}+ entries)`,
+      name: `Best results${from} (adjusted PPG, ${c.bestResultsMinEntries}+ entries)`,
       lines: best.map((p) => `${shortenCommander(p.commander)} — ${p.shrunkPpg.toFixed(2)} (${int(p.entries)} entries)`),
     });
   }
 
-  const conv = data.conversion
+  const conv = (statsOk ? data.conversion : [])
     .filter((x) => x.entriesInCutEvents >= c.conversionMinCutEntries)
     .sort((a, b) => b.conversion - a.conversion || b.entriesInCutEvents - a.entriesInCutEvents)
     .slice(0, caps.conversion);
@@ -310,10 +331,12 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     const base = data.baselineConversion === null ? "" : ` (baseline ${pct(data.baselineConversion, 0)})`;
     s.push({
       key: "conversion", block: "decks", numbered: true,
-      name: `Top-cut conversion${base}`,
+      name: `Top-cut conversion${from}${base}`,
       lines: conv.map((x) => `${shortenCommander(x.commander)} — ${pct(x.conversion, 0)} (${int(x.entriesInCutEvents)} entries)`),
     });
   }
+
+  if (!data.resolved.reportable) return s;
 
   const matching = c.trendNeedsMatchingCounts > 0;
   type Trend = PostData["trend"][number];
@@ -387,7 +410,9 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const title = `${data.resolved.label} — cEDH meta, ${monthOf(data.month)} ${data.month.slice(0, 4)}`;
   const notes: string[] = [];
   if (data.resolved.stepsUp > 0) notes.push(`Showing ${data.resolved.label}: ${data.requested.label} didn't have enough data.`);
-  if (!data.resolved.reportable) notes.push("Not enough decklists yet for commander stats.");
+  if (data.statsRegion && data.scene.events === 0) notes.push(`No qualifying events in ${data.resolved.label} in ${monthOf(data.month)}.`);
+  if (data.statsRegion?.reportable) notes.push(`Commander stats: ${data.statsRegion.label}, because ${data.resolved.label} had too few entries.`);
+  else if (!data.resolved.reportable) notes.push("Not enough decklists yet for commander stats.");
 
   let embed: Embed;
   let sections: Section[];
@@ -425,16 +450,57 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   return { embed, text };
 }
 
+/** Longest custom region name; names are cleaned and limited when created (src/server/custom-regions.ts). */
+export const CUSTOM_REGION_NAME_MAX = 40;
+
+/**
+ * Where a non-reportable custom region's statistical commander sections come from: its anchor (the smallest
+ * selectable standard region containing every place, see custom_region_anchor) or the first reportable region
+ * above it. Walks up one level at a time and stops at the first reportable one, because resolve_region scores
+ * every level up to global (observed November 2026: 1.7 s for Washington, where one check takes 0.5 s).
+ * Nothing is stored: the answer follows the region's places and the data.
+ */
+export async function customStatsRegion(sql: Sql, regionId: string, end: string): Promise<StatsRegion> {
+  const [a] = await sql<{ id: string }[]>`select custom_region_anchor(${regionId}) as id`;
+  let id = a?.id ?? "global";
+  for (let steps = 0; ; steps++) {
+    const [row] = await sql<{ label: string; name: string; parent: string | null; reportable: boolean }[]>`
+      select region_label(r.id) as label, r.display_name as name, r.parent_region_id as parent,
+             (select rr.reportable from region_reportability(r.id, ${end}::date) rr) as reportable
+      from regions r where r.id = ${id}`;
+    if (!row) throw new Error(`unknown region in the fallback chain: ${id}`);
+    if (row.reportable || row.parent === null || steps >= 10) return { id, label: row.label, shortLabel: row.name, reportable: row.reportable };
+    id = row.parent;
+  }
+}
+
 /** Reads everything composePost needs. The result is JSON-serializable (it is the fixture format). */
 export async function loadPostData(sql: Sql, regionId: string, month: string): Promise<PostData> {
   if (!/^\d{4}-\d{2}$/.test(month)) throw new Error(`month must be YYYY-MM, got ${month}`);
   const end = `${month}-01`;
-  const [requested] = await sql<{ id: string; label: string }[]>`select id, region_label(id) as label from regions where id = ${regionId}`;
-  if (!requested) throw new Error(`unknown region id: ${regionId}`);
-  const [res] = await sql<{ region_id: string; steps_up: number; reportable: boolean; label: string }[]>`
-    select rr.region_id, rr.steps_up, rr.reportable, region_label(rr.region_id) as label from resolve_region(${regionId}, ${end}::date) rr`;
-  if (!res) throw new Error("resolve_region returned no row");
+  const [found] = await sql<{ id: string; label: string; owned: boolean }[]>`
+    select id, region_label(id) as label, owner_guild_id is not null as owned from regions where id = ${regionId}`;
+  if (!found) throw new Error(`unknown region id: ${regionId}`);
+  // A custom region's name is admin-written; it is cleaned when created and again here before it is shown.
+  const requested = { id: found.id, label: found.owned ? sanitizeOrganizerText(found.label, CUSTOM_REGION_NAME_MAX) || "Custom region" : found.label };
+
+  // A standard region falls back as a whole to its first reportable parent (resolve_region). A custom region
+  // never does: its facts are its own, and only the statistical commander sections borrow another region.
+  let res: { region_id: string; steps_up: number; reportable: boolean; label: string };
+  let statsRegion: PostData["statsRegion"];
+  if (found.owned) {
+    const [rep] = await sql<{ reportable: boolean }[]>`select reportable from region_reportability(${regionId}, ${end}::date)`;
+    res = { region_id: regionId, steps_up: 0, reportable: rep?.reportable ?? false, label: requested.label };
+    if (!res.reportable) statsRegion = await customStatsRegion(sql, regionId, end);
+  } else {
+    const [row] = await sql<{ region_id: string; steps_up: number; reportable: boolean; label: string }[]>`
+      select rr.region_id, rr.steps_up, rr.reportable, region_label(rr.region_id) as label from resolve_region(${regionId}, ${end}::date) rr`;
+    if (!row) throw new Error("resolve_region returned no row");
+    res = row;
+  }
   const r = res.region_id;
+  /** Where metaShare, ppg and conversion are read from. */
+  const s = statsRegion?.id ?? r;
 
   const [scene] = await sql<{ events: string; players: string; prev_events: string; prev_players: string; largest_event_name: string | null; largest_event_players: number | null; draw_rate: number | null }[]>`
     select * from stat_scene(${r}, ${end}::date)`;
@@ -452,12 +518,13 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select commander, top_cut_entries, field_entries, total_top_cut_entries, total_field_entries
     from stat_top_cut_appearances(${r}, ${end}::date) limit 10`;
   const meta = await sql<{ commander: string; entries: string; meta_share: number }[]>`
-    select commander, entries, meta_share from stat_meta_share(${r}, ${end}::date) limit 20`;
+    select commander, entries, meta_share from stat_meta_share(${s}, ${end}::date) limit 20`;
   const ppg = await sql<{ commander: string; entries: string; ppg: number; shrunk_ppg: number }[]>`
-    select commander, entries, ppg, shrunk_ppg from stat_ppg(${r}, ${end}::date)`;
+    select commander, entries, ppg, shrunk_ppg from stat_ppg(${s}, ${end}::date)`;
   const conv = await sql<{ commander: string; entries_in_cut_events: string; top_cut_entries: string; conversion: number; baseline_conversion: number }[]>`
-    select * from stat_conversion(${r}, ${end}::date)`;
-  const trend = await sql<{ commander: string; last_month_entries: string; prior3_avg_entries: number; share_change: number | null; is_new: boolean; first_seen: string | null }[]>`
+    select * from stat_conversion(${s}, ${end}::date)`;
+  // Rising and cooling commanders need the region's own trend, so a mixed-scope post skips the query.
+  const trend = statsRegion ? [] : await sql<{ commander: string; last_month_entries: string; prior3_avg_entries: number; share_change: number | null; is_new: boolean; first_seen: string | null }[]>`
     select commander, last_month_entries, prior3_avg_entries, share_change, is_new, first_seen::text as first_seen
     from stat_share_trend(${r}, ${end}::date)`;
 
@@ -465,6 +532,7 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     month,
     requested: { id: requested.id, label: requested.label },
     resolved: { id: r, label: res.label, stepsUp: res.steps_up, reportable: res.reportable },
+    ...(statsRegion ? { statsRegion } : {}),
     scene: {
       events: Number(scene?.events ?? 0), players: Number(scene?.players ?? 0),
       prevEvents: Number(scene?.prev_events ?? 0), prevPlayers: Number(scene?.prev_players ?? 0),

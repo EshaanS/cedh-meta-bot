@@ -6,6 +6,7 @@ import type { Sql } from "../../scripts/lib/db";
 import { redact } from "../../scripts/lib/errors";
 import { composePost, loadPostData, type Embed } from "../../scripts/lib/post";
 import { isGuildAllowed, POST_FROM_DAY, previousMonth } from "./config";
+import { deleteGuildData } from "./custom-regions";
 import { DISCORD_ERRORS, DiscordError, type DiscordClient } from "./discord";
 
 export type CronOptions = { dryRun?: boolean; monthOverride?: string; timeBudgetMs?: number };
@@ -43,15 +44,20 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
     select 1 as ok from ingest_log where window_start = (${targetDate}::date)::timestamp at time zone 'UTC'`;
   if (!logged) return { ...summary, status: "data_not_ready" };
 
-  // Prune configs for guilds the bot is no longer in (no HTTP event exists for bot removal).
+  // Prune what belongs to guilds the bot is no longer in (no HTTP event exists for bot removal): the config
+  // and the guild's custom regions. A guild can own regions without ever having set a channel or region.
   try {
     const ids = await discord.listGuildIds();
     const gone = await sql<{ guild_id: string }[]>`
-      select guild_id from guild_configs where not (guild_id = any(${sql.array(ids, 1009)}::text[]))`;
+      select guild_id from (
+        select guild_id from guild_configs
+        union
+        select owner_guild_id from regions where owner_guild_id is not null
+      ) g
+      where not (guild_id = any(${sql.array(ids, 1009)}::text[]))
+      order by guild_id`;
     summary.pruned = gone.map((g) => g.guild_id);
-    if (!opts.dryRun && summary.pruned.length > 0) {
-      await sql`delete from guild_configs where guild_id = any(${sql.array(summary.pruned, 1009)}::text[])`;
-    }
+    if (!opts.dryRun) await deleteGuildData(sql, summary.pruned);
   } catch (err) {
     summary.pruneError = errorText(err);
   }
@@ -111,7 +117,7 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
     } catch (err) {
       const code = err instanceof DiscordError ? err.code : undefined;
       if (code === DISCORD_ERRORS.unknownGuild) {
-        await sql`delete from guild_configs where guild_id = ${c.guild_id}`;
+        await deleteGuildData(sql, [c.guild_id]);
       } else if (code === DISCORD_ERRORS.unknownChannel) {
         await sql`
           update guild_configs set channel_id = null, last_posted_month = ${previous}::date, updated_at = now()

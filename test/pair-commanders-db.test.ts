@@ -158,17 +158,24 @@ describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABAS
       Object.fromEntries((await sql<{ commander: string; n: string; is_new: boolean; first_seen: string | null }[]>`
         select commander, last_month_entries as n, is_new, first_seen::text as first_seen from stat_share_trend(${region}, ${MONTH}::date)`)
         .map((r) => [r.commander, `${r.n} ${r.is_new ? "new" : "seen"} ${r.first_seen}`]));
-    // Kinnan's date is left out: first_seen is worldwide, and test/players-db.test.ts (which can run at the
-    // same time on the same database) also registers Kinnan, in March 2031.
-    const { "Kinnan, Bonder Prodigy": kinnan, ...others } = await trend("global");
-    assert.deepEqual(others, {
-      "K'rrik, Son of Yawgmoth": "2 new 2030-06-05",
-      [KRAUM_TYMNA]: "2 new 2032-04-10",
-      "Tymna the Weaver / Will the Wise": "1 new 2032-04-10",
-    });
-    assert.match(kinnan!, /^1 new 203[12]-/);
+    // first_seen is worldwide, so other rows can only make a real commander's date earlier: another test file's
+    // (test/players-db.test.ts registers Kinnan in March 2031), or real data when the test database has some.
+    // Those dates are checked as "no later than"; the Will the Wise pair exists only in this file.
+    const split = (v: string | undefined) => ({ head: v?.slice(0, v.lastIndexOf(" ")), date: v?.slice(v.lastIndexOf(" ") + 1) ?? "9999" });
+    const global = await trend("global");
+    assert.deepEqual(Object.keys(global).sort(), ["K'rrik, Son of Yawgmoth", "Kinnan, Bonder Prodigy", KRAUM_TYMNA, "Tymna the Weaver / Will the Wise"].sort());
+    assert.equal(global["Tymna the Weaver / Will the Wise"], "1 new 2032-04-10");
+    assert.equal(split(global["Kinnan, Bonder Prodigy"]).head, "1 new");
+    assert.equal(split(global[KRAUM_TYMNA]).head, "2 new");
+    assert.ok(split(global[KRAUM_TYMNA]).date <= "2032-04-10");
+    // The 2030 event used the curly apostrophe; it counts for the straight spelling.
+    assert.equal(split(global["K'rrik, Son of Yawgmoth"]).head, "2 new");
+    assert.ok(split(global["K'rrik, Son of Yawgmoth"]).date <= "2030-06-05", global["K'rrik, Son of Yawgmoth"]);
     // In the region only the straight-apostrophe entry exists, but first_seen still comes from the older event elsewhere.
-    assert.deepEqual(await trend("pacific-northwest"), { "K'rrik, Son of Yawgmoth": "1 new 2030-06-05" });
+    const pnw = await trend("pacific-northwest");
+    assert.deepEqual(Object.keys(pnw), ["K'rrik, Son of Yawgmoth"]);
+    assert.equal(split(pnw["K'rrik, Son of Yawgmoth"]).head, "1 new");
+    assert.ok(split(pnw["K'rrik, Son of Yawgmoth"]).date <= "2030-06-05", pnw["K'rrik, Son of Yawgmoth"]);
   });
 
   test("top-cut appearances: field numbers count only events that had a cut, and only entries with a valid commander", async () => {
