@@ -28,37 +28,101 @@
       "eventName": "Guardian Games CEDH Monthly PDX",
       "participantCount": 66,
       "result": "winner",
-      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "winnerName": "Mara Ellison",
+      "winnerHidden": false
     },
     {
       "eventName": "Gem State CEDH | Ad Naus for a Cause!",
       "participantCount": 44,
       "result": "winner",
-      "resultCommanders": "Tasigur, the Golden Fang"
+      "resultCommanders": "Tasigur, the Golden Fang",
+      "winnerName": "Tobias Quill",
+      "winnerHidden": false
     },
     {
       "eventName": "Mind Full Games: October's Monthly 1k Event",
       "participantCount": 43,
       "result": "winner",
-      "resultCommanders": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh"
+      "resultCommanders": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
+      "winnerName": null,
+      "winnerHidden": false
     },
     {
       "eventName": "Olympic Commander Challenger Series 1k Vol 4 - 2026",
       "participantCount": 34,
       "result": "winner",
-      "resultCommanders": "Azami, Lady of Scrolls"
+      "resultCommanders": "Azami, Lady of Scrolls",
+      "winnerName": "Ines Varga",
+      "winnerHidden": false
     },
     {
       "eventName": "Commander Invitational Qualifier Cardboard Battlegrounds",
       "participantCount": 32,
       "result": "winner",
-      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "winnerName": "Devon Okafor",
+      "winnerHidden": false
     },
     {
       "eventName": "Guardian Games PDX CEDH Halloween",
       "participantCount": 32,
       "result": "winner",
-      "resultCommanders": "Lumra, Bellow of the Woods"
+      "resultCommanders": "Lumra, Bellow of the Woods",
+      "winnerName": "Lena Marchetti",
+      "winnerHidden": false
+    }
+  ],
+  "topPlayers": [
+    {
+      "name": "Mara Ellison",
+      "wins": 2,
+      "topCuts": 3,
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "name": "Tobias Quill",
+      "wins": 1,
+      "topCuts": 2,
+      "commander": "Tasigur, the Golden Fang"
+    },
+    {
+      "name": "Ines Varga",
+      "wins": 1,
+      "topCuts": 1,
+      "commander": "Azami, Lady of Scrolls"
+    },
+    {
+      "name": "Aiko Tanabe",
+      "wins": 0,
+      "topCuts": 3,
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "name": "Rafael Montoya",
+      "wins": 0,
+      "topCuts": 2,
+      "commander": null
+    }
+  ],
+  "risingPlayers": [
+    {
+      "name": "Noor Haddad",
+      "reason": "first top cut",
+      "eventName": "Guardian Games CEDH Monthly PDX",
+      "participantCount": 66
+    },
+    {
+      "name": "Tobias Quill",
+      "reason": "first win",
+      "eventName": "Gem State CEDH | Ad Naus for a Cause!",
+      "participantCount": 44
+    },
+    {
+      "name": "Felix Brandt",
+      "reason": "early top cut",
+      "eventName": "Olympic Commander Challenger Series 1k Vol 4 - 2026",
+      "participantCount": 34
     }
   ],
   "topCutAppearances": [

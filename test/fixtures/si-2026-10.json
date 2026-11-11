@@ -28,61 +28,133 @@
       "eventName": "CEDH Norte Bilbao + Zaragoza + Pamplona",
       "participantCount": 96,
       "result": "winner",
-      "resultCommanders": "Arcum Dagsson"
+      "resultCommanders": "Arcum Dagsson",
+      "winnerName": "Mara Ellison",
+      "winnerHidden": false
     },
     {
       "eventName": "1.cEDH069 Major @Die Fabrik",
       "participantCount": 77,
       "result": "winner",
-      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "winnerName": "Tobias Quill",
+      "winnerHidden": false
     },
     {
       "eventName": "The Warsaw Pact 2.0 - cEDH European Championship Qualifier",
       "participantCount": 55,
       "result": "winner",
-      "resultCommanders": "Zirda, the Dawnwaker"
+      "resultCommanders": "Zirda, the Dawnwaker",
+      "winnerName": null,
+      "winnerHidden": false
     },
     {
       "eventName": "Imperial Siege Nuremberg",
       "participantCount": 54,
       "result": "winner",
-      "resultCommanders": "Sisay, Weatherlight Captain"
+      "resultCommanders": "Sisay, Weatherlight Captain",
+      "winnerName": "Ines Varga",
+      "winnerHidden": false
     },
     {
       "eventName": "La CASTanyada cEDH | La Competència",
       "participantCount": 52,
       "result": "winner",
-      "resultCommanders": "Dack Fayden, Helping Hand"
+      "resultCommanders": "Dack Fayden, Helping Hand",
+      "winnerName": "Devon Okafor",
+      "winnerHidden": false
     },
     {
       "eventName": "TAP THAT TUNDRA - EU CHAMPIONSHIP QUALIFIER",
       "participantCount": 51,
       "result": "winner",
-      "resultCommanders": "Yuriko, the Tiger's Shadow"
+      "resultCommanders": "Yuriko, the Tiger's Shadow",
+      "winnerName": "Lena Marchetti",
+      "winnerHidden": false
     },
     {
       "eventName": "European Qualifier CEDH Octubre",
       "participantCount": 47,
       "result": "winner",
-      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "winnerName": "Soren Blake",
+      "winnerHidden": false
     },
     {
       "eventName": "Piece of Cake (unofficial Czech cEDH championship)",
       "participantCount": 44,
       "result": "winner",
-      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+      "resultCommanders": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "winnerName": "Priya Nandakumar",
+      "winnerHidden": false
     },
     {
       "eventName": "LITTLE PARIS SIEGE III",
       "participantCount": 42,
       "result": "winner",
-      "resultCommanders": "Crystal, Inhuman Princess"
+      "resultCommanders": "Crystal, Inhuman Princess",
+      "winnerName": "Hugo Lindqvist",
+      "winnerHidden": false
     },
     {
       "eventName": "Mana Burn II - European cEDH Championship Qualifier",
       "participantCount": 41,
       "result": "winner",
-      "resultCommanders": "Kinnan, Bonder Prodigy"
+      "resultCommanders": "Kinnan, Bonder Prodigy",
+      "winnerName": "Camille Rousseau",
+      "winnerHidden": false
+    }
+  ],
+  "topPlayers": [
+    {
+      "name": "Mara Ellison",
+      "wins": 2,
+      "topCuts": 3,
+      "commander": "Arcum Dagsson"
+    },
+    {
+      "name": "Tobias Quill",
+      "wins": 1,
+      "topCuts": 2,
+      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+    },
+    {
+      "name": "Ines Varga",
+      "wins": 1,
+      "topCuts": 1,
+      "commander": "Sisay, Weatherlight Captain"
+    },
+    {
+      "name": "Aiko Tanabe",
+      "wins": 0,
+      "topCuts": 3,
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "name": "Rafael Montoya",
+      "wins": 0,
+      "topCuts": 2,
+      "commander": null
+    }
+  ],
+  "risingPlayers": [
+    {
+      "name": "Noor Haddad",
+      "reason": "first top cut",
+      "eventName": "CEDH Norte Bilbao + Zaragoza + Pamplona",
+      "participantCount": 96
+    },
+    {
+      "name": "Tobias Quill",
+      "reason": "first win",
+      "eventName": "1.cEDH069 Major @Die Fabrik",
+      "participantCount": 77
+    },
+    {
+      "name": "Felix Brandt",
+      "reason": "early top cut",
+      "eventName": "Imperial Siege Nuremberg",
+      "participantCount": 54
     }
   ],
   "topCutAppearances": [

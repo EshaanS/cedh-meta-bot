@@ -28,61 +28,133 @@
       "eventName": "MBG Commanderpalooza #3 (TimeTwister event)",
       "participantCount": 150,
       "result": "winner",
-      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver"
+      "resultCommanders": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "winnerName": "Mara Ellison",
+      "winnerHidden": false
     },
     {
       "eventName": "BAKED ZITI 4: Goldsabertooth’s NY cEDH",
       "participantCount": 119,
       "result": "winner",
-      "resultCommanders": "Dack Fayden, Helping Hand"
+      "resultCommanders": "Dack Fayden, Helping Hand",
+      "winnerName": "Tobias Quill",
+      "winnerHidden": false
     },
     {
       "eventName": "1st annual 1stCKMA cEDH Tournament *100% PROXY FRIENDLY* *GAEA'S CRADLE*",
       "participantCount": 105,
       "result": "winner",
-      "resultCommanders": "Kinnan, Bonder Prodigy"
+      "resultCommanders": "Kinnan, Bonder Prodigy",
+      "winnerName": null,
+      "winnerHidden": false
     },
     {
       "eventName": "CEDH Norte Bilbao + Zaragoza + Pamplona",
       "participantCount": 96,
       "result": "winner",
-      "resultCommanders": "Arcum Dagsson"
+      "resultCommanders": "Arcum Dagsson",
+      "winnerName": "Ines Varga",
+      "winnerHidden": false
     },
     {
       "eventName": "Collectible Ventures: S.N.L. / Mages 10K Birthday Bash",
       "participantCount": 94,
       "result": "winner",
-      "resultCommanders": "Kinnan, Bonder Prodigy"
+      "resultCommanders": "Kinnan, Bonder Prodigy",
+      "winnerName": "Devon Okafor",
+      "winnerHidden": false
     },
     {
       "eventName": "Steel City Green Chile Slopper Tournament Series I",
       "participantCount": 93,
       "result": "winner",
-      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver"
+      "resultCommanders": "Thrasios, Triton Hero / Tymna the Weaver",
+      "winnerName": "Lena Marchetti",
+      "winnerHidden": false
     },
     {
       "eventName": "Perfect Storm Comics & Games - Tabernacle 10K",
       "participantCount": 91,
       "result": "winner",
-      "resultCommanders": "Krark, the Thumbless / Thrasios, Triton Hero"
+      "resultCommanders": "Krark, the Thumbless / Thrasios, Triton Hero",
+      "winnerName": "Soren Blake",
+      "winnerHidden": false
     },
     {
       "eventName": "Quantum Nexus' Highlander 10K",
       "participantCount": 84,
       "result": "winner",
-      "resultCommanders": "Kinnan, Bonder Prodigy"
+      "resultCommanders": "Kinnan, Bonder Prodigy",
+      "winnerName": "Priya Nandakumar",
+      "winnerHidden": false
     },
     {
       "eventName": "FOIL Gaea's Cradle cEDH 6k",
       "participantCount": 79,
       "result": "winner",
-      "resultCommanders": "Kinnan, Bonder Prodigy"
+      "resultCommanders": "Kinnan, Bonder Prodigy",
+      "winnerName": "Hugo Lindqvist",
+      "winnerHidden": false
     },
     {
       "eventName": "1.cEDH069 Major @Die Fabrik",
       "participantCount": 77,
       "result": "winner",
-      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero"
+      "resultCommanders": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "winnerName": "Camille Rousseau",
+      "winnerHidden": false
+    }
+  ],
+  "topPlayers": [
+    {
+      "name": "Mara Ellison",
+      "wins": 2,
+      "topCuts": 3,
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "name": "Tobias Quill",
+      "wins": 1,
+      "topCuts": 2,
+      "commander": "Dack Fayden, Helping Hand"
+    },
+    {
+      "name": "Ines Varga",
+      "wins": 1,
+      "topCuts": 1,
+      "commander": "Arcum Dagsson"
+    },
+    {
+      "name": "Aiko Tanabe",
+      "wins": 0,
+      "topCuts": 3,
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+    },
+    {
+      "name": "Rafael Montoya",
+      "wins": 0,
+      "topCuts": 2,
+      "commander": null
+    }
+  ],
+  "risingPlayers": [
+    {
+      "name": "Noor Haddad",
+      "reason": "first top cut",
+      "eventName": "MBG Commanderpalooza #3 (TimeTwister event)",
+      "participantCount": 150
+    },
+    {
+      "name": "Tobias Quill",
+      "reason": "first win",
+      "eventName": "BAKED ZITI 4: Goldsabertooth’s NY cEDH",
+      "participantCount": 119
+    },
+    {
+      "name": "Felix Brandt",
+      "reason": "early top cut",
+      "eventName": "CEDH Norte Bilbao + Zaragoza + Pamplona",
+      "participantCount": 96
     }
   ],
   "topCutAppearances": [

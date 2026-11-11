@@ -3,11 +3,14 @@
 //   --months N  the N most recent full calendar months (never the current month)
 //   --force     re-fetch windows already recorded in ingest_log
 // A window is recorded in ingest_log only once its end is at least 14 days in the past, so recent
-// windows are re-fetched on every run. All writes are upserts, so reruns leave row counts unchanged.
+// windows are re-fetched on every run. Windows logged before player ids were stored (has_players = false)
+// are fetched again. All writes are upserts, so reruns leave row counts unchanged.
+// Player data: only the TopDeck player id and display name are stored, and names are refreshed on every
+// ingest. "Deleted User" or a missing name is stored as null, and opted-out players keep a null name.
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { parseArgs } from "node:util";
 import { connect, type Sql } from "./lib/db";
-import { fetchBulkEdh, fullMonthWindows, isObj, log, num, sleep, text, type MonthWindow, type Obj } from "./lib/topdeck";
+import { fetchBulkEdh, fullMonthWindows, isObj, log, num, playerId, playerName, sleep, text, type MonthWindow, type Obj } from "./lib/topdeck";
 import { exitWithError } from "./lib/errors";
 
 const DAY_MS = 86_400_000;
@@ -15,6 +18,7 @@ const LOG_MIN_AGE_DAYS = 14;
 const BULK_PAUSE_MS = 10_000;
 const TOURNAMENT_CHUNK = 500;
 const ENTRY_CHUNK = 2000;
+const PLAYER_CHUNK = 5000;
 
 type TournamentRow = {
   tid: string;
@@ -46,16 +50,18 @@ const COUNTS = {
   losses_bracket: "lossesBracket",
 } as const;
 type CountColumn = keyof typeof COUNTS;
-type EntryRow = { tid: string; standing_index: number; leader: string | null } & Record<CountColumn, number>;
+type EntryRow = { tid: string; standing_index: number; leader: string | null; player_id: string | null } & Record<CountColumn, number>;
+type PlayerRow = { player_id: string; display_name: string | null };
+type Kept = { tournament: TournamentRow; entries: EntryRow[]; players: PlayerRow[] };
 
-type Mapped = { kind: "ok"; tournament: TournamentRow; entries: EntryRow[] } | { kind: "team" } | { kind: "invalid" };
+type Mapped = ({ kind: "ok" } & Kept) | { kind: "team" } | { kind: "invalid" };
 
 const int = (v: unknown): number | null => (typeof v === "number" && Number.isInteger(v) ? v : null);
 const float = (v: unknown): number | null => num(v) ?? null;
 
 /**
  * Whitelists the fields we store. Everything else in the API object (address, headerImage, game,
- * format, and any player fields) is dropped here, before any database write.
+ * format, and any player field other than id and name) is dropped here, before any database write.
  */
 function mapTournament(t: Obj): Mapped {
   if (t.isTeamEvent === true) return { kind: "team" };
@@ -64,6 +70,7 @@ function mapTournament(t: Obj): Mapped {
   if (!tid || startSecs === undefined || !Array.isArray(t.standings)) return { kind: "invalid" };
 
   const entries: EntryRow[] = [];
+  const players: PlayerRow[] = [];
   for (const [i, r] of t.standings.entries()) {
     if (!isObj(r)) return { kind: "invalid" };
     const counts = {} as Record<CountColumn, number>;
@@ -72,7 +79,9 @@ function mapTournament(t: Obj): Mapped {
       if (v === null) return { kind: "invalid" };
       counts[column] = v;
     }
-    entries.push({ tid, standing_index: i, leader: text(r.leader), ...counts });
+    const pid = playerId(r.id);
+    if (pid !== null) players.push({ player_id: pid, display_name: playerName(r.name) });
+    entries.push({ tid, standing_index: i, leader: text(r.leader), player_id: pid, ...counts });
   }
 
   const e: Obj = isObj(t.eventData) ? t.eventData : {};
@@ -96,6 +105,7 @@ function mapTournament(t: Obj): Mapped {
       country: text(e.country),
     },
     entries,
+    players,
   };
 }
 
@@ -109,6 +119,8 @@ type WindowResult = {
   fetched: number;
   tournaments: number;
   entries: number;
+  players: number;
+  entriesWithPlayer: number;
   team: number;
   invalid: number;
   duplicates: number;
@@ -118,7 +130,7 @@ type WindowResult = {
 /** Fetches one window and writes it in a single transaction. Logs the window only if `shouldLog`. */
 async function ingestWindow(sql: Sql, w: MonthWindow, shouldLog: boolean): Promise<WindowResult> {
   const raw = await fetchBulkEdh(w);
-  const byTid = new Map<string, { tournament: TournamentRow; entries: EntryRow[] }>();
+  const byTid = new Map<string, Kept>();
   let team = 0, invalid = 0, duplicates = 0;
   for (const item of raw) {
     const m: Mapped = isObj(item) ? mapTournament(item) : { kind: "invalid" };
@@ -126,15 +138,23 @@ async function ingestWindow(sql: Sql, w: MonthWindow, shouldLog: boolean): Promi
     else if (m.kind === "invalid") invalid++;
     else {
       if (byTid.has(m.tournament.tid)) duplicates++;
-      byTid.set(m.tournament.tid, { tournament: m.tournament, entries: m.entries });
+      byTid.set(m.tournament.tid, { tournament: m.tournament, entries: m.entries, players: m.players });
     }
   }
   const tournaments = [...byTid.values()].map((k) => k.tournament);
   const entries = [...byTid.values()].flatMap((k) => k.entries);
+  // One row per player; the name from the window's latest event wins.
+  const playerById = new Map<string, PlayerRow>();
+  for (const k of [...byTid.values()].sort((a, b) => a.tournament.start_date.getTime() - b.tournament.start_date.getTime())) {
+    for (const p of k.players) playerById.set(p.player_id, p);
+  }
+  const players = [...playerById.values()];
   const result: WindowResult = {
     fetched: raw.length,
     tournaments: tournaments.length,
     entries: entries.length,
+    players: players.length,
+    entriesWithPlayer: entries.filter((e) => e.player_id !== null).length,
     team,
     invalid,
     duplicates,
@@ -173,11 +193,21 @@ async function ingestWindow(sql: Sql, w: MonthWindow, shouldLog: boolean): Promi
           geo_checked_at        = case when (tournaments.lat, tournaments.lng) is distinct from (excluded.lat, excluded.lng) then null else tournaments.geo_checked_at end,
           ingested_at = now()`;
     }
+    for (const chunk of chunks(players, PLAYER_CHUNK)) {
+      await tx`
+        insert into players ${tx(chunk)}
+        on conflict (player_id) do update set display_name = excluded.display_name, updated_at = now()`;
+    }
+    // Opted-out players keep no stored name (same transaction, so the name is never visible).
+    await tx`
+      update players set display_name = null
+      where display_name is not null and player_id in (select player_id from player_optouts)`;
     for (const chunk of chunks(entries, ENTRY_CHUNK)) {
       await tx`
         insert into entries ${tx(chunk)}
         on conflict (tid, standing_index) do update set
           leader = excluded.leader,
+          player_id = excluded.player_id,
           wins = excluded.wins,
           draws = excluded.draws,
           losses = excluded.losses,
@@ -199,9 +229,10 @@ async function ingestWindow(sql: Sql, w: MonthWindow, shouldLog: boolean): Promi
     }
     if (shouldLog) {
       await tx`
-        insert into ingest_log (window_start, window_end, tournaments, entries, team_events_skipped, invalid_skipped)
-        values (${w.start}, ${w.end}, ${tournaments.length}, ${entries.length}, ${team}, ${invalid})
+        insert into ingest_log (window_start, window_end, tournaments, entries, team_events_skipped, invalid_skipped, has_players)
+        values (${w.start}, ${w.end}, ${tournaments.length}, ${entries.length}, ${team}, ${invalid}, true)
         on conflict (window_start) do update set
+          has_players = true,
           window_end = excluded.window_end,
           tournaments = excluded.tournaments,
           entries = excluded.entries,
@@ -229,7 +260,7 @@ async function main() {
   const sql = connect();
   try {
     const logged = new Set(
-      (await sql<{ window_start: Date }[]>`select window_start from ingest_log`).map((r) => r.window_start.getTime()),
+      (await sql<{ window_start: Date }[]>`select window_start from ingest_log where has_players`).map((r) => r.window_start.getTime()),
     );
     console.log("Data provided by TopDeck.gg (https://topdeck.gg)");
     let fetchedAny = false;
@@ -253,6 +284,7 @@ async function main() {
             : `not logged: ended ${ageDays.toFixed(1)} days ago (< ${LOG_MIN_AGE_DAYS}), will be re-fetched next run`;
       console.log(
         `${w.label}: ${r.fetched} fetched; ${r.tournaments} tournaments and ${r.entries} entries upserted; ` +
+          `${r.players} players, ${r.entriesWithPlayer} entries with a player id; ` +
           `${r.team} team events skipped; ${r.invalid} invalid skipped; ${r.duplicates} duplicate TIDs; ` +
           `${r.staleDeleted} stale entries deleted; ${logNote}`,
       );

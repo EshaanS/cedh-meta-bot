@@ -21,7 +21,7 @@ Nothing here posts outside your test server. The guild gate fails closed: with n
    | `DATABASE_URL` | Supabase **transaction pooler** URI, port **6543**, plus `?sslmode=require` |
    | `CRON_SECRET` | a long random string |
    | `ALLOWED_GUILD_IDS` | your test server's ID (right-click the server → Copy Server ID, with Developer Mode on) |
-   | `CONTACT_EMAIL` | optional, shown on the privacy page |
+   | `CONTACT_EMAIL` | shown on the privacy page; players write here to ask not to be named, so set it before posting |
 
 3. Deploy, then open `https://<your-app>.vercel.app/`. The page should show an "Add Field Report to a server" link.
 4. `vercel.json` schedules `/api/cron` daily at 15:17 UTC. Vercel sends `Authorization: Bearer $CRON_SECRET` itself.
@@ -59,6 +59,19 @@ The second call posts once to your test channel. Run it again: `posted` is empty
 
 ## 7. Removal
 Kick the bot from the test server. The next cron run lists the bot's guilds and deletes that server's settings.
+
+## Player data and opt-outs
+Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,
+keep names current, and honor privacy requests (`docs/permissions.md`).
+
+- First run after migration 008: `npm run migrate`, then `npm run backfill -- --months 36` (player history; it
+  re-fetches months that were ingested before player ids were stored), then `npm run classify`,
+  `npm run standings`, `npm run geocode`, `npm run regions`. After that, `npm run refresh` as before.
+- When a player asks not to be named, find their TopDeck player id and run `npm run optout -- add <player_id>
+  --note "requested by email 2026-11-10"`. They show as "a player" in Winners and are left out of the player
+  sections from the next post or `/preview` on. Posts already sent are not edited.
+- `npm run optout -- remove <player_id>` undoes it (the name returns on the next refresh), and
+  `npm run optout -- list` shows the list.
 
 ## Going public (needs your explicit approval)
 1. In Vercel, set `ALLOW_ALL_GUILDS=true`, or add servers to `ALLOWED_GUILD_IDS`, and redeploy.

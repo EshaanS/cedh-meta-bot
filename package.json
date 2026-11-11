@@ -24,7 +24,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "standings": "tsx --env-file-if-exists=.env scripts/fetch-standings.ts"
+    "standings": "tsx --env-file-if-exists=.env scripts/fetch-standings.ts",
+    "optout": "tsx --env-file-if-exists=.env scripts/optout.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

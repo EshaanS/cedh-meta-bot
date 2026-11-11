@@ -5,8 +5,12 @@
 const BASE = "https://topdeck.gg/api";
 const MAX_RETRIES = 5;
 
-/** Standings columns requested from the bulk endpoint. `leader` comes back without being requested. */
-export const COLUMNS = ["wins", "draws", "losses", "winsSwiss", "winsBracket", "lossesSwiss", "lossesBracket", "byes"];
+/**
+ * Standings columns requested from the bulk endpoint. `leader` comes back without being requested.
+ * `name` and `id` are the player's display name and TopDeck player id (permitted, see docs/permissions.md).
+ * Decklists and Discord fields are never requested.
+ */
+export const COLUMNS = ["name", "id", "wins", "draws", "losses", "winsSwiss", "winsBracket", "lossesSwiss", "lossesBracket", "byes"];
 
 export type Json = null | boolean | number | string | Json[] | { [k: string]: Json };
 export type Obj = { [k: string]: Json };
@@ -17,6 +21,13 @@ export const isObj = (v: unknown): v is Obj => typeof v === "object" && v !== nu
 export const num = (v: unknown): number | undefined => (typeof v === "number" && Number.isFinite(v) ? v : undefined);
 /** Trimmed string, or null when the value is not a string or is blank. */
 export const text = (v: unknown): string | null => (typeof v === "string" && v.trim() !== "" ? v.trim() : null);
+/** TopDeck player id as text, or null when absent. */
+export const playerId = (v: unknown): string | null => (typeof v === "number" && Number.isFinite(v) ? String(v) : text(v));
+/** Player display name, or null when missing or "Deleted User" (a removed player). */
+export const playerName = (v: unknown): string | null => {
+  const name = text(v);
+  return name === null || /^deleted user$/i.test(name) ? null : name;
+};
 
 function retryAfterMs(header: string | null): number {
   if (!header) return 60_000;
@@ -88,24 +99,31 @@ export async function fetchInfo(tid: string): Promise<unknown> {
   return JSON.parse(await request(`/v2/tournaments/${encodeURIComponent(tid)}/info`, { method: "GET" }));
 }
 
-export type StandingOne = { status: "found" | "no_standing_1" | "no_commander"; leader: string | null };
+export type StandingOne = {
+  status: "found" | "no_standing_1" | "no_commander";
+  leader: string | null;
+  playerId: string | null;
+  playerName: string | null;
+};
 
 /**
- * Reads only the standing-1 row's `leader` from a standings response. Everything else in the response
- * (player names, IDs, decklists) is ignored and never returned.
+ * Reads only the standing-1 row's `leader`, `id` and `name` from a standings response. Everything else in
+ * the response (other players, decklists, deck objects) is ignored and never returned.
  */
 export function pickStandingOne(rows: unknown): StandingOne {
   const list = Array.isArray(rows) ? rows : [];
   const first = list.find((r) => isObj(r) && Number(r.standing) === 1);
-  if (!first || !isObj(first)) return { status: "no_standing_1", leader: null };
+  if (!first || !isObj(first)) return { status: "no_standing_1", leader: null, playerId: null, playerName: null };
   const leader = text(first.leader);
-  return leader ? { status: "found", leader } : { status: "no_commander", leader: null };
+  const id = playerId(first.id);
+  const player = { playerId: id, playerName: id === null ? null : playerName(first.name) };
+  return leader ? { status: "found", leader, ...player } : { status: "no_commander", leader: null, ...player };
 }
 
 /**
- * GET /v2/tournaments/{tid}/standings, reduced to the standing-1 commander. The endpoint ignores `columns`
- * and returns player names, IDs and decklists; only `standing` and `leader` are read, and the parsed response
- * goes out of scope here.
+ * GET /v2/tournaments/{tid}/standings, reduced to the standing-1 commander and player. The endpoint ignores
+ * `columns` and returns every player's name, ID and decklist; only the standing-1 row's `standing`, `leader`,
+ * `id` and `name` are read, and the parsed response goes out of scope here.
  */
 export async function fetchStandingOne(tid: string): Promise<StandingOne> {
   return pickStandingOne(JSON.parse(await request(`/v2/tournaments/${encodeURIComponent(tid)}/standings`, { method: "GET" })));
