@@ -34,11 +34,11 @@ Felix Brandt — top cut in first 5 events · 96p CEDH Norte Bilbao + Zaragoza +
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Top-cut appearances — October
-1. Kraum / Tymna the Weaver — 157
-2. Kinnan, Bonder Prodigy — 153
-3. Rograkh / Thrasios — 107
-4. Sisay, Weatherlight Captain — 102
-5. Rograkh / Silas Renn — 90
+1. Kraum / Tymna the Weaver — 157 cuts · 9.2% of cuts vs 8.5% of field
+2. Kinnan, Bonder Prodigy — 153 cuts · 9.0% of cuts vs 7.5% of field
+3. Rograkh / Thrasios — 107 cuts · 6.3% of cuts vs 5.6% of field
+4. Sisay, Weatherlight Captain — 102 cuts · 6.0% of cuts vs 5.1% of field
+5. Rograkh / Silas Renn — 90 cuts · 5.3% of cuts vs 4.9% of field
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -69,9 +69,9 @@ Felix Brandt — top cut in first 5 events · 96p CEDH Norte Bilbao + Zaragoza +
 5. Malcolm / Tymna the Weaver — 35% (139 entries)
 
 📈 Rising commanders (by share growth vs prior 3 months)
-Jace, Multiverse Architect — 19 entries in October, new
-Geist of Saint Thalia — 14 entries in October, new
-Dack Fayden, Helping Hand — 93 entries in October (avg 1/month)
+Dack Fayden, Helping Hand — 93 entries in October, new since Sep 26
+Vraska, Soul of Stone — 35 entries in October, new since Sep 26
+Jace, Multiverse Architect — 19 entries in October, new since Oct 1
 
 📉 Cooling commanders (by share drop vs prior 3 months)
 Etali, Primal Conqueror — 98 entries in October (avg 136/month)

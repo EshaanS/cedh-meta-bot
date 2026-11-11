@@ -13,6 +13,7 @@ import {
   monthlyAvg,
   POST_CONFIG,
   sanitizeOrganizerText,
+  shortDate,
   shortenCommander,
   type PostData,
 } from "../scripts/lib/post";
@@ -176,12 +177,14 @@ test("budget trimming drops bottom sections first and keeps the post within budg
 test("rising and cooling: count display, eligibility and matching counts", () => {
   const data = loadFixture("pacific-northwest-2026-10");
   const top = data.metaShare.map((m) => m.commander);
+  const old = "2024-01-13";
   data.trend = [
-    { commander: "Jace, Multiverse Architect", lastMonthEntries: 11, prior3AvgEntries: 0, shareChange: null, isNew: true },
-    { commander: top[1]!, lastMonthEntries: 12, prior3AvgEntries: 0.4, shareChange: 0.5, isNew: false },
-    { commander: top[2]!, lastMonthEntries: 25, prior3AvgEntries: 22, shareChange: -0.06, isNew: false }, // entries up: not cooling
-    { commander: top[3]!, lastMonthEntries: 4, prior3AvgEntries: 12, shareChange: -0.6, isNew: false }, // qualifies via prior avg
-    { commander: "Not In Top 15", lastMonthEntries: 3, prior3AvgEntries: 30, shareChange: -0.9, isNew: false },
+    // No entries here in the prior 3 months, but an old commander: plain "new".
+    { commander: "Jace, Multiverse Architect", lastMonthEntries: 11, prior3AvgEntries: 0, shareChange: null, isNew: true, firstSeen: "2025-03-08" },
+    { commander: top[1]!, lastMonthEntries: 12, prior3AvgEntries: 0.4, shareChange: 0.5, isNew: false, firstSeen: old },
+    { commander: top[2]!, lastMonthEntries: 25, prior3AvgEntries: 22, shareChange: -0.06, isNew: false, firstSeen: old }, // entries up: not cooling
+    { commander: top[3]!, lastMonthEntries: 4, prior3AvgEntries: 12, shareChange: -0.6, isNew: false, firstSeen: old }, // qualifies via prior avg
+    { commander: "Not In Top 15", lastMonthEntries: 3, prior3AvgEntries: 30, shareChange: -0.9, isNew: false, firstSeen: old },
   ];
   const { embed } = composePost(data);
   const rising = field(embed, "Rising commanders")!.value.split("\n");
@@ -297,7 +300,7 @@ test("layout: three blocks with dividers, emoji on every section, gold color, no
   for (const f of embed.fields) for (const line of f.value.split("\n")) assert.doesNotMatch(line, /^\s*(\d+\.|[-*+])\s/, `${f.name}: ${line}`);
   assert.match(field(embed, "Most played")!.value, /^1\\\. .+\n2\\\. /);
   // The preview shows plain numbers and the same dividers.
-  assert.match(text, /\n1\. Kraum \/ Tymna the Weaver — 157\n/);
+  assert.match(text, /\n1\. Kraum \/ Tymna the Weaver — \d+ cuts · \d+\.\d% of cuts vs \d+\.\d% of field\n/);
   assert.equal(text.split("\n").filter((l) => l === POST_CONFIG.dividerName).length, 3);
   assert.equal(POST_CONFIG.dividerName, "━".repeat(32));
   // Scene: one row of three inline fields (Discord's maximum per row), then Largest event at full width.
@@ -327,14 +330,16 @@ test("layout: three blocks with dividers, emoji on every section, gold color, no
 
 test("trim order: the decks block is cut bottom-up before anything in the people block", () => {
   const data = loadFixture("global-2026-10");
-  const full = composePost(data).embed;
+  // Top-cut detail is the very first thing to go; it is switched off here so this test is about lines.
+  const cfg = { ...POST_CONFIG, topCutDetail: 0 };
+  const full = composePost(data, cfg).embed;
   const count = (e: typeof full, name: string) => field(e, name)?.value.split("\n").length ?? 0;
   const people = ["Winners", "Top players", "Rising players"];
   const decks = ["Top-cut appearances", "Most played", "Best results", "Top-cut conversion", "Rising commanders", "Cooling commanders"];
   const decksAtFloor = (e: typeof full) => decks.every((d) => count(e, d) === (d === "Most played" ? 3 : 0));
   let sawPeopleTrim = false;
   for (let budget = contentLength(full); budget >= 800; budget -= 50) {
-    const e = composePost(data, { ...POST_CONFIG, contentBudget: budget }).embed;
+    const e = composePost(data, { ...cfg, contentBudget: budget }).embed;
     const peopleTrimmed = people.some((p) => count(e, p) < count(full, p));
     if (peopleTrimmed) {
       sawPeopleTrim = true;
@@ -343,9 +348,90 @@ test("trim order: the decks block is cut bottom-up before anything in the people
   }
   assert.ok(sawPeopleTrim, "the loop reached the people block");
   // Bottom-up inside decks: the first cut comes out of Cooling commanders.
-  const first = composePost(data, { ...POST_CONFIG, contentBudget: contentLength(full) - 1 }).embed;
+  const first = composePost(data, { ...cfg, contentBudget: contentLength(full) - 1 }).embed;
   assert.equal(count(first, "Cooling commanders"), count(full, "Cooling commanders") - 1);
   for (const name of [...people, ...decks.slice(0, 5)]) assert.equal(count(first, name), count(full, name), name);
+});
+
+test("rising commanders: 'new since' for a commander first seen in the last 2 months", () => {
+  const data = loadFixture("pacific-northwest-2026-10");
+  const top = data.metaShare.map((m) => m.commander);
+  const row = (commander: string, lastMonthEntries: number, prior3AvgEntries: number, shareChange: number | null, firstSeen: string | null) =>
+    ({ commander, lastMonthEntries, prior3AvgEntries, shareChange, isNew: prior3AvgEntries === 0, firstSeen });
+  data.trend = [
+    row("Dack Fayden, Helping Hand", 93, 4 / 3, 60, "2026-09-26"), // has prior entries, but first seen last month
+    row("Brand New, This Month", 14, 0, null, "2026-10-03"),
+    row("First Of Last Month", 12, 1, 5, "2026-09-01"), // the boundary is the first day of the month before
+    row("Just Too Old", 20, 2, 4, "2026-08-31"), // one day before the boundary: an ordinary riser
+    row("Back After A Break", 11, 0, null, "2024-05-18"), // nothing in the prior 3 months, but an old card
+    row("Date Unknown", 13, 0, null, null),
+    row(top[0]!, 30, 60, -0.5, "2026-09-10"), // falling, but new: never listed as cooling
+    row(top[1]!, 8, 40, -0.8, "2024-01-01"),
+  ];
+  const all = composePost(data, { ...POST_CONFIG, risingMax: 10 }).embed;
+  assert.deepEqual(field(all, "Rising commanders")!.value.split("\n"), [
+    "Dack Fayden, Helping Hand — 93 entries in October, new since Sep 26",
+    `${shortenCommander(top[0]!)} — 30 entries in October, new since Sep 10`,
+    "Brand New, This Month — 14 entries in October, new since Oct 3",
+    "Date Unknown — 13 entries in October, new",
+    "First Of Last Month — 12 entries in October, new since Sep 1",
+    "Back After A Break — 11 entries in October, new",
+    "Just Too Old — 20 entries in October (avg 2/month)",
+  ]);
+  assert.deepEqual(field(all, "Cooling commanders")!.value.split("\n"), [`${shortenCommander(top[1]!)} — 8 entries in October (avg 40/month)`]);
+  // Three months: August now counts as recent. Zero: the date is never used.
+  const three = field(composePost(data, { ...POST_CONFIG, risingMax: 10, newCommanderMonths: 3 }).embed, "Rising commanders")!.value;
+  assert.match(three, /Just Too Old — 20 entries in October, new since Aug 31/);
+  const off = field(composePost(data, { ...POST_CONFIG, risingMax: 10, newCommanderMonths: 0 }).embed, "Rising commanders")!.value;
+  assert.doesNotMatch(off, /new since/);
+  assert.match(off, /Dack Fayden, Helping Hand — 93 entries in October \(avg 1\/month\)/);
+  assert.equal(shortDate("2026-01-05"), "Jan 5");
+  // January report: the month before is December of the previous year.
+  const jan = loadFixture("pacific-northwest-2026-10");
+  jan.month = "2027-01";
+  jan.trend = [row("Year Boundary", 15, 0, null, "2026-12-02"), row("Too Old", 15, 0, null, "2026-11-30")];
+  assert.deepEqual(field(composePost(jan).embed, "Rising commanders")!.value.split("\n"),
+    ["Too Old — 15 entries in January, new", "Year Boundary — 15 entries in January, new since Dec 2"]);
+});
+
+test("top-cut appearances: share of cuts against share of field, with shorter forms under budget pressure", () => {
+  const data = loadFixture("pacific-northwest-2026-10");
+  const t = { totalTopCutEntries: 200, totalFieldEntries: 1000 };
+  data.topCutAppearances = [
+    { commander: "Kraum, Ludevic's Opus / Tymna the Weaver", topCutEntries: 20, fieldEntries: 80, ...t }, // 10.0% of cuts vs 8.0% of field
+    { commander: "Kinnan, Bonder Prodigy", topCutEntries: 10, fieldEntries: 100, ...t }, // 5.0% vs 10.0%
+    { commander: "One Cut", topCutEntries: 1, fieldEntries: 1, ...t },
+    { commander: "No Field Numbers", topCutEntries: 3, fieldEntries: 0, totalTopCutEntries: 0, totalFieldEntries: 0 },
+  ];
+  const lines = (detail: number) => field(composePost(data, { ...POST_CONFIG, topCutDetail: detail }).embed, "Top-cut appearances")!.value.split("\n");
+  assert.deepEqual(lines(2), [
+    "1\\. Kraum / Tymna the Weaver — 20 cuts · 10.0% of cuts vs 8.0% of field",
+    "2\\. Kinnan, Bonder Prodigy — 10 cuts · 5.0% of cuts vs 10.0% of field",
+    "3\\. One Cut — 1 cut · 0.5% of cuts vs 0.1% of field",
+    "4\\. No Field Numbers — 3 cuts",
+  ]);
+  assert.deepEqual(lines(1), [
+    "1\\. Kraum / Tymna the Weaver — 20 cuts · 1.25× its field share",
+    "2\\. Kinnan, Bonder Prodigy — 10 cuts · 0.50× its field share",
+    "3\\. One Cut — 1 cut · 5.00× its field share",
+    "4\\. No Field Numbers — 3 cuts",
+  ]);
+  assert.deepEqual(lines(0), ["1\\. Kraum / Tymna the Weaver — 20 cuts", "2\\. Kinnan, Bonder Prodigy — 10 cuts", "3\\. One Cut — 1 cut", "4\\. No Field Numbers — 3 cuts"]);
+
+  // Under budget pressure the detail steps down (both shares, ratio, count) before any line anywhere is trimmed.
+  const global = loadFixture("global-2026-10");
+  const full = composePost(global).embed;
+  const counts = (e: typeof full) => e.fields.map((f) => f.value.split("\n").length).join(",");
+  const topCut = (e: typeof full) => field(e, "Top-cut appearances")!.value;
+  assert.match(topCut(full), /% of cuts vs \d+\.\d% of field/);
+  const ratio = composePost(global, { ...POST_CONFIG, contentBudget: contentLength(full) - 1 }).embed;
+  assert.match(topCut(ratio), /× its field share/);
+  assert.equal(counts(ratio), counts(full), "no line was trimmed");
+  const plain = composePost(global, { ...POST_CONFIG, contentBudget: contentLength(ratio) - 1 }).embed;
+  assert.doesNotMatch(topCut(plain), /field/);
+  assert.equal(counts(plain), counts(full), "still no line trimmed");
+  const next = composePost(global, { ...POST_CONFIG, contentBudget: contentLength(plain) - 1 }).embed;
+  assert.notEqual(counts(next), counts(full), "only now does a line go");
 });
 
 test("player names are cut at a word boundary, not mid-word", () => {

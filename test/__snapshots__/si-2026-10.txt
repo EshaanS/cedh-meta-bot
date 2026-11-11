@@ -35,11 +35,11 @@ Felix Brandt — top cut in first 5 events · 54p Imperial Siege Nuremberg
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🎯 Top-cut appearances — October
-1. Kinnan, Bonder Prodigy — 35
-2. Kraum / Tymna the Weaver — 35
-3. Rograkh / Silas Renn — 30
-4. Rograkh / Thrasios — 28
-5. Sisay, Weatherlight Captain — 23
+1. Kinnan, Bonder Prodigy — 35 cuts · 9.3% of cuts vs 9.0% of field
+2. Kraum / Tymna the Weaver — 35 cuts · 9.3% of cuts vs 9.1% of field
+3. Rograkh / Silas Renn — 30 cuts · 8.0% of cuts vs 8.0% of field
+4. Rograkh / Thrasios — 28 cuts · 7.4% of cuts vs 6.6% of field
+5. Sisay, Weatherlight Captain — 23 cuts · 6.1% of cuts vs 5.4% of field
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -70,7 +70,7 @@ Felix Brandt — top cut in first 5 events · 54p Imperial Siege Nuremberg
 5. Kodama of the East Tree / Tymna the Weaver — 42% (31 entries)
 
 📈 Rising commanders (by share growth vs prior 3 months)
-Dack Fayden, Helping Hand — 19 entries in October, new
+Dack Fayden, Helping Hand — 19 entries in October, new since Sep 26
 Zirda, the Dawnwaker — 14 entries in October (avg 2/month)
 Urza, Lord High Artificer — 14 entries in October (avg 5/month)
 

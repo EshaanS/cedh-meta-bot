@@ -129,43 +129,73 @@
   "topCutAppearances": [
     {
       "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
-      "topCutEntries": 14
+      "topCutEntries": 14,
+      "fieldEntries": 27,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Kinnan, Bonder Prodigy",
-      "topCutEntries": 11
+      "topCutEntries": 11,
+      "fieldEntries": 21,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
-      "topCutEntries": 5
+      "topCutEntries": 5,
+      "fieldEntries": 18,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Thrasios, Triton Hero / Tymna the Weaver",
-      "topCutEntries": 5
+      "topCutEntries": 5,
+      "fieldEntries": 16,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Sisay, Weatherlight Captain",
-      "topCutEntries": 4
+      "topCutEntries": 4,
+      "fieldEntries": 21,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Etali, Primal Conqueror",
-      "topCutEntries": 3
+      "topCutEntries": 3,
+      "fieldEntries": 8,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Kefka, Court Mage",
-      "topCutEntries": 3
+      "topCutEntries": 3,
+      "fieldEntries": 7,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
-      "topCutEntries": 3
+      "topCutEntries": 3,
+      "fieldEntries": 13,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
-      "topCutEntries": 3
+      "topCutEntries": 3,
+      "fieldEntries": 22,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     },
     {
       "commander": "Baylen, the Haymaker",
-      "topCutEntries": 2
+      "topCutEntries": 2,
+      "fieldEntries": 4,
+      "totalTopCutEntries": 103,
+      "totalFieldEntries": 404
     }
   ],
   "metaShare": [
@@ -893,1288 +923,1472 @@
       "lastMonthEntries": 27,
       "prior3AvgEntries": 22.333333333333332,
       "shareChange": -0.0552024566164393,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-11"
     },
     {
       "commander": "Kinnan, Bonder Prodigy",
       "lastMonthEntries": 25,
       "prior3AvgEntries": 21.666666666666668,
       "shareChange": -0.09827015090172986,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
       "lastMonthEntries": 22,
       "prior3AvgEntries": 21,
       "shareChange": -0.18128654970760227,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
       "lastMonthEntries": 21,
       "prior3AvgEntries": 9.333333333333334,
       "shareChange": 0.7583732057416268,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-11"
     },
     {
       "commander": "Sisay, Weatherlight Captain",
       "lastMonthEntries": 21,
       "prior3AvgEntries": 13,
       "shareChange": 0.26242178873757815,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Thrasios, Triton Hero / Tymna the Weaver",
       "lastMonthEntries": 16,
       "prior3AvgEntries": 10.333333333333334,
       "shareChange": 0.21006328137058183,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
       "lastMonthEntries": 13,
       "prior3AvgEntries": 7.333333333333333,
       "shareChange": 0.38538494997825157,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Magda, Brazen Outlaw",
       "lastMonthEntries": 12,
       "prior3AvgEntries": 10.666666666666666,
       "shareChange": -0.1208133971291867,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Ral, Monsoon Mage",
       "lastMonthEntries": 10,
       "prior3AvgEntries": 7.666666666666667,
       "shareChange": 0.019346785937174982,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
       "lastMonthEntries": 9,
       "prior3AvgEntries": 7,
       "shareChange": 0.004784688995215447,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Tayam, Luminous Enigma",
       "lastMonthEntries": 9,
       "prior3AvgEntries": 8.333333333333334,
       "shareChange": -0.1559808612440191,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Vivi Ornitier",
       "lastMonthEntries": 9,
       "prior3AvgEntries": 4.333333333333333,
       "shareChange": 0.6231137283768864,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Winota, Joiner of Forces",
       "lastMonthEntries": 9,
       "prior3AvgEntries": 5.333333333333333,
       "shareChange": 0.31877990430622005,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Etali, Primal Conqueror",
       "lastMonthEntries": 8,
       "prior3AvgEntries": 9.333333333333334,
       "shareChange": -0.3301435406698565,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
       "lastMonthEntries": 8,
       "prior3AvgEntries": 7,
       "shareChange": -0.10685805422647532,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-11"
     },
     {
       "commander": "Kefka, Court Mage",
       "lastMonthEntries": 7,
       "prior3AvgEntries": 6,
       "shareChange": -0.08825093035619358,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Tivit, Seller of Secrets",
       "lastMonthEntries": 7,
       "prior3AvgEntries": 4.666666666666667,
       "shareChange": 0.1722488038277512,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Chatterfang, Squirrel General",
       "lastMonthEntries": 5,
       "prior3AvgEntries": 2,
       "shareChange": 0.9537480063795853,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Crystal, Inhuman Princess",
       "lastMonthEntries": 5,
       "prior3AvgEntries": 6.666666666666667,
       "shareChange": -0.4138755980861244,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-06-20"
     },
     {
       "commander": "Scion of the Ur-Dragon",
       "lastMonthEntries": 5,
       "prior3AvgEntries": 4.333333333333333,
       "shareChange": -0.09827015090172986,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Shang-Chi, Master of Kung Fu",
       "lastMonthEntries": 5,
       "prior3AvgEntries": 1,
       "shareChange": 2.9074960127591707,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-07-11"
     },
     {
       "commander": "Vraska, Soul of Stone",
       "lastMonthEntries": 5,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-09-26"
     },
     {
       "commander": "Baylen, the Haymaker",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Dack Fayden, Helping Hand",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-09-26"
     },
     {
       "commander": "Derevi, Empyrial Tactician",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": 0.8755980861244019,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Helga, Skittish Seer",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 2.3333333333333335,
       "shareChange": 0.33971291866028697,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "K'rrik, Son of Yawgmoth",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 1,
       "shareChange": 2.1259968102073366,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Kenrith, the Returned King",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 7,
       "shareChange": -0.5534290271132376,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Lumra, Bellow of the Woods",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 2.6666666666666665,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Nick Fury, Agent of S.H.I.E.L.D.",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 4.666666666666667,
       "shareChange": -0.3301435406698565,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-06-21"
     },
     {
       "commander": "Prismari, the Inspiration",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-04-18"
     },
     {
       "commander": "Rocco, Cabaretti Caterer",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 3.6666666666666665,
       "shareChange": -0.1474554153979991,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Super-Skrull",
       "lastMonthEntries": 4,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": 0.8755980861244019,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-06-27"
     },
     {
       "commander": "Elsha of the Infinite",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 6.033492822966506,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Hashaton, Scarab's Fist",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.7583732057416266,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Jhoira, Ageless Innovator",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 2.516746411483253,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Kediss, Emberclaw Familiar / Malcolm, Keen-Eyed Navigator",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 2.3333333333333335,
       "shareChange": 0.004784688995215447,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Lotho, Corrupt Shirriff",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 6.033492822966506,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-27"
     },
     {
       "commander": "Urza, Lord High Artificer",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.7583732057416266,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Yuriko, the Tiger's Shadow",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": 0.40669856459330167,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Zirda, the Dawnwaker",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 4,
       "shareChange": -0.4138755980861244,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Zur the Enchanter",
       "lastMonthEntries": 3,
       "prior3AvgEntries": 2,
       "shareChange": 0.1722488038277512,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Akiri, Line-Slinger / Thrasios, Triton Hero",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 2,
       "shareChange": -0.21850079744816586,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Ashling, Flame Dancer",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Dihada, Binder of Wills",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1,
       "shareChange": 0.5629984051036683,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Flamewar, Brash Veteran",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-12"
     },
     {
       "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-07-12"
     },
     {
       "commander": "Francisco, Fowl Marauder / Thrasios, Triton Hero",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 3.688995215311004,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 5.666666666666667,
       "shareChange": -0.7241767520405291,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-05-31"
     },
     {
       "commander": "Jaws, Relentless Predator",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-10-25"
     },
     {
       "commander": "Kethis, the Hidden Hand",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": -0.062200956937799035,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-10-05"
     },
     {
       "commander": "King T'Challa",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": -0.062200956937799035,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-06-28"
     },
     {
       "commander": "Krark, the Thumbless / Silas Renn, Seeker Adept",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Malcolm, Keen-Eyed Navigator / Tana, the Bloodsower",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Maralen, Fae Ascendant",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 2.3333333333333335,
       "shareChange": -0.3301435406698565,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-17"
     },
     {
       "commander": "Marneus Calgar",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 2.6666666666666665,
       "shareChange": -0.4138755980861245,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Najeela, the Blade-Blossom",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1,
       "shareChange": 0.5629984051036683,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Plagon, Lord of the Beach",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Rakdos, the Muscle",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": -0.062200956937799035,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Raph & Mikey, Troublemakers",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-03-07"
     },
     {
       "commander": "Shorikai, Genesis Engine",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "The Gitrog Monster",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Vohar, Vodalian Desecrator",
       "lastMonthEntries": 2,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Agent of the Iron Throne / Ganax, Astral Hunter",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-10-17"
     },
     {
       "commander": "Arcum Dagsson",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Atla Palani, Nest Tender",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-25"
     },
     {
       "commander": "Atraxa, Grand Unifier",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1,
       "shareChange": -0.21850079744816586,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Azami, Lady of Scrolls",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Bjorna, Nightfall Alchemist / Wernog, Rider's Chaplain",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": -0.5311004784688995,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Brigid, Clachan's Heart",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": -0.4138755980861245,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-24"
     },
     {
       "commander": "Bruce Banner",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-06-27"
     },
     {
       "commander": "Captain Sisay",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-12"
     },
     {
       "commander": "Dargo, the Shipwrecker / Reyhan, Last of the Abzan",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Ertai, the Corrupted",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-03-21"
     },
     {
       "commander": "Esika, God of the Tree",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": -0.4138755980861245,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Flubs, the Fool",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Gev, Scaled Scorch",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-07-12"
     },
     {
       "commander": "Gwenom, Remorseless",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-09-20"
     },
     {
       "commander": "Heliod, Sun-Crowned",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Iroh, Grand Lotus",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-11-17"
     },
     {
       "commander": "Jaheira, Friend of the Forest / Street Urchin",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-10-17"
     },
     {
       "commander": "Kodama of the East Tree / Tymna the Weaver",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Lavinia, Azorius Renegade",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-18"
     },
     {
       "commander": "Leonardo, the Balance / Michelangelo, the Heart",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-02-28"
     },
     {
       "commander": "Livio, Oathsworn Sentinel / Thrasios, Triton Hero",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-19"
     },
     {
       "commander": "Lonis, Cryptozoologist",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Magus Lucea Kane",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-01-31"
     },
     {
       "commander": "Marath, Will of the Wild",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Marwyn, the Nurturer",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Minn, Wily Illusionist",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-10-10"
     },
     {
       "commander": "Minsc, Beloved Ranger",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Oswald Fiddlebender",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Tymna the Weaver",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Rydia, Summoner of Mist",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Sauron, the Dark Lord",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Slicer, Hired Muscle",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Stella Lee, Wild Card",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 2.6666666666666665,
       "shareChange": -0.7069377990430623,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Sythis, Harvest's Hand",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1,
       "shareChange": -0.21850079744816586,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Talion, the Kindly Lord",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": -0.4138755980861245,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Tasigur, the Golden Fang",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": -0.5311004784688995,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Terra, Magical Adept",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 2,
       "shareChange": -0.6092503987240829,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Tevesh Szat, Doom of Fools / Thrasios, Triton Hero",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 2,
       "shareChange": -0.6092503987240829,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "The Cabbage Merchant",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-12-06"
     },
     {
       "commander": "The Master of Keys",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1,
       "shareChange": -0.21850079744816586,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "The Queen of Dale",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": 1.344497607655502,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-09-19"
     },
     {
       "commander": "Thor, Guardian of Midgard",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2026-07-11"
     },
     {
       "commander": "Toph, the First Metalbender",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": 0.17224880382775098,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-11-20"
     },
     {
       "commander": "Voja, Jaws of the Conclave",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 1,
       "shareChange": -0.21850079744816586,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Yeva, Nature's Herald",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Yusri, Fortune's Flame",
       "lastMonthEntries": 1,
       "prior3AvgEntries": 0,
       "shareChange": null,
-      "isNew": true
+      "isNew": true,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Aang, at the Crossroads",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 2,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-11-15"
     },
     {
       "commander": "Aragorn, the Uniter",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Armix, Filigree Thrasher / Rograkh, Son of Rohgahh",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-31"
     },
     {
       "commander": "Ashling, Rekindled",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-31"
     },
     {
       "commander": "Ashling, the Limitless",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-17"
     },
     {
       "commander": "Avatar Aang",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-11-30"
     },
     {
       "commander": "Baron Helmut Zemo",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-07-19"
     },
     {
       "commander": "Breya, Etherium Shaper",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Cazur, Ruthless Stalker / Ukkima, Stalking Shadow",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Clan Crafter / Jaheira, Friend of the Forest",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-24"
     },
     {
       "commander": "Cloakwood Hermit / Volo, Itinerant Scholar",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-08-01"
     },
     {
       "commander": "Codie, Vociferous Codex",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Deadpool, Trading Card",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Edric, Spymaster of Trest",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-25"
     },
     {
       "commander": "Elas il-Kor, Sadistic Pilgrim",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Elesh Norn, Grand Cenobite",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-08-22"
     },
     {
       "commander": "Ellivere of the Wild Court",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Emet-Selch of the Third Seat",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-02-21"
     },
     {
       "commander": "Emiel the Blessed",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-08-09"
     },
     {
       "commander": "Emmara, Soul of the Accord",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-09-27"
     },
     {
       "commander": "Erinis, Gloom Stalker / Street Urchin",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Galadriel, Light of Valinor",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-29"
     },
     {
       "commander": "Glarb, Calamity's Augur",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Godo, Bandit Warlord",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Golbez, Crystal Collector",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Gorma, the Gullet",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-05-30"
     },
     {
       "commander": "Grenzo, Dungeon Warden",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Gyruda, Doom of Depths",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Halana, Kessig Ranger / Tymna the Weaver",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Inalla, Archmage Ritualist",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Iron Spider, Stark Upgrade",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-07-03"
     },
     {
       "commander": "Jan Jansen, Chaos Crafter",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Korvold, Fae-Cursed King",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Krark, the Thumbless / Sakashima of a Thousand Faces",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Krark, the Thumbless / Thrasios, Triton Hero",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Liliana, Heretical Healer",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-05-30"
     },
     {
       "commander": "Malcolm, Keen-Eyed Navigator / Tevesh Szat, Doom of Fools",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-10-18"
     },
     {
       "commander": "Malcolm, Keen-Eyed Navigator / Tymna the Weaver",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Malcolm, Keen-Eyed Navigator / Vial Smasher the Fierce",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Marvo, Deep Operative",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-31"
     },
     {
       "commander": "Mizzix of the Izmagnus",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-08-02"
     },
     {
       "commander": "Mm'menon, Uthros Exile",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-09-07"
     },
     {
       "commander": "Mm'menon, the Right Hand",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-31"
     },
     {
       "commander": "Narset, Jeskai Waymaster",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-19"
     },
     {
       "commander": "Norman Osborn",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-09-20"
     },
     {
       "commander": "Ojer Axonil, Deepest Might",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "Oloro, Ageless Ascetic",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Omnath, Locus of All",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Ovika, Enigma Goliath",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-19"
     },
     {
       "commander": "Raised by Giants / Vhal, Candlekeep Researcher",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-01-17"
     },
     {
       "commander": "Razaketh, the Foulblooded",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-10-18"
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Tevesh Szat, Doom of Fools",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Rona, Herald of Invasion",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-05"
     },
     {
       "commander": "Rowan, Scion of War",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Sami, Wildcat Captain",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-08-09"
     },
     {
       "commander": "Shalai and Hallar",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-22"
     },
     {
       "commander": "Sliver Overlord",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-09-12"
     },
     {
       "commander": "Tajic, Blade of the Legion",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-08-29"
     },
     {
       "commander": "Tazri, Stalwart Survivor",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-12"
     },
     {
       "commander": "Teshar, Ancestor's Apostle",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Thalia and The Gitrog Monster",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-21"
     },
     {
       "commander": "The Unbeatable Squirrel Girl",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-07-04"
     },
     {
       "commander": "The Wandering Minstrel",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 2,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Thrasios, Triton Hero / Vial Smasher the Fierce",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1.6666666666666667,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-13"
     },
     {
       "commander": "Tiamat",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 1,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Tom, Bert, and William",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-08-15"
     },
     {
       "commander": "Toph, Hardheaded Teacher",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-11-15"
     },
     {
       "commander": "Ulalek, Fused Atrocity",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-28"
     },
     {
       "commander": "Witherbloom, the Balancer",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2026-04-18"
     },
     {
       "commander": "Xyris, the Writhing Storm",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-15"
     },
     {
       "commander": "Y'shtola, Night's Blessed",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.6666666666666666,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Yisan, the Wanderer Bard",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-07-05"
     },
     {
       "commander": "Zada, Hedron Grinder",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Zaxara, the Exemplary",
       "lastMonthEntries": 0,
       "prior3AvgEntries": 0.3333333333333333,
       "shareChange": null,
-      "isNew": false
+      "isNew": false,
+      "firstSeen": "2025-06-25"
     }
   ]
 }

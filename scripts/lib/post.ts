@@ -14,6 +14,9 @@ export const POST_CONFIG = {
   topPlayersMax: 5,
   risingPlayersMax: 3,
   topCutMax: 5,
+  /** Top-cut appearances line: 2 = "157 cuts · 9.1% of cuts vs 7.9% of field", 1 = "157 cuts · 1.15× its field
+   *  share", 0 = "157 cuts". When the post is over budget the level steps down before any line is trimmed. */
+  topCutDetail: 2,
   mostPlayedMax: 10,
   bestResultsMax: 5,
   bestResultsMinEntries: 30,
@@ -21,6 +24,9 @@ export const POST_CONFIG = {
   conversionMinCutEntries: 30,
   risingMax: 3,
   risingMinLastMonthEntries: 10,
+  /** A commander first seen (anywhere in our data) in the report month or the newCommanderMonths - 1 months
+   *  before it is "new since <date>", even if it already has entries in the prior 3 months. */
+  newCommanderMonths: 2,
   coolingMax: 3,
   coolingTopN: 15,
   coolingMinEntries: 10,
@@ -75,12 +81,15 @@ export type PostData = {
   /** Opted-out and removed players never appear in these two lists (filtered in SQL). */
   topPlayers: { name: string; wins: number; topCuts: number; commander: string | null }[];
   risingPlayers: { name: string; reason: string; eventName: string | null; participantCount: number }[];
-  topCutAppearances: { commander: string; topCutEntries: number }[];
+  /** fieldEntries and the totals count entries with a commander in the month's events that had a top cut. */
+  topCutAppearances: { commander: string; topCutEntries: number; fieldEntries: number; totalTopCutEntries: number; totalFieldEntries: number }[];
   metaShare: { commander: string; entries: number; metaShare: number }[];
   ppg: { commander: string; entries: number; ppg: number; shrunkPpg: number }[];
   conversion: { commander: string; entriesInCutEvents: number; topCutEntries: number; conversion: number }[];
   baselineConversion: number | null;
-  trend: { commander: string; lastMonthEntries: number; prior3AvgEntries: number; shareChange: number | null; isNew: boolean }[];
+  /** isNew: no entries in the region in the prior 3 months. firstSeen: UTC date (YYYY-MM-DD) of the commander's
+   *  first qualifying entry anywhere in our data, or null when unknown. */
+  trend: { commander: string; lastMonthEntries: number; prior3AvgEntries: number; shareChange: number | null; isNew: boolean; firstSeen: string | null }[];
 };
 
 export type EmbedField = { name: string; value: string; inline?: boolean };
@@ -138,6 +147,11 @@ export const changeVs = (cur: number, prev: number, prevMonth: string) => {
   return c === 0 ? `same as ${prevMonth}` : `${c > 0 ? "+" : ""}${c}% vs ${prevMonth}`;
 };
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+/** First day (YYYY-MM-DD) of the month `offset` months from `yyyyMm`. */
+const monthStart = (yyyyMm: string, offset = 0) =>
+  new Date(Date.UTC(Number(yyyyMm.slice(0, 4)), Number(yyyyMm.slice(5, 7)) - 1 + offset, 1)).toISOString().slice(0, 10);
+/** "2026-09-26" -> "Sep 26". */
+export const shortDate = (yyyyMmDd: string) => `${MONTHS[Number(yyyyMmDd.slice(5, 7)) - 1]!.slice(0, 3)} ${Number(yyyyMmDd.slice(8, 10))}`;
 const monthOf = (yyyyMm: string, offset = 0) => {
   const d = new Date(Date.UTC(Number(yyyyMm.slice(0, 4)), Number(yyyyMm.slice(5, 7)) - 1 + offset, 1));
   return MONTHS[d.getUTCMonth()]!;
@@ -175,7 +189,7 @@ function fitLines(lines: string[], max = DISCORD_LIMITS.fieldValue): string[] {
   return out;
 }
 
-type Caps = { winners: number; topPlayers: number; risingPlayers: number; topCut: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number };
+type Caps = { winners: number; topPlayers: number; risingPlayers: number; topCut: number; topCutDetail: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number };
 /** The post's three visual blocks, in order: scene (inline fields), people (players), decks (commanders). */
 type Block = "scene" | "people" | "decks";
 /** `numbered` sections hold their lines without the rank; it is added when the embed and the preview are built. */
@@ -256,7 +270,16 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     s.push({
       key: "topCut", block: "decks", numbered: true,
       name: `Top-cut appearances — ${mon}`,
-      lines: top.map((t) => `${shortenCommander(t.commander)} — ${t.topCutEntries}`),
+      lines: top.map((t) => {
+        const cuts = `${shortenCommander(t.commander)} — ${plural(t.topCutEntries, "cut", "cuts")}`;
+        // Share of the month's top cuts against share of the field in the events that had a cut.
+        if (caps.topCutDetail < 1 || t.totalTopCutEntries <= 0 || t.totalFieldEntries <= 0 || t.fieldEntries <= 0) return cuts;
+        const cutShare = t.topCutEntries / t.totalTopCutEntries;
+        const fieldShare = t.fieldEntries / t.totalFieldEntries;
+        return caps.topCutDetail >= 2
+          ? `${cuts} · ${pct(cutShare)} of cuts vs ${pct(fieldShare)} of field`
+          : `${cuts} · ${(cutShare / fieldShare).toFixed(2)}× its field share`;
+      }),
     });
   }
 
@@ -293,21 +316,30 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   }
 
   const matching = c.trendNeedsMatchingCounts > 0;
-  const countLine = (t: PostData["trend"][number]) =>
-    t.isNew
-      ? `${shortenCommander(t.commander)} — ${t.lastMonthEntries} entries in ${mon}, new`
-      : `${shortenCommander(t.commander)} — ${t.lastMonthEntries} entries in ${mon} (avg ${monthlyAvg(t.prior3AvgEntries)}/month)`;
+  type Trend = PostData["trend"][number];
+  // "New since": first seen anywhere in the report month or the months just before it (newCommanderMonths).
+  const newSince = monthStart(data.month, -(c.newCommanderMonths - 1));
+  const recent = (t: Trend) => c.newCommanderMonths > 0 && t.firstSeen !== null && t.firstSeen >= newSince;
+  const isNew = (t: Trend) => t.isNew || recent(t);
+  const countLine = (t: Trend) => {
+    const head = `${shortenCommander(t.commander)} — ${t.lastMonthEntries} entries in ${mon}`;
+    if (recent(t)) return `${head}, new since ${shortDate(t.firstSeen!)}`;
+    return t.isNew ? `${head}, new` : `${head} (avg ${monthlyAvg(t.prior3AvgEntries)}/month)`;
+  };
 
   const rising = data.trend
     .filter((t) => t.lastMonthEntries >= c.risingMinLastMonthEntries)
-    .filter((t) => t.isNew || ((t.shareChange ?? 0) > 0 && (!matching || t.lastMonthEntries > t.prior3AvgEntries)))
-    .sort((a, b) => Number(b.isNew) - Number(a.isNew) || (b.shareChange ?? 0) - (a.shareChange ?? 0))
+    .filter((t) => isNew(t) || ((t.shareChange ?? 0) > 0 && (!matching || t.lastMonthEntries > t.prior3AvgEntries)))
+    // New commanders first, most entries first; then the others by share growth.
+    .sort((a, b) =>
+      Number(isNew(b)) - Number(isNew(a))
+      || (isNew(a) ? b.lastMonthEntries - a.lastMonthEntries || a.commander.localeCompare(b.commander) : (b.shareChange ?? 0) - (a.shareChange ?? 0)))
     .slice(0, caps.rising);
   if (rising.length) s.push({ key: "risingCommanders", block: "decks", name: "Rising commanders (by share growth vs prior 3 months)", lines: rising.map(countLine) });
 
   const topCommanders = new Set(data.metaShare.slice(0, c.coolingTopN).map((m) => m.commander));
   const cooling = data.trend
-    .filter((t) => topCommanders.has(t.commander) && !t.isNew && t.shareChange !== null && t.shareChange < 0)
+    .filter((t) => topCommanders.has(t.commander) && !isNew(t) && t.shareChange !== null && t.shareChange < 0)
     .filter((t) => t.lastMonthEntries >= c.coolingMinEntries || t.prior3AvgEntries >= c.coolingMinEntries)
     .filter((t) => !matching || t.lastMonthEntries < t.prior3AvgEntries)
     .sort((a, b) => a.shareChange! - b.shareChange!)
@@ -328,13 +360,15 @@ function coverageLine(data: PostData): string {
 /** Pure: builds the embed and the plain-text preview, trimming bottom sections first until the budget fits. */
 export function composePost(data: PostData, config: PostConfig = POST_CONFIG): { embed: Embed; text: string } {
   const caps: Caps = {
-    winners: config.winnersMax, topPlayers: config.topPlayersMax, risingPlayers: config.risingPlayersMax, topCut: config.topCutMax, mostPlayed: config.mostPlayedMax, best: config.bestResultsMax,
+    winners: config.winnersMax, topPlayers: config.topPlayersMax, risingPlayers: config.risingPlayersMax, topCut: config.topCutMax, topCutDetail: config.topCutDetail, mostPlayed: config.mostPlayedMax, best: config.bestResultsMax,
     conversion: config.conversionMax, rising: config.risingMax, cooling: config.coolingMax,
   };
-  // Trim order: the decks block first, bottom-up (each section to a floor, then deeper), and only then the
-  // people block, bottom-up in the same way. The scene, coverage and Sources are never trimmed.
+  // Trim order: first the top-cut lines lose detail (both shares, then the ratio, then the count alone); then
+  // the decks block, bottom-up (each section to a floor, then deeper); and only then the people block,
+  // bottom-up in the same way. The scene, coverage and Sources are never trimmed.
   const step = (k: keyof Caps, floor: number) => () => caps[k] > floor && (caps[k]--, true);
   const trims = [
+    step("topCutDetail", 1), step("topCutDetail", 0),
     step("cooling", 0), step("rising", 0), step("conversion", 3), step("best", 3), step("mostPlayed", 5), step("topCut", 3),
     step("conversion", 0), step("best", 0), step("mostPlayed", 3), step("topCut", 0),
     step("risingPlayers", 1), step("topPlayers", 3), step("winners", 5),
@@ -414,16 +448,18 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select player_name, wins, top_cuts, top_commander from stat_top_players(${r}, ${end}::date, 5)`;
   const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
     select player_name, reason, event_name, participant_count from stat_rising_players(${r}, ${end}::date, 3)`;
-  const topCut = await sql<{ commander: string; top_cut_entries: string }[]>`
-    select * from stat_top_cut_appearances(${r}, ${end}::date) limit 10`;
+  const topCut = await sql<{ commander: string; top_cut_entries: string; field_entries: string; total_top_cut_entries: string; total_field_entries: string }[]>`
+    select commander, top_cut_entries, field_entries, total_top_cut_entries, total_field_entries
+    from stat_top_cut_appearances(${r}, ${end}::date) limit 10`;
   const meta = await sql<{ commander: string; entries: string; meta_share: number }[]>`
     select commander, entries, meta_share from stat_meta_share(${r}, ${end}::date) limit 20`;
   const ppg = await sql<{ commander: string; entries: string; ppg: number; shrunk_ppg: number }[]>`
     select commander, entries, ppg, shrunk_ppg from stat_ppg(${r}, ${end}::date)`;
   const conv = await sql<{ commander: string; entries_in_cut_events: string; top_cut_entries: string; conversion: number; baseline_conversion: number }[]>`
     select * from stat_conversion(${r}, ${end}::date)`;
-  const trend = await sql<{ commander: string; last_month_entries: string; prior3_avg_entries: number; share_change: number | null; is_new: boolean }[]>`
-    select commander, last_month_entries, prior3_avg_entries, share_change, is_new from stat_share_trend(${r}, ${end}::date)`;
+  const trend = await sql<{ commander: string; last_month_entries: string; prior3_avg_entries: number; share_change: number | null; is_new: boolean; first_seen: string | null }[]>`
+    select commander, last_month_entries, prior3_avg_entries, share_change, is_new, first_seen::text as first_seen
+    from stat_share_trend(${r}, ${end}::date)`;
 
   return {
     month,
@@ -446,7 +482,10 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     })),
     topPlayers: topPlayers.map((p) => ({ name: p.player_name, wins: Number(p.wins), topCuts: Number(p.top_cuts), commander: p.top_commander })),
     risingPlayers: risingPlayers.map((p) => ({ name: p.player_name, reason: p.reason, eventName: p.event_name, participantCount: p.participant_count })),
-    topCutAppearances: topCut.map((t) => ({ commander: t.commander, topCutEntries: Number(t.top_cut_entries) })),
+    topCutAppearances: topCut.map((t) => ({
+      commander: t.commander, topCutEntries: Number(t.top_cut_entries), fieldEntries: Number(t.field_entries),
+      totalTopCutEntries: Number(t.total_top_cut_entries), totalFieldEntries: Number(t.total_field_entries),
+    })),
     metaShare: meta.map((m) => ({ commander: m.commander, entries: Number(m.entries), metaShare: m.meta_share })),
     ppg: ppg.map((p) => ({ commander: p.commander, entries: Number(p.entries), ppg: p.ppg, shrunkPpg: p.shrunk_ppg })),
     conversion: conv.map((x) => ({
@@ -455,7 +494,7 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     baselineConversion: conv[0]?.baseline_conversion ?? null,
     trend: trend.map((t) => ({
       commander: t.commander, lastMonthEntries: Number(t.last_month_entries), prior3AvgEntries: Number(t.prior3_avg_entries),
-      shareChange: t.share_change, isNew: t.is_new,
+      shareChange: t.share_change, isNew: t.is_new, firstSeen: t.first_seen,
     })),
   };
 }

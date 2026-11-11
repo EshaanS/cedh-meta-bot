@@ -1,7 +1,7 @@
 // pair_commanders, is_valid_pair, the exclusion of invalid pairs from commander stats and apostrophe
 // normalization, against a real Postgres with a fake Scryfall search. Skipped unless TEST_DATABASE_URL is set.
 // The test database's pair_commanders is saved first and restored afterwards; tournaments use ids starting
-// with "test-pc-" in a month far from real data (2031-04).
+// with "test-pc-" in a month far from real data (2032-04).
 import assert from "node:assert/strict";
 import { after, before, describe, test } from "node:test";
 import type { Sql } from "../scripts/lib/db";
@@ -12,7 +12,7 @@ const url = process.env.TEST_DATABASE_URL;
 describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABASE_URL not set" }, () => {
   let sql: Sql;
   let saved: { name_key: string; name: string; card_name: string; fetched_at: Date }[] = [];
-  const MONTH = "2031-04-01";
+  const MONTH = "2032-04-01";
   const PLAYER = "testpcplayer".padEnd(28, "0");
   const c = (name: string, alt: string[] = []): ScryfallCard => ({ name, faceNames: [], altNames: alt, typeLine: "", keywords: [], oracleText: "" });
   const filler = Array.from({ length: 60 }, (_, i) => c(`Filler Partner ${i}`));
@@ -36,7 +36,7 @@ describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABAS
     [...await sql<{ commander: string; entries: string }[]>`
       select commander, entries from commander_shares('global', ${MONTH}::date, 1) order by entries desc, commander`].map((r) => `${r.commander}: ${r.entries}`);
   const cleanup = async () => {
-    await sql`delete from tournaments where tid like 'test-pc-%'`;
+    await sql`delete from tournaments where tid like 'test-pc-%' or tid like 'test-pcx-%'`;
     await sql`delete from players where player_id = ${PLAYER}`;
   };
   const store = async (cards: ScryfallCard[]) => {
@@ -53,7 +53,7 @@ describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABAS
     await sql`insert into players (player_id, display_name) values (${PLAYER}, 'Test Pair Player')`;
     for (const [id, leader] of leaders) {
       await sql`insert into tournaments (tid, name, start_date, participant_count, top_cut, event_class)
-                values (${`test-pc-${id}`}, 'pair test', '2031-04-10T12:00:00Z', 20, 4, 'cedh')`;
+                values (${`test-pc-${id}`}, 'pair test', '2032-04-10T12:00:00Z', 20, 4, 'cedh')`;
       // The invalid pair (d) belongs to a player who made the cut, for the Top players check.
       await sql`insert into entries (tid, standing_index, leader, player_id, wins, draws, losses, byes, wins_swiss, wins_bracket, losses_swiss, losses_bracket)
                 values (${`test-pc-${id}`}, 0, ${leader}, ${id === "d" ? PLAYER : null}, 3, 1, 1, 0, 3, ${id === "d" ? 1 : 0}, 1, 0)`;
@@ -144,6 +144,55 @@ describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABAS
     // Event results read entries directly: the registered pair still shows as the winner's deck.
     const [res] = await sql<{ result: string; result_commanders: string }[]>`select result, result_commanders from tournament_results where tid = 'test-pc-d'`;
     assert.deepEqual({ ...res }, { result: "winner", result_commanders: "Kinnan, Bonder Prodigy / Tymna the Weaver" });
+  });
+
+  test("trend first_seen is the first qualifying entry anywhere, with apostrophe variants counted as the same commander", async () => {
+    await store(fullList);
+    // An older event outside any region, with the curly spelling; and one April event placed in Washington.
+    await sql`insert into tournaments (tid, name, start_date, participant_count, top_cut, event_class)
+              values ('test-pcx-old', 'old', '2030-06-05T23:30:00Z', 20, 4, 'cedh')`;
+    await sql`insert into entries (tid, standing_index, leader, wins, draws, losses, byes, wins_swiss, wins_bracket, losses_swiss, losses_bracket)
+              values ('test-pcx-old', 0, ${"K\u2019rrik, Son of Yawgmoth"}, 3, 1, 1, 0, 3, 0, 1, 0)`;
+    await sql`update tournaments set geo_country_code = 'US', geo_admin1_code = 'US-WA' where tid = 'test-pc-i'`;
+    const trend = async (region: string) =>
+      Object.fromEntries((await sql<{ commander: string; n: string; is_new: boolean; first_seen: string | null }[]>`
+        select commander, last_month_entries as n, is_new, first_seen::text as first_seen from stat_share_trend(${region}, ${MONTH}::date)`)
+        .map((r) => [r.commander, `${r.n} ${r.is_new ? "new" : "seen"} ${r.first_seen}`]));
+    // Kinnan's date is left out: first_seen is worldwide, and test/players-db.test.ts (which can run at the
+    // same time on the same database) also registers Kinnan, in March 2031.
+    const { "Kinnan, Bonder Prodigy": kinnan, ...others } = await trend("global");
+    assert.deepEqual(others, {
+      "K'rrik, Son of Yawgmoth": "2 new 2030-06-05",
+      [KRAUM_TYMNA]: "2 new 2032-04-10",
+      "Tymna the Weaver / Will the Wise": "1 new 2032-04-10",
+    });
+    assert.match(kinnan!, /^1 new 203[12]-/);
+    // In the region only the straight-apostrophe entry exists, but first_seen still comes from the older event elsewhere.
+    assert.deepEqual(await trend("pacific-northwest"), { "K'rrik, Son of Yawgmoth": "1 new 2030-06-05" });
+  });
+
+  test("top-cut appearances: field numbers count only events that had a cut, and only entries with a valid commander", async () => {
+    await store(fullList);
+    const ev = (tid: string) => sql`insert into tournaments (tid, name, start_date, participant_count, top_cut, event_class)
+                                    values (${tid}, 'cut test', '2032-05-10T12:00:00Z', 20, 0, 'cedh')`;
+    const en = (tid: string, i: number, leader: string | null, w: number, l: number) =>
+      sql`insert into entries (tid, standing_index, leader, wins, draws, losses, byes, wins_swiss, wins_bracket, losses_swiss, losses_bracket)
+          values (${tid}, ${i}, ${leader}, 3, 1, 1, 0, 3, ${w}, 1, ${l})`;
+    // t1 had a cut (bracket games recorded, even though top_cut is 0); t2 did not.
+    await ev("test-pcx-t1");
+    await en("test-pcx-t1", 0, "Kinnan, Bonder Prodigy", 1, 0);
+    await en("test-pcx-t1", 1, "Kinnan, Bonder Prodigy", 0, 0);
+    await en("test-pcx-t1", 2, KRAUM_TYMNA, 0, 1);
+    await en("test-pcx-t1", 3, null, 0, 1); // cut, but no commander
+    await en("test-pcx-t1", 4, "Kinnan, Bonder Prodigy / Tymna the Weaver", 1, 1); // cut, but an invalid pair
+    await ev("test-pcx-t2");
+    await en("test-pcx-t2", 0, "Kinnan, Bonder Prodigy", 0, 0);
+    await en("test-pcx-t2", 1, "Kinnan, Bonder Prodigy", 0, 0);
+    const rows = await sql`select * from stat_top_cut_appearances('global', '2032-05-01'::date)`;
+    assert.deepEqual([...rows].map((r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, k === "commander" ? v : Number(v)]))), [
+      { commander: "Kinnan, Bonder Prodigy", top_cut_entries: 1, field_entries: 2, total_top_cut_entries: 2, total_field_entries: 3 },
+      { commander: KRAUM_TYMNA, top_cut_entries: 1, field_entries: 1, total_top_cut_entries: 2, total_field_entries: 3 },
+    ]);
   });
 
   test("a card that left the list is removed and its pairs become invalid", async () => {
