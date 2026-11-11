@@ -289,7 +289,8 @@ test("layout: three blocks with dividers, emoji on every section, gold color, no
   assert.deepEqual(blocks, [
     ["📍 Events — October", "Players", "Draw rate", "Largest event"],
     ["🏆 Winners — October (largest events)", "👑 Top players — October", "🌱 Rising players — October (first win or top cut in 3 years of data)"],
-    ["🎯 Top-cut appearances — October", "📊 Most played (6 months)", "⭐ Best results (adjusted PPG, 30+ entries)", "🔀 Top-cut conversion (baseline 26%)",
+    ["🎯 Top-cut appearances — October"],
+    ["📊 Most played (6 months)", "⭐ Best results (adjusted PPG, 30+ entries)", "🔀 Top-cut conversion (baseline 26%)",
       "📈 Rising commanders (by share growth vs prior 3 months)", "📉 Cooling commanders (by share drop vs prior 3 months)", "ℹ️ Coverage", "🔗 Sources"],
   ]);
   // No line may start a markdown list ("1. x", "- x", "* x"): Discord would restyle it.
@@ -297,7 +298,23 @@ test("layout: three blocks with dividers, emoji on every section, gold color, no
   assert.match(field(embed, "Most played")!.value, /^1\\\. .+\n2\\\. /);
   // The preview shows plain numbers and the same dividers.
   assert.match(text, /\n1\. Kraum \/ Tymna the Weaver — 157\n/);
-  assert.equal(text.split("\n").filter((l) => l === POST_CONFIG.dividerName).length, 2);
+  assert.equal(text.split("\n").filter((l) => l === POST_CONFIG.dividerName).length, 3);
+  assert.equal(POST_CONFIG.dividerName, "━".repeat(32));
+  // Scene: one row of three inline fields (Discord's maximum per row), then Largest event at full width.
+  assert.deepEqual(embed.fields.slice(0, 4).map((f) => f.inline === true), [true, true, true, false]);
+  const fourInline = composePost(loadFixture("global-2026-10"), { ...POST_CONFIG, largestEventInline: 1 }).embed;
+  assert.deepEqual(fourInline.fields.slice(0, 4).map((f) => f.inline === true), [true, true, true, true]);
+  // No divider before Most played when it opens the decks block, and none when the option is off.
+  const noTopCut = loadFixture("global-2026-10");
+  noTopCut.topCutAppearances = [];
+  const dividerBefore = (e: typeof embed, name: string) => isDivider(e.fields[e.fields.findIndex((f) => plain(f.name).startsWith(name)) - 1]!);
+  const e2 = composePost(noTopCut).embed;
+  assert.equal(e2.fields.filter(isDivider).length, 2);
+  assert.ok(dividerBefore(e2, "Most played"), "the block divider is still there");
+  assert.ok(!e2.fields.some((f, i) => isDivider(f) && isDivider(e2.fields[i + 1] ?? { name: "" })), "dividers never touch");
+  const off = composePost(loadFixture("global-2026-10"), { ...POST_CONFIG, subDividerBefore: "" }).embed;
+  assert.equal(off.fields.filter(isDivider).length, 2);
+  assert.ok(!dividerBefore(off, "Most played"));
   // Dividers and emoji are part of the counted content.
   const bare = composePost(loadFixture("global-2026-10"), {
     ...POST_CONFIG, dividerName: "",

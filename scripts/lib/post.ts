@@ -31,7 +31,14 @@ export const POST_CONFIG = {
   /** Embed accent color (gold). */
   embedColor: 0xc9a84c,
   /** Field placed between the scene, people and decks blocks. An empty dividerName turns dividers off. */
-  dividerName: "━━━━━━━━━━━━━━━━━━━━",
+  dividerName: "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  /** One more divider inside a block, before this section (a sectionEmoji key; "" for none). Before Most played
+   *  it separates the month's sections above from the 6-month and trend sections below. Skipped when that
+   *  section is first in its block, so two dividers never touch. */
+  subDividerBefore: "mostPlayed",
+  /** Discord shows at most three inline fields per row, so a fourth scene field would sit alone on a second row.
+   *  0 puts Largest event on its own full-width line under Events / Players / Draw rate; 1 makes it inline. */
+  largestEventInline: 0,
   /** Discord rejects an empty field value, so the divider's value is a zero-width space. */
   dividerValue: "\u200b",
   /** Put after the number on ranked lines. "\\." shows as "1." but stops Discord from turning the lines into a
@@ -192,7 +199,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     if (sc.drawRate !== null) s.push({ key: "scene", block: "scene", name: "Draw rate", lines: [pct(sc.drawRate, 0)], inline: true });
     if (sc.largestEventName && sc.largestEventPlayers) {
       const name = sanitizeOrganizerText(sc.largestEventName, c.eventNameMax) || "Unnamed event";
-      s.push({ key: "scene", block: "scene", name: "Largest event", lines: [`${sc.largestEventPlayers} players · ${name}`], inline: true });
+      s.push({ key: "scene", block: "scene", name: "Largest event", lines: [`${sc.largestEventPlayers} players · ${name}`], ...(c.largestEventInline > 0 ? { inline: true } : {}) });
     }
   }
 
@@ -338,7 +345,9 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const sourcesName = withEmoji(emoji.sources, "Sources");
   // The emoji goes on a section's first field (the scene is several inline fields under one emoji).
   const named = (list: Section[]) => list.map((x, i) => ({ ...x, name: list.findIndex((y) => y.key === x.key) === i ? withEmoji(emoji[x.key], x.name) : x.name }));
-  const startsBlock = (list: Section[], i: number) => config.dividerName !== "" && i > 0 && list[i - 1]!.block !== list[i]!.block;
+  /** A divider goes before the first section of a new block, and before subDividerBefore inside its block. */
+  const startsBlock = (list: Section[], i: number) =>
+    config.dividerName !== "" && i > 0 && (list[i - 1]!.block !== list[i]!.block || (list[i]!.key === config.subDividerBefore && list[i - 1]!.key !== list[i]!.key));
   const ranked = (x: Section, suffix: string) => (x.numbered ? x.lines.map((l, i) => `${i + 1}${suffix} ${l}`) : x.lines);
 
   const title = `${data.resolved.label} — cEDH meta, ${monthOf(data.month)} ${data.month.slice(0, 4)}`;
@@ -372,8 +381,9 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   if (violations.length) throw new Error(`embed exceeds Discord limits: ${violations.join("; ")}`);
 
   const final = sections;
-  const inline = final.filter((x) => x.inline).map((x) => `${x.name}: ${x.lines.join(" ")}`);
-  const blocks = final.flatMap((x, i) => (x.inline ? [] : [...(startsBlock(final, i) ? ["", config.dividerName] : []), "", x.name, ...ranked(x, ".")]));
+  const isScene = (x: Section) => x.block === "scene";
+  const inline = final.filter(isScene).map((x) => `${x.name}: ${x.lines.join(" ")}`);
+  const blocks = final.flatMap((x, i) => (isScene(x) ? [] : [...(startsBlock(final, i) ? ["", config.dividerName] : []), "", x.name, ...ranked(x, ".")]));
   const text = [
     title, ...notes, ...(inline.length ? ["", ...inline] : []), ...blocks,
     "", `${coverageName}: ${coverageLine(data)}`, `${sourcesName}: ${ATTRIBUTION_PREVIEW}`,
