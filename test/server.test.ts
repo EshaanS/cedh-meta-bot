@@ -66,7 +66,7 @@ test("interactions: commands outside the allowlist get an ephemeral 'not open ye
   assert.equal(res.type, 4);
   assert.equal(res.data.flags, 64);
   assert.match(res.data.content, /isn't open yet/);
-  assert.match(res.data.content, /Data provided by \[TopDeck\.gg\]/);
+  assert.doesNotMatch(res.data.content, /Data provided by/, "config replies carry no attribution");
   assert.equal(r.background, undefined);
 });
 

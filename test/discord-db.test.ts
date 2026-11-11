@@ -151,7 +151,7 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
 
     const ac = await run({ type: 4, token: "tok", guild_id: "test-i1", data: { name: "region", options: [{ name: "set", type: 1, options: [{ name: "region", type: 3, value: "catal", focused: true }] }] } });
     const choices = (ac.response as { data: { choices: { name: string; value: string }[] } }).data.choices;
-    assert.ok(choices.some((c) => c.value === "es-cataluna" && c.name === "Cataluña, Spain"), JSON.stringify(choices));
+    assert.ok(choices.some((c) => c.value === "es-cataluna" && c.name === "Cataluña (Spain)"), JSON.stringify(choices));
 
     await run(cmd("region", "set", [{ name: "region", type: 3, value: "es-b" }]));
     assert.match(d.edits.at(-1)!.content!, /isn't a region I can report on/);
@@ -168,7 +168,7 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
 
     await run(cmd("channel", "set", [{ name: "channel", type: 7, value: "chan-ok" }], textChannel("chan-ok")));
     assert.equal(d.sent.at(-1)!.channelId, "chan-ok");
-    assert.match(d.sent.at(-1)!.payload.content!, /Data provided by/);
+    assert.doesNotMatch(d.sent.at(-1)!.payload.content!, /Data provided by/, "confirmation shows no TopDeck data");
     assert.equal((await row("test-i1"))!.channel_id, "chan-ok");
 
     await run(cmd("region", "show"));
@@ -178,5 +178,9 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     await run(cmd("preview"));
     assert.equal(d.edits.at(-1)!.embeds?.length, 1);
     assert.match(d.edits.at(-1)!.content!, /Preview of the October report/);
+    const embed = d.edits.at(-1)!.embeds![0] as { fields: { name: string; value: string }[] };
+    assert.equal(embed.fields.at(-1)!.name, "Sources");
+    for (const e of d.edits.slice(0, -1)) assert.doesNotMatch(e.content ?? "", /Data provided by/);
+    for (const c of choices) assert.doesNotMatch(c.name, /\((continent|country|custom region)\)/);
   });
 });

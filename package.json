@@ -15,7 +15,7 @@
     "quality": "tsx --env-file-if-exists=.env scripts/quality.ts",
     "geocode": "tsx --env-file-if-exists=.env scripts/geocode.ts",
     "classify": "tsx --env-file-if-exists=.env scripts/classify.ts",
-    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run geocode && npm run regions",
+    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run standings && npm run geocode && npm run regions",
     "regions": "tsx --env-file-if-exists=.env scripts/regions.ts",
     "report": "tsx --env-file-if-exists=.env scripts/report.ts",
     "preview": "tsx --env-file-if-exists=.env scripts/preview.ts",
@@ -23,7 +23,8 @@
     "register-commands": "tsx --env-file-if-exists=.env scripts/register-commands.ts",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "standings": "tsx --env-file-if-exists=.env scripts/fetch-standings.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

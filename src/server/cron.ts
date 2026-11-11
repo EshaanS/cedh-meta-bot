@@ -47,10 +47,10 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
   try {
     const ids = await discord.listGuildIds();
     const gone = await sql<{ guild_id: string }[]>`
-      select guild_id from guild_configs where not (guild_id = any(${sql.array(ids)}::text[]))`;
+      select guild_id from guild_configs where not (guild_id = any(${sql.array(ids, 1009)}::text[]))`;
     summary.pruned = gone.map((g) => g.guild_id);
     if (!opts.dryRun && summary.pruned.length > 0) {
-      await sql`delete from guild_configs where guild_id = any(${sql.array(summary.pruned)}::text[])`;
+      await sql`delete from guild_configs where guild_id = any(${sql.array(summary.pruned, 1009)}::text[])`;
     }
   } catch (err) {
     summary.pruneError = errorText(err);
