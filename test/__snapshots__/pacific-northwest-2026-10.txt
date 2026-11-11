@@ -20,7 +20,7 @@ Top players — October
 4. Aiko Tanabe — 3 top cuts · Kraum / Tymna the Weaver
 5. Rafael Montoya — 2 top cuts
 
-Rising players — October
+Rising players — October (first win or top cut in 3 years of data)
 Noor Haddad — first top cut · 66p Guardian Games CEDH Monthly PDX
 Tobias Quill — first win · 44p Gem State CEDH Ad Naus for a Cause!
 Felix Brandt — early top cut · 34p Olympic Commander Challenger Series 1k Vol 4 - 20…
@@ -63,5 +63,5 @@ Rograkh / Silas Renn — 21 entries in October (avg 9/month)
 Ob Nixilis, Captive Kingpin — 13 entries in October (avg 7/month)
 Sisay, Weatherlight Captain — 21 entries in October (avg 13/month)
 
-114 qualifying events over 6 months · 76% of entries with decklists
+114 qualifying events over 6 months · 76% of entries with decklists · 99% of October entries have a linked player
 Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

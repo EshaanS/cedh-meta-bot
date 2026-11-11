@@ -4,7 +4,9 @@
 import type { Sql } from "./db";
 
 export const POST_CONFIG = {
-  contentBudget: 3000,
+  contentBudget: 4500, // Discord's hard limit for an embed is 6,000
+  /** Years of player history ingested; shown on Rising players so "first" isn't read as "new to the game". */
+  playerHistoryYears: 3,
   eventNameMax: 50,
   winnersMax: 10,
   playerNameMax: 32,
@@ -38,7 +40,8 @@ export type PostData = {
     events: number; players: number; prevEvents: number; prevPlayers: number;
     largestEventName: string | null; largestEventPlayers: number | null; drawRate: number | null;
   };
-  coverage: { qualifyingEvents: number; pctEntriesWithLeader: number | null };
+  /** pctEntriesWithPlayer: share (0-100) of the month's qualifying entries with a TopDeck account id. */
+  coverage: { qualifyingEvents: number; pctEntriesWithLeader: number | null; pctEntriesWithPlayer: number | null };
   /** winnerName is null when there is no single winner, the player is unknown or removed, or opted out (winnerHidden). */
   results: {
     eventName: string | null; participantCount: number; result: string; resultCommanders: string | null;
@@ -203,7 +206,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .slice(0, caps.risingPlayers);
   if (risingPlayers.length) {
     s.push({
-      name: `Rising players — ${mon}`,
+      name: `Rising players — ${mon} (first win or top cut in ${c.playerHistoryYears} years of data)`,
       lines: risingPlayers.map((p) => {
         const event = sanitizeOrganizerText(p.eventName ?? "Unnamed event", c.eventNameMax) || "Unnamed event";
         return `${p.name} — ${p.reason} · ${p.participantCount}p ${event}`;
@@ -274,7 +277,10 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
 
 function coverageLine(data: PostData): string {
   const leaderPct = data.coverage.pctEntriesWithLeader === null ? "n/a" : `${data.coverage.pctEntriesWithLeader.toFixed(0)}%`;
-  return `${int(data.coverage.qualifyingEvents)} qualifying events over 6 months · ${leaderPct} of entries with decklists`;
+  const p = data.coverage.pctEntriesWithPlayer;
+  // Players without a TopDeck account can't be named, so say how much of the month the player sections cover.
+  const players = p === null ? "" : ` · ${p.toFixed(0)}% of ${monthOf(data.month)} entries have a linked player`;
+  return `${int(data.coverage.qualifyingEvents)} qualifying events over 6 months · ${leaderPct} of entries with decklists${players}`;
 }
 
 /** Pure: builds the embed and the plain-text preview, trimming bottom sections first until the budget fits. */
@@ -341,6 +347,8 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select qualifying_events, pct_entries_with_leader from stat_coverage(${r}, ${end}::date)`;
   const results = await sql<{ event_name: string | null; participant_count: number; result: string; result_commanders: string | null; winner_name: string | null; winner_hidden: boolean }[]>`
     select event_name, participant_count, result, result_commanders, winner_name, winner_hidden from stat_month_results(${r}, ${end}::date, 10)`;
+  const [playerCov] = await sql<{ pct_entries_with_player: number | null }[]>`
+    select pct_entries_with_player from stat_player_coverage(${r}, ${end}::date)`;
   const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; top_commander: string | null }[]>`
     select player_name, wins, top_cuts, top_commander from stat_top_players(${r}, ${end}::date, 5)`;
   const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
@@ -375,6 +383,7 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     coverage: {
       qualifyingEvents: Number(cov?.qualifying_events ?? 0),
       pctEntriesWithLeader: cov?.pct_entries_with_leader == null ? null : Number(cov.pct_entries_with_leader),
+      pctEntriesWithPlayer: playerCov?.pct_entries_with_player == null ? null : Number(playerCov.pct_entries_with_player),
     },
     results: results.map((x) => ({
       eventName: x.event_name, participantCount: x.participant_count, result: x.result, resultCommanders: x.result_commanders,
