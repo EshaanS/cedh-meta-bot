@@ -2,21 +2,33 @@ Europe — cEDH meta, October 2026
 Showing Europe: Slovenia didn't have enough data.
 
 Events — October: 48 (+50% vs September)
-Players: 1,535 (+36%)
+Players: 1,535 (+36% vs September)
 Draw rate: 31%
 Largest event: 96 players · CEDH Norte Bilbao + Zaragoza + Pamplona
 
 Winners — October (largest events)
-• 96p · CEDH Norte Bilbao + Zaragoza + Pamplona · Arcum Dagsson
-• 77p · 1.cEDH069 Major Die Fabrik · Rograkh / Thrasios
+• 96p · CEDH Norte Bilbao + Zaragoza + Pamplona · Mara Ellison on Arcum Dagsson
+• 77p · 1.cEDH069 Major Die Fabrik · Tobias Quill on Rograkh / Thrasios
 • 55p · The Warsaw Pact 2.0 - cEDH European Championship… · Zirda, the Dawnwaker
-• 54p · Imperial Siege Nuremberg · Sisay, Weatherlight Captain
-• 52p · La CASTanyada cEDH La Competència · Dack Fayden, Helping Hand
-• 51p · TAP THAT TUNDRA - EU CHAMPIONSHIP QUALIFIER · Yuriko, the Tiger's Shadow
-• 47p · European Qualifier CEDH Octubre · Rograkh / Silas Renn
-• 44p · Piece of Cake (unofficial Czech cEDH championship) · Rograkh / Silas Renn
-• 42p · LITTLE PARIS SIEGE III · Crystal, Inhuman Princess
-• 41p · Mana Burn II - European cEDH Championship Qualifi… · Kinnan, Bonder Prodigy
+• 54p · Imperial Siege Nuremberg · Ines Varga on Sisay, Weatherlight Captain
+• 52p · La CASTanyada cEDH La Competència · Devon Okafor on Dack Fayden, Helping Hand
+• 51p · TAP THAT TUNDRA - EU CHAMPIONSHIP QUALIFIER · Lena Marchetti on Yuriko, the Tiger's Shadow
+• 47p · European Qualifier CEDH Octubre · Soren Blake on Rograkh / Silas Renn
+• 44p · Piece of Cake (unofficial Czech cEDH championship) · Priya Nandakumar on Rograkh / Silas Renn
+• 42p · LITTLE PARIS SIEGE III · Hugo Lindqvist on Crystal, Inhuman Princess
+• 41p · Mana Burn II - European cEDH Championship Qualifi… · Camille Rousseau on Kinnan, Bonder Prodigy
+
+Top players — October
+1. Mara Ellison — 2 wins, 3 top cuts · Arcum Dagsson
+2. Tobias Quill — 1 win, 2 top cuts · Rograkh / Thrasios
+3. Ines Varga — 1 win, 1 top cut · Sisay, Weatherlight Captain
+4. Aiko Tanabe — 3 top cuts · Kraum / Tymna the Weaver
+5. Rafael Montoya — 2 top cuts
+
+Rising players — October
+Noor Haddad — first top cut · 96p CEDH Norte Bilbao + Zaragoza + Pamplona
+Tobias Quill — first win · 77p 1.cEDH069 Major Die Fabrik
+Felix Brandt — early top cut · 54p Imperial Siege Nuremberg
 
 Top-cut appearances — October
 1. Kinnan, Bonder Prodigy — 35
@@ -38,28 +50,18 @@ Most played (6 months)
 10. Etali, Primal Conqueror — 1.9% –
 
 Best results (adjusted PPG, 30+ entries)
-1. Scion of the Ur-Dragon — 1.58 (n = 70)
-2. Rocco, Cabaretti Caterer — 1.47 (n = 59)
-3. Kodama of the East Tree / Tymna the Weaver — 1.44 (n = 35)
-4. Arcum Dagsson — 1.44 (n = 63)
-5. Winota, Joiner of Forces — 1.41 (n = 69)
+1. Scion of the Ur-Dragon — 1.58 (70 entries)
+2. Rocco, Cabaretti Caterer — 1.47 (59 entries)
+3. Kodama of the East Tree / Tymna the Weaver — 1.44 (35 entries)
+4. Arcum Dagsson — 1.44 (63 entries)
+5. Winota, Joiner of Forces — 1.41 (69 entries)
 
 Top-cut conversion (baseline 29%)
-1. Rowan, Scion of War — 49% (n = 57)
-2. Scion of the Ur-Dragon — 48% (n = 63)
-3. Arcum Dagsson — 46% (n = 56)
-4. Winota, Joiner of Forces — 42% (n = 50)
-5. Kodama of the East Tree / Tymna the Weaver — 42% (n = 31)
-
-Rising (by share growth vs prior 3 months)
-Dack Fayden, Helping Hand — 19 entries in October, new
-Zirda, the Dawnwaker — 14 entries in October (avg 2/month)
-Urza, Lord High Artificer — 14 entries in October (avg 5/month)
-
-Cooling off (by share drop vs prior 3 months)
-Dargo / Tymna the Weaver — 23 entries in October (avg 26/month)
-Etali, Primal Conqueror — 18 entries in October (avg 20/month)
-Tivit, Seller of Secrets — 13 entries in October (avg 14/month)
+1. Rowan, Scion of War — 49% (57 entries)
+2. Scion of the Ur-Dragon — 48% (63 entries)
+3. Arcum Dagsson — 46% (56 entries)
+4. Winota, Joiner of Forces — 42% (50 entries)
+5. Kodama of the East Tree / Tymna the Weaver — 42% (31 entries)
 
 272 qualifying events over 6 months · 87% of entries with decklists
 Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

@@ -1,17 +1,29 @@
 Pacific Northwest — cEDH meta, October 2026
 
-Events — October: 19 (+0% vs September)
-Players: 534 (+5%)
+Events — October: 19 (same as September)
+Players: 534 (+5% vs September)
 Draw rate: 21%
 Largest event: 66 players · Guardian Games CEDH Monthly PDX
 
 Winners — October (largest events)
-• 66p · Guardian Games CEDH Monthly PDX · Kraum / Tymna the Weaver
-• 44p · Gem State CEDH Ad Naus for a Cause! · Tasigur, the Golden Fang
+• 66p · Guardian Games CEDH Monthly PDX · Mara Ellison on Kraum / Tymna the Weaver
+• 44p · Gem State CEDH Ad Naus for a Cause! · Tobias Quill on Tasigur, the Golden Fang
 • 43p · Mind Full Games: October's Monthly 1k Event · Francisco / Rograkh
-• 34p · Olympic Commander Challenger Series 1k Vol 4 - 20… · Azami, Lady of Scrolls
-• 32p · Commander Invitational Qualifier Cardboard Battle… · Kraum / Tymna the Weaver
-• 32p · Guardian Games PDX CEDH Halloween · Lumra, Bellow of the Woods
+• 34p · Olympic Commander Challenger Series 1k Vol 4 - 20… · Ines Varga on Azami, Lady of Scrolls
+• 32p · Commander Invitational Qualifier Cardboard Battle… · Devon Okafor on Kraum / Tymna the Weaver
+• 32p · Guardian Games PDX CEDH Halloween · Lena Marchetti on Lumra, Bellow of the Woods
+
+Top players — October
+1. Mara Ellison — 2 wins, 3 top cuts · Kraum / Tymna the Weaver
+2. Tobias Quill — 1 win, 2 top cuts · Tasigur, the Golden Fang
+3. Ines Varga — 1 win, 1 top cut · Azami, Lady of Scrolls
+4. Aiko Tanabe — 3 top cuts · Kraum / Tymna the Weaver
+5. Rafael Montoya — 2 top cuts
+
+Rising players — October
+Noor Haddad — first top cut · 66p Guardian Games CEDH Monthly PDX
+Tobias Quill — first win · 44p Gem State CEDH Ad Naus for a Cause!
+Felix Brandt — early top cut · 34p Olympic Commander Challenger Series 1k Vol 4 - 20…
 
 Top-cut appearances — October
 1. Kraum / Tymna the Weaver — 14
@@ -33,20 +45,20 @@ Most played (6 months)
 10. Etali, Primal Conqueror — 2.5% –
 
 Best results (adjusted PPG, 30+ entries)
-1. Kinnan, Bonder Prodigy — 1.42 (n = 179)
-2. Ishai / Rograkh — 1.40 (n = 62)
-3. Tivit, Seller of Secrets — 1.36 (n = 44)
-4. Rograkh / Thrasios — 1.33 (n = 166)
-5. Etali, Primal Conqueror — 1.29 (n = 63)
+1. Kinnan, Bonder Prodigy — 1.42 (179 entries)
+2. Ishai / Rograkh — 1.40 (62 entries)
+3. Tivit, Seller of Secrets — 1.36 (44 entries)
+4. Rograkh / Thrasios — 1.33 (166 entries)
+5. Etali, Primal Conqueror — 1.29 (63 entries)
 
 Top-cut conversion (baseline 25%)
-1. Kinnan, Bonder Prodigy — 37% (n = 171)
-2. Thrasios / Yoshimaru — 33% (n = 40)
-3. Kefka, Court Mage — 31% (n = 42)
-4. Etali, Primal Conqueror — 30% (n = 60)
-5. Ishai / Rograkh — 29% (n = 59)
+1. Kinnan, Bonder Prodigy — 37% (171 entries)
+2. Thrasios / Yoshimaru — 33% (40 entries)
+3. Kefka, Court Mage — 31% (42 entries)
+4. Etali, Primal Conqueror — 30% (60 entries)
+5. Ishai / Rograkh — 29% (59 entries)
 
-Rising (by share growth vs prior 3 months)
+Rising commanders (by share growth vs prior 3 months)
 Rograkh / Silas Renn — 21 entries in October (avg 9/month)
 Ob Nixilis, Captive Kingpin — 13 entries in October (avg 7/month)
 Sisay, Weatherlight Captain — 21 entries in October (avg 13/month)

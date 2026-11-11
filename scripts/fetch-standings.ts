@@ -1,5 +1,6 @@
-// Fetches the official standing-1 commander for qualifying 32+ events with no recorded bracket (topCut = 0),
-// one request per second, each event once. Stores only (tid, commander, status, fetched_at).
+// Fetches the official standing-1 commander and player for qualifying 32+ events with no recorded bracket
+// (topCut = 0), one request per second, each event once. Stores the commander, status and player id in
+// event_winners and the player's id and display name in players; nothing else from the response is kept.
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { connect } from "./lib/db";
 import { exitWithError } from "./lib/errors";

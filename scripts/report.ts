@@ -103,6 +103,22 @@ async function main() {
       select * from stat_notable_results(${r}, ${month}::date)`;
     section(`Notable results in ${values.month} (qualifying events with 32+ players)`, ["participant_count", "event_name", "location", "result", "result_commanders", "top_cut_commanders"], notable,
       "result: winner = the single top-cut entry with the most bracket wins and no bracket losses; final drawn = 2+ such entries tied.");
+
+    // Names come from player_names, so opted-out and removed players never print here.
+    const winners = await sql<{ event_name: string | null; participant_count: number; result: string; result_commanders: string | null; winner_name: string | null; winner_hidden: boolean }[]>`
+      select event_name, participant_count, result, result_commanders, winner_name, winner_hidden from stat_month_results(${r}, ${month}::date, 10)`;
+    section(`Winners in ${values.month} (10 largest qualifying 32+ events)`, ["participant_count", "event_name", "result", "result_commanders", "winner"],
+      winners.map((w) => ({ ...w, winner: w.winner_hidden ? "(opted out)" : (w.winner_name ?? "") })));
+
+    const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; largest_event: number; top_commander: string | null }[]>`
+      select * from stat_top_players(${r}, ${month}::date, 10)`;
+    section(`Top players in ${values.month} (qualifying events; by wins, then top cuts, then largest event)`,
+      ["player_name", "wins", "top_cuts", "largest_event", "top_commander"], topPlayers);
+
+    const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
+      select * from stat_rising_players(${r}, ${month}::date, 10)`;
+    section(`Rising players in ${values.month} (first win, first top cut, or a top cut in their first 5 events)`,
+      ["player_name", "reason", "participant_count", "event_name"], risingPlayers);
   } finally {
     await sql.end();
   }

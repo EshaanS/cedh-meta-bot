@@ -7,6 +7,9 @@ export const POST_CONFIG = {
   contentBudget: 3000,
   eventNameMax: 50,
   winnersMax: 10,
+  playerNameMax: 32,
+  topPlayersMax: 5,
+  risingPlayersMax: 3,
   topCutMax: 5,
   mostPlayedMax: 10,
   arrowThreshold: 0.003, // ±0.3 percentage points of meta share
@@ -36,7 +39,14 @@ export type PostData = {
     largestEventName: string | null; largestEventPlayers: number | null; drawRate: number | null;
   };
   coverage: { qualifyingEvents: number; pctEntriesWithLeader: number | null };
-  results: { eventName: string | null; participantCount: number; result: string; resultCommanders: string | null }[];
+  /** winnerName is null when there is no single winner, the player is unknown or removed, or opted out (winnerHidden). */
+  results: {
+    eventName: string | null; participantCount: number; result: string; resultCommanders: string | null;
+    winnerName: string | null; winnerHidden: boolean;
+  }[];
+  /** Opted-out and removed players never appear in these two lists (filtered in SQL). */
+  topPlayers: { name: string; wins: number; topCuts: number; commander: string | null }[];
+  risingPlayers: { name: string; reason: string; eventName: string | null; participantCount: number }[];
   topCutAppearances: { commander: string; topCutEntries: number }[];
   metaShare: { commander: string; entries: number; metaShare: number; priorShare: number | null }[];
   priorWindowEntries: number;
@@ -90,11 +100,13 @@ export function shareArrow(share: number, priorShare: number | null, priorWindow
 
 const pct = (x: number, digits = 1) => `${(100 * x).toFixed(digits)}%`;
 const int = (n: number) => n.toLocaleString("en-US");
-const signedPctChange = (cur: number, prev: number) => {
+/** "+9% vs September", "-4% vs September", or "same as September" when the change rounds to 0%. */
+export const changeVs = (cur: number, prev: number, prevMonth: string) => {
   if (prev <= 0) return null;
   const c = Math.round((100 * (cur - prev)) / prev);
-  return `${c >= 0 ? "+" : ""}${c}%`;
+  return c === 0 ? `same as ${prevMonth}` : `${c > 0 ? "+" : ""}${c}% vs ${prevMonth}`;
 };
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
 const monthOf = (yyyyMm: string, offset = 0) => {
   const d = new Date(Date.UTC(Number(yyyyMm.slice(0, 4)), Number(yyyyMm.slice(5, 7)) - 1 + offset, 1));
   return MONTHS[d.getUTCMonth()]!;
@@ -132,22 +144,23 @@ function fitLines(lines: string[], max = DISCORD_LIMITS.fieldValue): string[] {
   return out;
 }
 
-type Caps = { winners: number; topCut: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number };
+type Caps = { winners: number; topPlayers: number; risingPlayers: number; topCut: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number };
 type Section = { name: string; lines: string[]; inline?: boolean };
 
 function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   const s: Section[] = [];
+  // Player names are user-written, so they get the same cleaning as organizer text.
+  const playerText = (name: string) => sanitizeOrganizerText(name, c.playerNameMax);
   const mon = monthOf(data.month);
   const prevMon = monthOf(data.month, -1);
 
   // Scene this month (inline)
   const sc = data.scene;
   if (sc.events > 0) {
-    const evChange = signedPctChange(sc.events, sc.prevEvents);
-    const plChange = signedPctChange(sc.players, sc.prevPlayers);
-    s.push({ name: `Events — ${mon}`, lines: [`${int(sc.events)}${evChange ? ` (${evChange} vs ${prevMon})` : ""}`], inline: true });
-    s.push({ name: "Players", lines: [`${int(sc.players)}${plChange ? ` (${plChange})` : ""}`], inline: true });
-    if (sc.drawRate !== null) s.push({ name: "Draw rate", lines: [pct(sc.drawRate, 0)], inline: true });
+    const evChange = changeVs(sc.events, sc.prevEvents, prevMon);
+    const plChange = changeVs(sc.players, sc.prevPlayers, prevMon);
+    s.push({ name: `Events — ${mon}`, lines: [`${int(sc.events)}${evChange ? ` (${evChange})` : ""}`], inline: true });
+    s.push({ name: "Players", lines: [`${int(sc.players)}${plChange ? ` (${plChange})` : ""}`], inline: true });    if (sc.drawRate !== null) s.push({ name: "Draw rate", lines: [pct(sc.drawRate, 0)], inline: true });
     if (sc.largestEventName && sc.largestEventPlayers) {
       const name = sanitizeOrganizerText(sc.largestEventName, c.eventNameMax) || "Unnamed event";
       s.push({ name: "Largest event", lines: [`${sc.largestEventPlayers} players · ${name}`], inline: true });
@@ -158,13 +171,45 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   const winnerLines = data.results.slice(0, caps.winners).map((r) => {
     const name = sanitizeOrganizerText(r.eventName ?? "Unnamed event", c.eventNameMax) || "Unnamed event";
     const commanders = (r.resultCommanders ?? "").split("; ").filter(Boolean).map((x) => (x === "unknown" ? "unknown commander" : shortenCommander(x)));
+    // An opted-out winner is "a player"; a winner with no known name shows the commander alone.
+    const who = r.winnerHidden ? "a player" : r.winnerName ? playerText(r.winnerName) : "";
+    const winner = commanders[0] ? (who ? `${who} on ${commanders[0]}` : commanders[0]) : who || "winner not recorded";
     const outcome =
-      r.result === "winner" ? (commanders[0] ?? "winner not recorded")
+      r.result === "winner" ? winner
       : r.result === "final drawn" ? `drawn final: ${commanders.join(", ")}`
       : r.result;
     return `• ${r.participantCount}p · ${name} · ${outcome}`;
   });
   if (winnerLines.length) s.push({ name: `Winners — ${mon} (largest events)`, lines: fitLines(winnerLines) });
+
+  // Player sections need no decklists, so they show for non-reportable regions too.
+  const topPlayers = data.topPlayers
+    .map((p) => ({ ...p, name: playerText(p.name) }))
+    .filter((p) => p.name)
+    .slice(0, caps.topPlayers);
+  if (topPlayers.length) {
+    s.push({
+      name: `Top players — ${mon}`,
+      lines: topPlayers.map((p, i) => {
+        const record = [p.wins > 0 ? plural(p.wins, "win", "wins") : "", p.topCuts > 0 ? plural(p.topCuts, "top cut", "top cuts") : ""].filter(Boolean).join(", ");
+        return `${i + 1}. ${p.name} — ${record}${p.commander ? ` · ${shortenCommander(p.commander)}` : ""}`;
+      }),
+    });
+  }
+
+  const risingPlayers = data.risingPlayers
+    .map((p) => ({ ...p, name: playerText(p.name) }))
+    .filter((p) => p.name)
+    .slice(0, caps.risingPlayers);
+  if (risingPlayers.length) {
+    s.push({
+      name: `Rising players — ${mon}`,
+      lines: risingPlayers.map((p) => {
+        const event = sanitizeOrganizerText(p.eventName ?? "Unnamed event", c.eventNameMax) || "Unnamed event";
+        return `${p.name} — ${p.reason} · ${p.participantCount}p ${event}`;
+      }),
+    });
+  }
 
   if (!data.resolved.reportable) return s;
 
@@ -186,7 +231,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   if (best.length) {
     s.push({
       name: `Best results (adjusted PPG, ${c.bestResultsMinEntries}+ entries)`,
-      lines: best.map((p, i) => `${i + 1}. ${shortenCommander(p.commander)} — ${p.shrunkPpg.toFixed(2)} (n = ${p.entries})`),
+      lines: best.map((p, i) => `${i + 1}. ${shortenCommander(p.commander)} — ${p.shrunkPpg.toFixed(2)} (${int(p.entries)} entries)`),
     });
   }
 
@@ -198,7 +243,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     const base = data.baselineConversion === null ? "" : ` (baseline ${pct(data.baselineConversion, 0)})`;
     s.push({
       name: `Top-cut conversion${base}`,
-      lines: conv.map((x, i) => `${i + 1}. ${shortenCommander(x.commander)} — ${pct(x.conversion, 0)} (n = ${x.entriesInCutEvents})`),
+      lines: conv.map((x, i) => `${i + 1}. ${shortenCommander(x.commander)} — ${pct(x.conversion, 0)} (${int(x.entriesInCutEvents)} entries)`),
     });
   }
 
@@ -213,7 +258,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .filter((t) => t.isNew || ((t.shareChange ?? 0) > 0 && (!matching || t.lastMonthEntries > t.prior3AvgEntries)))
     .sort((a, b) => Number(b.isNew) - Number(a.isNew) || (b.shareChange ?? 0) - (a.shareChange ?? 0))
     .slice(0, caps.rising);
-  if (rising.length) s.push({ name: "Rising (by share growth vs prior 3 months)", lines: rising.map(countLine) });
+  if (rising.length) s.push({ name: "Rising commanders (by share growth vs prior 3 months)", lines: rising.map(countLine) });
 
   const topCommanders = new Set(data.metaShare.slice(0, c.coolingTopN).map((m) => m.commander));
   const cooling = data.trend
@@ -222,7 +267,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .filter((t) => !matching || t.lastMonthEntries < t.prior3AvgEntries)
     .sort((a, b) => a.shareChange! - b.shareChange!)
     .slice(0, caps.cooling);
-  if (cooling.length) s.push({ name: "Cooling off (by share drop vs prior 3 months)", lines: cooling.map(countLine) });
+  if (cooling.length) s.push({ name: "Cooling commanders (by share drop vs prior 3 months)", lines: cooling.map(countLine) });
 
   return s;
 }
@@ -235,14 +280,16 @@ function coverageLine(data: PostData): string {
 /** Pure: builds the embed and the plain-text preview, trimming bottom sections first until the budget fits. */
 export function composePost(data: PostData, config: PostConfig = POST_CONFIG): { embed: Embed; text: string } {
   const caps: Caps = {
-    winners: config.winnersMax, topCut: config.topCutMax, mostPlayed: config.mostPlayedMax, best: config.bestResultsMax,
+    winners: config.winnersMax, topPlayers: config.topPlayersMax, risingPlayers: config.risingPlayersMax, topCut: config.topCutMax, mostPlayed: config.mostPlayedMax, best: config.bestResultsMax,
     conversion: config.conversionMax, rising: config.risingMax, cooling: config.coolingMax,
   };
   // Trim order, bottom sections first, each to a floor; then deeper cuts in the same order.
   const step = (k: keyof Caps, floor: number) => () => caps[k] > floor && (caps[k]--, true);
   const trims = [
-    step("cooling", 0), step("rising", 0), step("conversion", 3), step("best", 3), step("mostPlayed", 5), step("topCut", 3), step("winners", 5),
-    step("conversion", 0), step("best", 0), step("topCut", 0), step("mostPlayed", 3), step("winners", 3),
+    step("cooling", 0), step("rising", 0), step("conversion", 3), step("best", 3), step("mostPlayed", 5), step("topCut", 3),
+    step("risingPlayers", 1), step("topPlayers", 3), step("winners", 5),
+    step("conversion", 0), step("best", 0), step("topCut", 0), step("mostPlayed", 3),
+    step("risingPlayers", 0), step("topPlayers", 0), step("winners", 3),
   ];
 
   const title = `${data.resolved.label} — cEDH meta, ${monthOf(data.month)} ${data.month.slice(0, 4)}`;
@@ -292,8 +339,12 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select * from stat_scene(${r}, ${end}::date)`;
   const [cov] = await sql<{ qualifying_events: string; pct_entries_with_leader: number | null }[]>`
     select qualifying_events, pct_entries_with_leader from stat_coverage(${r}, ${end}::date)`;
-  const results = await sql<{ event_name: string | null; participant_count: number; result: string; result_commanders: string | null }[]>`
-    select event_name, participant_count, result, result_commanders from stat_month_results(${r}, ${end}::date, 10)`;
+  const results = await sql<{ event_name: string | null; participant_count: number; result: string; result_commanders: string | null; winner_name: string | null; winner_hidden: boolean }[]>`
+    select event_name, participant_count, result, result_commanders, winner_name, winner_hidden from stat_month_results(${r}, ${end}::date, 10)`;
+  const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; top_commander: string | null }[]>`
+    select player_name, wins, top_cuts, top_commander from stat_top_players(${r}, ${end}::date, 5)`;
+  const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
+    select player_name, reason, event_name, participant_count from stat_rising_players(${r}, ${end}::date, 3)`;
   const topCut = await sql<{ commander: string; top_cut_entries: string }[]>`
     select * from stat_top_cut_appearances(${r}, ${end}::date) limit 10`;
   const meta = await sql<{ commander: string; entries: string; meta_share: number; prior_share: number | null }[]>`
@@ -325,7 +376,12 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
       qualifyingEvents: Number(cov?.qualifying_events ?? 0),
       pctEntriesWithLeader: cov?.pct_entries_with_leader == null ? null : Number(cov.pct_entries_with_leader),
     },
-    results: results.map((x) => ({ eventName: x.event_name, participantCount: x.participant_count, result: x.result, resultCommanders: x.result_commanders })),
+    results: results.map((x) => ({
+      eventName: x.event_name, participantCount: x.participant_count, result: x.result, resultCommanders: x.result_commanders,
+      winnerName: x.winner_name, winnerHidden: x.winner_hidden,
+    })),
+    topPlayers: topPlayers.map((p) => ({ name: p.player_name, wins: Number(p.wins), topCuts: Number(p.top_cuts), commander: p.top_commander })),
+    risingPlayers: risingPlayers.map((p) => ({ name: p.player_name, reason: p.reason, eventName: p.event_name, participantCount: p.participant_count })),
     topCutAppearances: topCut.map((t) => ({ commander: t.commander, topCutEntries: Number(t.top_cut_entries) })),
     metaShare: meta.map((m) => ({ commander: m.commander, entries: Number(m.entries), metaShare: m.meta_share, priorShare: m.prior_share })),
     priorWindowEntries: Number(prior?.n ?? 0),
