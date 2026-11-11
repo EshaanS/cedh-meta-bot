@@ -1,5 +1,6 @@
 // Player stats and the opt-out list against a real Postgres. Skipped unless TEST_DATABASE_URL is set.
-// Uses ids starting with "test-pl-" in a month far from real data (2031-03) and removes them afterwards.
+// Uses event ids starting with "test-pl-" and 28-character player ids starting with "testpl", in a month far
+// from real data (2031-03), and removes them afterwards.
 import assert from "node:assert/strict";
 import { after, before, describe, test } from "node:test";
 import type { Sql } from "../scripts/lib/db";
@@ -11,8 +12,8 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
   const MONTH = "2031-03-01";
   const cleanup = async () => {
     await sql`delete from tournaments where tid like 'test-pl-%'`; // entries and event_winners cascade
-    await sql`delete from player_optouts where player_id like 'test-pl-%'`;
-    await sql`delete from players where player_id like 'test-pl-%'`;
+    await sql`delete from player_optouts where player_id like 'testpl%'`;
+    await sql`delete from players where player_id like 'testpl%'`;
   };
   const event = (tid: string, date: string, players: number, topCut: number) =>
     sql`insert into tournaments (tid, name, start_date, participant_count, top_cut, event_class)
@@ -27,34 +28,34 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
     sql = connect();
     await cleanup();
     await sql`insert into players (player_id, display_name) values
-      ('test-pl-one', 'Test Player One'), ('test-pl-two', 'Test Player Two'), ('test-pl-three', 'Test Player Three'),
-      ('test-pl-gone', null), ('test-pl-vet', 'Test Veteran')`;
+      ('testplone0000000000000000000', 'Test Player One'), ('testpltwo0000000000000000000', 'Test Player Two'), ('testplthree00000000000000000', 'Test Player Three'),
+      ('testplgone000000000000000000', null), ('testplvet0000000000000000000', 'Test Veteran')`;
     // The stored name is left in place on purpose: the view alone must hide an opted-out player.
-    await sql`insert into player_optouts (player_id, note) values ('test-pl-two', 'test')`;
+    await sql`insert into player_optouts (player_id, note) values ('testpltwo0000000000000000000', 'test')`;
 
     // History before the month: the veteran already has a win and six events; player three has five events.
     for (let i = 0; i < 6; i++) {
       await event(`test-pl-h${i}`, `2031-01-${String(10 + i).padStart(2, "0")}T12:00:00Z`, 20, 4);
-      await entry(`test-pl-h${i}`, 0, "test-pl-vet", "Sisay, Weatherlight Captain", 2, 0);
-      if (i < 5) await entry(`test-pl-h${i}`, 1, "test-pl-three", null, 0, 0);
+      await entry(`test-pl-h${i}`, 0, "testplvet0000000000000000000", "Sisay, Weatherlight Captain", 2, 0);
+      if (i < 5) await entry(`test-pl-h${i}`, 1, "testplthree00000000000000000", null, 0, 0);
     }
 
     // A: one wins; two (opted out) and the veteran also cut.
     await event("test-pl-a", "2031-03-10T12:00:00Z", 40, 4);
-    await entry("test-pl-a", 0, "test-pl-one", "Kinnan, Bonder Prodigy", 2, 0);
-    await entry("test-pl-a", 1, "test-pl-two", "Kinnan, Bonder Prodigy", 1, 1);
-    await entry("test-pl-a", 2, "test-pl-vet", "Sisay, Weatherlight Captain", 0, 1);
-    await entry("test-pl-a", 3, "test-pl-three", null, 0, 0);
+    await entry("test-pl-a", 0, "testplone0000000000000000000", "Kinnan, Bonder Prodigy", 2, 0);
+    await entry("test-pl-a", 1, "testpltwo0000000000000000000", "Kinnan, Bonder Prodigy", 1, 1);
+    await entry("test-pl-a", 2, "testplvet0000000000000000000", "Sisay, Weatherlight Captain", 0, 1);
+    await entry("test-pl-a", 3, "testplthree00000000000000000", null, 0, 0);
     // B: two (opted out) wins; one cuts again; three's first cut comes in their 7th event.
     await event("test-pl-b", "2031-03-20T12:00:00Z", 36, 4);
-    await entry("test-pl-b", 0, "test-pl-two", "Kinnan, Bonder Prodigy", 2, 0);
-    await entry("test-pl-b", 1, "test-pl-one", "Kinnan, Bonder Prodigy", 0, 1);
-    await entry("test-pl-b", 2, "test-pl-three", "Tivit, Seller of Secrets", 0, 1);
+    await entry("test-pl-b", 0, "testpltwo0000000000000000000", "Kinnan, Bonder Prodigy", 2, 0);
+    await entry("test-pl-b", 1, "testplone0000000000000000000", "Kinnan, Bonder Prodigy", 0, 1);
+    await entry("test-pl-b", 2, "testplthree00000000000000000", "Tivit, Seller of Secrets", 0, 1);
     // C: no recorded bracket; the official winner is a removed player (no name).
     await event("test-pl-c", "2031-03-25T12:00:00Z", 33, 0);
-    await entry("test-pl-c", 0, "test-pl-gone", "Tivit, Seller of Secrets", 0, 0);
+    await entry("test-pl-c", 0, "testplgone000000000000000000", "Tivit, Seller of Secrets", 0, 0);
     await sql`insert into event_winners (tid, winner_commander, status, winner_player_id, player_checked_at)
-              values ('test-pl-c', 'Tivit, Seller of Secrets', 'found', 'test-pl-gone', now())`;
+              values ('test-pl-c', 'Tivit, Seller of Secrets', 'found', 'testplgone000000000000000000', now())`;
   });
   after(async () => {
     await cleanup();
@@ -91,7 +92,7 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
   });
 
   test("removing the opt-out shows the player again", async () => {
-    await sql`delete from player_optouts where player_id = 'test-pl-two'`;
+    await sql`delete from player_optouts where player_id = 'testpltwo0000000000000000000'`;
     try {
       const [b] = await sql<{ winner_name: string | null; winner_hidden: boolean }[]>`
         select winner_name, winner_hidden from stat_month_results('global', ${MONTH}::date, 10) where tid = 'test-pl-b'`;
@@ -99,7 +100,7 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
       const top = await sql<{ player_name: string }[]>`select player_name from stat_top_players('global', ${MONTH}::date, 10)`;
       assert.ok(top.some((p) => p.player_name === "Test Player Two"));
     } finally {
-      await sql`insert into player_optouts (player_id, note) values ('test-pl-two', 'test')`;
+      await sql`insert into player_optouts (player_id, note) values ('testpltwo0000000000000000000', 'test')`;
     }
   });
 });

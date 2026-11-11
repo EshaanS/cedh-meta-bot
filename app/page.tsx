@@ -22,7 +22,7 @@ export default function Home() {
         We store nothing about server members. Removing the bot deletes the server&apos;s settings within a day.
       </p>
       <p>
-        Tournament data comes from public TopDeck.gg results. For players we store only the TopDeck player ID and display name,
+        Tournament data comes from public TopDeck.gg results. For players with a TopDeck account we store only the TopDeck player ID and display name,
         refreshed from TopDeck, to name event winners and top performers. We do not store decklists or Discord details.
       </p>
       <p>If you don&apos;t want your name shown in reports, write to the contact address below and we will stop naming you.</p>
