@@ -19,10 +19,12 @@ export default function Home() {
       <h2>Privacy</h2>
       <p>
         For each server we store the server ID, the chosen channel ID, the chosen region, and the last month a report was posted.
-        We store nothing about server members. Removing the bot deletes the server&apos;s settings within a day.
+        We store nothing about server members. After the bot is removed from a server, that server&apos;s settings are deleted the next
+        time the monthly report job runs. A server admin who wants them deleted sooner can write to the contact address below.
       </p>
       <p>
-        If a server admin builds a custom region, we store the name they gave it and the places in it (cities, states, countries).
+        If a server admin builds a custom region, we store the name they gave it and the places in it: cities, states, countries,
+        continents, and areas around a city (the city chosen as the center and a distance in kilometres).
         These belong to that server, are not visible to any other server, hold no user data, and are deleted with the server&apos;s settings.
       </p>
       <p>

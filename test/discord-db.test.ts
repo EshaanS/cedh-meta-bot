@@ -37,7 +37,8 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
             select guild_id as id from guild_configs where guild_id not like 'test-%'
             union
             select owner_guild_id from regions where owner_guild_id is not null and owner_guild_id not like 'test-%'`;
-          return [...new Set([...realGuilds, ...(opts.guilds ?? []), ...others.map((o) => o.id)])];
+          // test/bulk-radius-db.test.ts creates its servers' regions throughout its run, so they are named here.
+          return [...new Set([...realGuilds, ...(opts.guilds ?? []), ...others.map((o) => o.id), "brtest-a", "brtest-b", "brtest-limit"])];
         },
         putCommands: async () => null,
       },

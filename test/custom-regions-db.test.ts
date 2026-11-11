@@ -60,7 +60,7 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     assert.match(await say(guild, "create", { name }), new RegExp(`^Created ${name.replace(/[+]/g, "\\+")}\\.`));
     for (const [typed, label] of places) {
       const reply = await say(guild, "add", { place: await pick(guild, "add", "place", typed, label), region: name });
-      assert.match(reply, /^Added /, reply);
+      assert.match(reply, /: added 1 place \(\d+ of 25\)\.\nAdded: /, reply);
     }
     return regionId(guild, name);
   };
@@ -175,11 +175,13 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     const bc = await build(A, "Vancouver BC", [["vancouver", "Vancouver, British Columbia, Canada (1 event)"]]);
     assert.deepEqual(await tids(bc), ["vanbc"], "Vancouver, Washington stays out");
     // Typed in full without picking is accepted; a city with no events, Global, a hidden level and junk are not.
-    assert.match(await say(A, "add", { place: "Spokane, Washington, United States", region: "Seattle Metro" }), /^Added Spokane, Washington, United States to Seattle Metro \(2 places of 25\)\.$/);
-    for (const place of ["Seattle", "r:global", "r:es-b", "c:US:US-WA:seattle", "k:ZZ", "p:1", ""]) {
-      assert.match(await say(A, "add", { place, region: "Seattle Metro" }), /^Pick a place from the list/, place);
+    assert.equal(await say(A, "add", { place: "Spokane, Washington, United States", region: "Seattle Metro" }), "Seattle Metro: added 1 place (2 of 25).\nAdded: Spokane, Washington, United States");
+    for (const place of ["Seattle", "r:global", "r:es-b", "c:US:US-WA:seattle", "k:ZZ", "p:1"]) {
+      const reply = await say(A, "add", { place, region: "Seattle Metro" });
+      assert.ok(reply.startsWith(`Seattle Metro: nothing added (2 of 25 places).\nNot found: "${place}"`), reply);
     }
-    assert.equal(await say(A, "add", { place: "Spokane, Washington, United States", region: "Seattle Metro" }), "Spokane, Washington, United States is already in Seattle Metro.");
+    assert.match(await say(A, "add", { place: "", region: "Seattle Metro" }), /^Nothing to add yet\./);
+    assert.equal(await say(A, "add", { place: "Spokane, Washington, United States", region: "Seattle Metro" }), "Seattle Metro: nothing added (2 of 25 places).\nAlready in the region: Spokane, Washington, United States");
     assert.deepEqual(await tids(metro), ["spokane", "tacoma1", "tacoma2", "tacoma3"]);
   });
 
@@ -219,13 +221,17 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     ].join("\n"));
     const choices = await complete(A, "remove", "place", "", { region: "Seattle Metro" });
     assert.deepEqual(choices.map((c) => c.name), ["Spokane, Washington, United States", "Tacoma, Washington, United States"]);
-    assert.equal(await say(A, "remove", { place: choices[0]!.value, region: "Seattle Metro" }), "Removed Spokane, Washington, United States from Seattle Metro.");
-    assert.match(await say(A, "remove", { place: "Spokane, Washington, United States", region: "Seattle Metro" }), /^That place isn't in Seattle Metro\./);
+    assert.equal(await say(A, "remove", { place: choices[0]!.value, region: "Seattle Metro" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Spokane, Washington, United States");
+    assert.equal(
+      await say(A, "remove", { place: "Spokane, Washington, United States", region: "Seattle Metro" }),
+      'Seattle Metro: nothing removed (1 place).\nNot in Seattle Metro: "Spokane, Washington, United States". Pick from the list that appears as you type.',
+    );
+    assert.equal(await say(A, "remove", { region: "Seattle Metro" }), "Nothing to remove yet. Pick places in the place options, or type several in the list option.");
     assert.deepEqual((await complete(A, "delete", "region", "van")).map((c) => c.name), ["Vancouver BC"]);
     assert.equal(await say(A, "delete", { region: "Vancouver BC" }), "Deleted Vancouver BC.");
     // With one region left, the option isn't needed.
-    assert.match(await say(A, "add", { place: "Portland, Oregon, United States" }), /^Added Portland, Oregon, United States to Seattle Metro \(2 places of 25\)\.$/);
-    assert.equal(await say(A, "remove", { place: "Portland, Oregon, United States" }), "Removed Portland, Oregon, United States from Seattle Metro.");
+    assert.equal(await say(A, "add", { place: "Portland, Oregon, United States" }), "Seattle Metro: added 1 place (2 of 25).\nAdded: Portland, Oregon, United States");
+    assert.equal(await say(A, "remove", { place: "Portland, Oregon, United States" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Portland, Oregon, United States");
     assert.equal(await say(B, "list"), "This server has no custom regions. Create one with /region create, then add places with /region add.");
   });
 
@@ -280,12 +286,12 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     assert.match(embed.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
 
     // A custom region that is reportable itself uses its own entries everywhere.
-    assert.match(await say(A, "add", { place: "r:us-wa", region: "Seattle Metro" }), /^Added Washington \(United States\)/);
+    assert.equal(await say(A, "add", { place: "r:us-wa", region: "Seattle Metro" }), "Seattle Metro: added 1 place (2 of 25).\nAdded: Washington (United States)");
     assert.equal(await say(A, "set", { region: "Seattle Metro" }), "Region set to Seattle Metro.\nCommander stats: Seattle Metro's own entries.");
     const full = (await run(A, "preview")).embeds![0]!;
     assert.equal(full.description, undefined);
     assert.ok(full.fields.some((f) => f.name === "📊 Most played (6 months)"));
-    assert.equal(await say(A, "remove", { place: "Washington (United States)", region: "Seattle Metro" }), "Removed Washington (United States) from Seattle Metro.");
+    assert.equal(await say(A, "remove", { place: "Washington (United States)", region: "Seattle Metro" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Washington (United States)");
   });
 
   test("isolation: another server can't see, set, change or delete a region, even with its id", async () => {
@@ -304,7 +310,7 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     await assert.rejects(sql`insert into guild_configs (guild_id, region_id) values (${B}, ${id})`, /belongs to another server/);
     // Another server's region can't be a place either, and the same name is free on another server.
     assert.match(await say(B, "create", { name: "Seattle Metro" }), /^Created Seattle Metro\./);
-    assert.match(await say(B, "add", { place: `r:${id}` }), /^Pick a place from the list/);
+    assert.ok((await say(B, "add", { place: `r:${id}` })).startsWith("Seattle Metro: nothing added (0 of 25 places).\nNot found: "));
     await assert.rejects(sql`insert into region_places (region_id, member_region_id) values (${await regionId(B, "Seattle Metro")}, ${id})`, /cannot be a member/);
     assert.deepEqual(await tids(await regionId(B, "Seattle Metro")), []);
     assert.deepEqual(await tids(id), ["tacoma1", "tacoma2", "tacoma3"], "server A's region is untouched");
@@ -321,8 +327,11 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     await sql`
       insert into region_places (region_id, country_code, label)
       select ${id}, 'X' || chr(65 + g), 'Filler ' || g from generate_series(0, ${REGION_CONFIG.maxPlacesPerRegion - 2}) g`;
-    assert.match(await say(L, "add", { place: "r:us-wa", region: "Region 1" }), /\(25 places of 25\)\.$/);
-    assert.equal(await say(L, "add", { place: "r:us-or", region: "Region 1" }), "A region can have up to 25 places. Remove one with /region remove first.");
+    assert.equal(await say(L, "add", { place: "r:us-wa", region: "Region 1" }), "Region 1: added 1 place (25 of 25).\nAdded: Washington (United States)");
+    assert.equal(
+      await say(L, "add", { place: "r:us-or", region: "Region 1" }),
+      "Region 1: nothing added (25 of 25 places).\nNot added, the region is full (25 places): Oregon (United States). Remove a place with /region remove first.",
+    );
     assert.equal(Number((await sql<{ n: string }[]>`select count(*) as n from region_places where region_id = ${id}`)[0]!.n), 25);
   });
 
@@ -348,7 +357,7 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     const real = await sql<{ id: string }[]>`
       select guild_id as id from guild_configs where guild_id not like 'crtest-%'
       union select owner_guild_id from regions where owner_guild_id is not null and owner_guild_id not like 'crtest-%'`;
-    guildIds = [B, L, ...real.map((r) => r.id)];
+    guildIds = [B, L, "brtest-a", "brtest-b", "brtest-limit", ...real.map((r) => r.id)];
     const dry = await runCron({ sql, discord, allowlist: new Set<string>(), now }, { dryRun: true });
     assert.deepEqual(dry.pruned.filter((g) => g.startsWith("crtest-")), [A, ORPHAN]);
     assert.equal((await sql`select 1 from regions where owner_guild_id in (${A}, ${ORPHAN})`).length, 2, "a dry run deletes nothing");

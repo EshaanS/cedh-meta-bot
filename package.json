@@ -27,7 +27,8 @@
     "standings": "tsx --env-file-if-exists=.env scripts/fetch-standings.ts",
     "optout": "tsx --env-file-if-exists=.env scripts/optout.ts",
     "pair-commanders": "tsx --env-file-if-exists=.env scripts/fetch-pair-commanders.ts",
-    "pair-report": "tsx --env-file-if-exists=.env scripts/pair-report.ts"
+    "pair-report": "tsx --env-file-if-exists=.env scripts/pair-report.ts",
+    "places": "tsx --env-file-if-exists=.env scripts/load-populated-places.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

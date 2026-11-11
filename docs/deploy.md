@@ -65,18 +65,42 @@ A server admin can build a region from places and use it as the server's region.
 deploying it, register the commands again (`npm run register-commands -- --guild <id>`) so Discord learns the
 new subcommands.
 
-- `/region create name:Seattle Metro`, then `/region add place:…` for each place. Start typing and pick from the
-  list: cities appear only when they have events in the data, labelled with state, country and event count.
+- `/region create name:Seattle Metro`, then `/region add`. Start typing in `place` and pick from the list:
+  cities appear only when they have events in the data, labelled with state, country and event count.
   States, countries, continents and Pacific Northwest can be added too.
+- Several places in one command: `place`, `place2` … `place5` each take one pick, and `list` takes typed text,
+  for example `list:Tacoma, Issaquah, Lacey, Vancouver BC`. A name that fits more than one place ("Vancouver")
+  is never guessed: the reply lists the options. If a place is written with a comma ("Portland, Oregon"), put
+  semicolons between places. The reply says what was added, what was already there, and what was not added
+  and why. `/region remove` takes the same options.
 - `/region set` lists the server's own regions first. `/region show` lists the places and says where commander
   stats come from. `/region remove`, `/region delete` and `/region list` do what they say.
 - A city is where the venue is, not the metro area around it: there are no events in Seattle itself, but there
-  are in Tacoma, Issaquah and Lacey. Build a metro from the cities the list offers.
+  are in Tacoma, Issaquah and Lacey. For a metro, use a radius: `/region add around:Seattle km:50` adds
+  everything within 50 km of Seattle as one place (10 to 200 km; 50 if `km` is left out). It can also be
+  written in the list: `50 km of Seattle`.
 - A small region shows its own events, winners and players. Most played, Best results and Top-cut conversion
   come from the smallest standard region around it (for example Washington) until it has enough decklists, and
   the post says so.
-- Limits: 5 custom regions per server, 25 places per region, names up to 40 characters (`REGION_CONFIG` in
-  `src/server/custom-regions.ts`).
+- Limits: 5 custom regions per server, 25 places per region (a radius is one place), names up to 40 characters
+  (`REGION_CONFIG` in `src/server/custom-regions.ts`).
+
+### Radius centers (migration 016, once)
+The `around` option offers every city with events in the data, plus the cities in Natural Earth's populated
+places (so Seattle can be a center although it has no events). The second list is loaded once from a pinned
+file; the bot reads the table and never the file. Without it, only cities with events are offered.
+
+```
+curl -o data/ne_10m_populated_places_simple.geojson https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places_simple.geojson
+npm run migrate
+npm run places
+npm run register-commands -- --guild <test server id>
+```
+
+`npm run places` checks the file's SHA-256, needs the admin-1 boundary file in `data/` as `geocode` does, and
+prints how many places it stored (7,342). It is not part of `refresh`: the file is pinned and does not change.
+Running it again changes nothing. Register the commands after deploying, because `/region add` and
+`/region remove` have new options.
 
 ## Player data and opt-outs
 Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,

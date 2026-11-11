@@ -6,9 +6,10 @@ import { redact } from "../../scripts/lib/errors";
 import { composePost, loadPostData } from "../../scripts/lib/post";
 import { isGuildAllowed, monthName, POST_FROM_DAY, previousMonth } from "./config";
 import {
-  addPlace, createRegion, deleteRegion, findGuildRegion, fold, listGuildRegions, matchPlaces, placeOptions, REGION_CONFIG, RegionError,
-  regionPlaces, removePlace, resolvePlace, statsSourceLine, targetRegion, type GuildRegion,
+  addPlaces, centerOptions, createRegion, deleteRegion, findGuildRegion, fold, listGuildRegions, matchCenters, matchPlaces, placeOptions,
+  REGION_CONFIG, RegionError, regionPlaces, removePlaces, resolveAddRequest, statsSourceLine, targetRegion, type GuildRegion,
 } from "./custom-regions";
+import { addSummary, removeSummary } from "./place-matching";
 import { DISCORD_ERRORS, DiscordError, type DiscordClient, type MessagePayload } from "./discord";
 
 const PING = 1;
@@ -97,13 +98,20 @@ async function autocomplete(deps: InteractionDeps, i: Interaction, guildId: stri
     return [...own, ...matchRegions(await selectableRegions(sql, now), typed)].slice(0, REGION_CONFIG.choiceMax);
   }
   if (focused.name === "region") return matchGuildRegions(await listGuildRegions(sql, guildId), typed);
-  if (sub.name === "add" && focused.name === "place") return matchPlaces(await placeOptions(sql, now), typed);
-  if (sub.name === "remove" && focused.name === "place") {
+  if (sub.name === "add" && focused.name === "around") return matchCenters(await centerOptions(sql, now), typed);
+  if (!isPlaceOption(focused.name)) return [];
+  // Each place option has its own list; a place already picked in another option of this command is left out.
+  const picked = new Set(placeValues(sub.options).filter((_, n) => REGION_CONFIG.placeOptionNames[n] !== focused.name).map(String));
+  if (sub.name === "add") {
+    const rows = (await placeOptions(sql, now)).filter((o) => !picked.has(o.value));
+    return matchPlaces(rows, typed);
+  }
+  if (sub.name === "remove") {
     const region = await targetRegion(sql, guildId, optionValue(sub.options, "region")).catch(() => null);
     if (!region) return [];
     const q = fold(typed.trim());
     return (await regionPlaces(sql, region.id))
-      .filter((p) => q === "" || fold(p.label).includes(q))
+      .filter((p) => !picked.has(`p:${p.id}`) && (q === "" || fold(p.label).includes(q)))
       .slice(0, REGION_CONFIG.choiceMax)
       .map((p) => ({ name: p.label.slice(0, REGION_CONFIG.choiceTextMax), value: `p:${p.id}` }));
   }
@@ -116,7 +124,10 @@ const subcommand = (i: Interaction) => i.data?.options?.[0];
 const optionValue = (opts: Option[] | undefined, name: string) => opts?.find((o) => o.name === name)?.value;
 const monthStart = (yyyyMm: string) => `${yyyyMm}-01`;
 const currentMonth = (now: Date) => `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
-const places = (n: number) => `${n} ${n === 1 ? "place" : "places"}`;
+const isPlaceOption = (name: string) => (REGION_CONFIG.placeOptionNames as readonly string[]).includes(name);
+/** The values of place, place2 … place5, in that order (undefined where the option was left out). */
+const placeValues = (opts: Option[] | undefined) => REGION_CONFIG.placeOptionNames.map((name) => optionValue(opts, name));
+const given = (v: unknown) => v !== undefined && v !== null && String(v).trim() !== "";
 
 async function regionSet(deps: InteractionDeps, guildId: string, value: unknown): Promise<MessagePayload> {
   const sql = deps.sql();
@@ -191,21 +202,33 @@ async function regionCreate(deps: InteractionDeps, guildId: string, name: unknow
   return reply(`Created ${region.name}. Add places with /region add, then choose it with /region set.`);
 }
 
-async function regionAdd(deps: InteractionDeps, guildId: string, placeValue: unknown, regionValue: unknown): Promise<MessagePayload> {
+const ADD_HINT = [
+  "Nothing to add yet. Use one or more of these options:",
+  "• place, place2 … place5: start typing and pick a city, state, country or continent from the list.",
+  "• list: several places in one go, for example `Tacoma, Issaquah, Lacey, Vancouver BC`.",
+  `• around and km: everything within a distance of a city, for example around Seattle, km ${REGION_CONFIG.radiusDefaultKm}.`,
+].join("\n");
+const REMOVE_HINT = "Nothing to remove yet. Pick places in the place options, or type several in the list option.";
+
+/** One /region add: every picked place, the typed list and the radius, with one summary of what happened. */
+async function regionAdd(deps: InteractionDeps, guildId: string, opts: Option[] | undefined): Promise<MessagePayload> {
+  const request = { picks: placeValues(opts), list: optionValue(opts, "list"), around: optionValue(opts, "around"), km: optionValue(opts, "km") };
+  if (![...request.picks, request.list, request.around, request.km].some(given)) return reply(ADD_HINT);
   const sql = deps.sql();
-  const region = await targetRegion(sql, guildId, regionValue);
-  const place = await resolvePlace(sql, deps.now().getTime(), placeValue);
-  await addPlace(sql, guildId, region, place);
-  return reply(`Added ${place.label} to ${region.name} (${places(region.places + 1)} of ${REGION_CONFIG.maxPlacesPerRegion}).`);
+  const region = await targetRegion(sql, guildId, optionValue(opts, "region"));
+  const { places, outcome } = await resolveAddRequest(sql, deps.now().getTime(), request);
+  const total = places.length > 0 ? await addPlaces(sql, guildId, region, places, outcome) : region.places;
+  return reply(addSummary(region.name, outcome, total, REGION_CONFIG.maxPlacesPerRegion));
 }
 
-async function regionRemove(deps: InteractionDeps, guildId: string, placeValue: unknown, regionValue: unknown): Promise<MessagePayload> {
+async function regionRemove(deps: InteractionDeps, guildId: string, opts: Option[] | undefined): Promise<MessagePayload> {
+  const picks = placeValues(opts);
+  const list = optionValue(opts, "list");
+  if (![...picks, list].some(given)) return reply(REMOVE_HINT);
   const sql = deps.sql();
-  const region = await targetRegion(sql, guildId, regionValue);
-  const label = await removePlace(sql, guildId, region, placeValue);
-  const lines = [`Removed ${label} from ${region.name}.`];
-  if (region.places - 1 === 0) lines.push(`${region.name} has no places left, so its reports will have no events until you add some.`);
-  return reply(lines.join("\n"));
+  const region = await targetRegion(sql, guildId, optionValue(opts, "region"));
+  const { outcome, left } = await removePlaces(sql, guildId, region, picks, list);
+  return reply(removeSummary(region.name, outcome, left));
 }
 
 async function regionDelete(deps: InteractionDeps, guildId: string, regionValue: unknown): Promise<MessagePayload> {
@@ -295,8 +318,8 @@ export async function handleInteraction(i: Interaction, deps: InteractionDeps): 
     if (sub?.name === "set") work = () => regionSet(deps, guildId, opt("region"));
     else if (sub?.name === "show") work = () => regionShow(deps, guildId);
     else if (sub?.name === "create") work = () => regionCreate(deps, guildId, opt("name"));
-    else if (sub?.name === "add") work = () => regionAdd(deps, guildId, opt("place"), opt("region"));
-    else if (sub?.name === "remove") work = () => regionRemove(deps, guildId, opt("place"), opt("region"));
+    else if (sub?.name === "add") work = () => regionAdd(deps, guildId, sub.options);
+    else if (sub?.name === "remove") work = () => regionRemove(deps, guildId, sub.options);
     else if (sub?.name === "delete") work = () => regionDelete(deps, guildId, opt("region"));
     else if (sub?.name === "list") work = () => regionList(deps, guildId);
   } else if (i.data.name === "channel" && sub?.name === "set") work = () => channelSet(deps, i, guildId, opt("channel"));
