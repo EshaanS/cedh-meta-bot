@@ -107,125 +107,104 @@
     {
       "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
       "entries": 185,
-      "metaShare": 0.07229386479093396,
-      "priorShare": 0.07379729098552079
+      "metaShare": 0.07229386479093396
     },
     {
       "commander": "Kinnan, Bonder Prodigy",
       "entries": 179,
-      "metaShare": 0.06994919890582259,
-      "priorShare": 0.07192900513778608
+      "metaShare": 0.06994919890582259
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
       "entries": 166,
-      "metaShare": 0.06486908948808129,
-      "priorShare": 0.06725829051844932
+      "metaShare": 0.06486908948808129
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
       "entries": 106,
-      "metaShare": 0.041422430636967565,
-      "priorShare": 0.039701074264362445
+      "metaShare": 0.041422430636967565
     },
     {
       "commander": "Sisay, Weatherlight Captain",
       "entries": 104,
-      "metaShare": 0.04064087534193044,
-      "priorShare": 0.038766931340495095
+      "metaShare": 0.04064087534193044
     },
     {
       "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
       "entries": 72,
-      "metaShare": 0.02813599062133646,
-      "priorShare": 0.029425502101821578
+      "metaShare": 0.02813599062133646
     },
     {
       "commander": "Thrasios, Triton Hero / Tymna the Weaver",
       "entries": 70,
-      "metaShare": 0.027354435326299335,
-      "priorShare": 0.025221858944418495
+      "metaShare": 0.027354435326299335
     },
     {
       "commander": "Magda, Brazen Outlaw",
       "entries": 68,
-      "metaShare": 0.02657288003126221,
-      "priorShare": 0.026156001868285848
+      "metaShare": 0.02657288003126221
     },
     {
       "commander": "Ral, Monsoon Mage",
       "entries": 67,
-      "metaShare": 0.02618210238374365,
-      "priorShare": 0.026623073330219522
+      "metaShare": 0.02618210238374365
     },
     {
       "commander": "Etali, Primal Conqueror",
       "entries": 63,
-      "metaShare": 0.0246189917936694,
-      "priorShare": 0.025688930406352173
+      "metaShare": 0.0246189917936694
     },
     {
       "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
       "entries": 62,
-      "metaShare": 0.02422821414615084,
-      "priorShare": 0.02802428771602055
+      "metaShare": 0.02422821414615084
     },
     {
       "commander": "Kenrith, the Returned King",
       "entries": 56,
-      "metaShare": 0.021883548261039467,
-      "priorShare": 0.024287716020551145
+      "metaShare": 0.021883548261039467
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
       "entries": 53,
-      "metaShare": 0.020711215318483783,
-      "priorShare": 0.018682858477347034
+      "metaShare": 0.020711215318483783
     },
     {
       "commander": "Tayam, Luminous Enigma",
       "entries": 51,
-      "metaShare": 0.01992966002344666,
-      "priorShare": 0.019617001401214387
+      "metaShare": 0.01992966002344666
     },
     {
       "commander": "Tivit, Seller of Secrets",
       "entries": 44,
-      "metaShare": 0.017194216490816726,
-      "priorShare": 0.017281644091546006
+      "metaShare": 0.017194216490816726
     },
     {
       "commander": "Kefka, Court Mage",
       "entries": 43,
-      "metaShare": 0.016803438843298164,
-      "priorShare": 0.01681457262961233
+      "metaShare": 0.016803438843298164
     },
     {
       "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
       "entries": 40,
-      "metaShare": 0.015631105900742476,
-      "priorShare": 0.014946286781877626
+      "metaShare": 0.015631105900742476
     },
     {
       "commander": "Winota, Joiner of Forces",
       "entries": 39,
-      "metaShare": 0.015240328253223915,
-      "priorShare": 0.014012143858010275
+      "metaShare": 0.015240328253223915
     },
     {
       "commander": "Vivi Ornitier",
       "entries": 34,
-      "metaShare": 0.013286440015631106,
-      "priorShare": 0.011676786548341896
+      "metaShare": 0.013286440015631106
     },
     {
       "commander": "Crystal, Inhuman Princess",
       "entries": 29,
-      "metaShare": 0.011332551778038297,
-      "priorShare": 0.011209715086408221
+      "metaShare": 0.011332551778038297
     }
   ],
-  "priorWindowEntries": 2141,
   "ppg": [
     {
       "commander": "Chatterfang, Squirrel General",

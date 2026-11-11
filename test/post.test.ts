@@ -12,7 +12,6 @@ import {
   monthlyAvg,
   POST_CONFIG,
   sanitizeOrganizerText,
-  shareArrow,
   shortenCommander,
   type PostData,
 } from "../scripts/lib/post";
@@ -134,15 +133,6 @@ test("budget trimming drops bottom sections first and keeps the post within budg
   assert.ok(field(embed, "Winners"), "Winners must survive trimming");
 });
 
-test("shareArrow: up, down, flat within ±0.3 pp, none without a previous window", () => {
-  const t = POST_CONFIG.arrowThreshold;
-  assert.equal(shareArrow(0.05, 0.04, 1000, t), "↑");
-  assert.equal(shareArrow(0.04, 0.05, 1000, t), "↓");
-  assert.equal(shareArrow(0.0502, 0.05, 1000, t), "–");
-  assert.equal(shareArrow(0.01, null, 1000, t), "↑");
-  assert.equal(shareArrow(0.05, 0.04, 0, t), null);
-});
-
 test("rising and cooling: count display, eligibility and matching counts", () => {
   const data = loadFixture("pacific-northwest-2026-10");
   const top = data.metaShare.map((m) => m.commander);
@@ -191,4 +181,11 @@ test("shortenCommander, sanitizeOrganizerText and monthlyAvg", () => {
   assert.ok(t.endsWith("…"));
   assert.equal(monthlyAvg(0.67), "<1");
   assert.equal(monthlyAvg(2.5), "3");
+});
+
+test("most played is a snapshot: share only, no movement markers", () => {
+  for (const name of FIXTURES) {
+    const lines = field(composePost(loadFixture(name)).embed, "Most played")!.value.split("\n");
+    for (const l of lines) assert.match(l, /^\d+\. .+ — \d+\.\d%$/, l);
+  }
 });

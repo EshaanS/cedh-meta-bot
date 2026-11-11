@@ -9,7 +9,6 @@ export const POST_CONFIG = {
   winnersMax: 10,
   topCutMax: 5,
   mostPlayedMax: 10,
-  arrowThreshold: 0.003, // ±0.3 percentage points of meta share
   bestResultsMax: 5,
   bestResultsMinEntries: 30,
   conversionMax: 5,
@@ -38,8 +37,7 @@ export type PostData = {
   coverage: { qualifyingEvents: number; pctEntriesWithLeader: number | null };
   results: { eventName: string | null; participantCount: number; result: string; resultCommanders: string | null }[];
   topCutAppearances: { commander: string; topCutEntries: number }[];
-  metaShare: { commander: string; entries: number; metaShare: number; priorShare: number | null }[];
-  priorWindowEntries: number;
+  metaShare: { commander: string; entries: number; metaShare: number }[];
   ppg: { commander: string; entries: number; ppg: number; shrunkPpg: number }[];
   conversion: { commander: string; entriesInCutEvents: number; topCutEntries: number; conversion: number }[];
   baselineConversion: number | null;
@@ -78,15 +76,6 @@ export function shortenCommander(name: string): string {
 
 /** Prior-3-month average entries: nearest whole number, or "<1" below 1. */
 export const monthlyAvg = (avg: number) => (avg < 1 ? "<1" : String(Math.round(avg)));
-
-/** ↑ / ↓ / – against the previous window; null when there is no previous window to compare with. */
-export function shareArrow(share: number, priorShare: number | null, priorWindowEntries: number, threshold: number): string | null {
-  if (priorWindowEntries <= 0) return null;
-  const diff = share - (priorShare ?? 0);
-  if (diff > threshold) return "↑";
-  if (diff < -threshold) return "↓";
-  return "–";
-}
 
 const pct = (x: number, digits = 1) => `${(100 * x).toFixed(digits)}%`;
 const int = (n: number) => n.toLocaleString("en-US");
@@ -173,13 +162,8 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
 
   const most = data.metaShare.slice(0, caps.mostPlayed);
   if (most.length) {
-    s.push({
-      name: "Most played (6 months)",
-      lines: most.map((m, i) => {
-        const arrow = shareArrow(m.metaShare, m.priorShare, data.priorWindowEntries, c.arrowThreshold);
-        return `${i + 1}. ${shortenCommander(m.commander)} — ${pct(m.metaShare)}${arrow ? ` ${arrow}` : ""}`;
-      }),
-    });
+    // A snapshot of the 6-month window; movement is shown by Rising and Cooling off.
+    s.push({ name: "Most played (6 months)", lines: most.map((m, i) => `${i + 1}. ${shortenCommander(m.commander)} — ${pct(m.metaShare)}`) });
   }
 
   const best = data.ppg.filter((p) => p.entries >= c.bestResultsMinEntries).sort((a, b) => b.shrunkPpg - a.shrunkPpg).slice(0, caps.best);
@@ -286,7 +270,6 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select rr.region_id, rr.steps_up, rr.reportable, region_label(rr.region_id) as label from resolve_region(${regionId}, ${end}::date) rr`;
   if (!res) throw new Error("resolve_region returned no row");
   const r = res.region_id;
-  const prevEnd = `${month}-01`;
 
   const [scene] = await sql<{ events: string; players: string; prev_events: string; prev_players: string; largest_event_name: string | null; largest_event_players: number | null; draw_rate: number | null }[]>`
     select * from stat_scene(${r}, ${end}::date)`;
@@ -296,14 +279,8 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select event_name, participant_count, result, result_commanders from stat_month_results(${r}, ${end}::date, 10)`;
   const topCut = await sql<{ commander: string; top_cut_entries: string }[]>`
     select * from stat_top_cut_appearances(${r}, ${end}::date) limit 10`;
-  const meta = await sql<{ commander: string; entries: string; meta_share: number; prior_share: number | null }[]>`
-    select m.commander, m.entries, m.meta_share, p.meta_share as prior_share
-    from stat_meta_share(${r}, ${end}::date) m
-    left join commander_shares(${r}, (${prevEnd}::date - interval '1 month')::date) p on p.commander = m.commander
-    order by m.entries desc, m.commander
-    limit 20`;
-  const [prior] = await sql<{ n: string | null }[]>`
-    select sum(entries) as n from commander_shares(${r}, (${prevEnd}::date - interval '1 month')::date)`;
+  const meta = await sql<{ commander: string; entries: string; meta_share: number }[]>`
+    select commander, entries, meta_share from stat_meta_share(${r}, ${end}::date) limit 20`;
   const ppg = await sql<{ commander: string; entries: string; ppg: number; shrunk_ppg: number }[]>`
     select commander, entries, ppg, shrunk_ppg from stat_ppg(${r}, ${end}::date)`;
   const conv = await sql<{ commander: string; entries_in_cut_events: string; top_cut_entries: string; conversion: number; baseline_conversion: number }[]>`
@@ -327,8 +304,7 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     },
     results: results.map((x) => ({ eventName: x.event_name, participantCount: x.participant_count, result: x.result, resultCommanders: x.result_commanders })),
     topCutAppearances: topCut.map((t) => ({ commander: t.commander, topCutEntries: Number(t.top_cut_entries) })),
-    metaShare: meta.map((m) => ({ commander: m.commander, entries: Number(m.entries), metaShare: m.meta_share, priorShare: m.prior_share })),
-    priorWindowEntries: Number(prior?.n ?? 0),
+    metaShare: meta.map((m) => ({ commander: m.commander, entries: Number(m.entries), metaShare: m.meta_share })),
     ppg: ppg.map((p) => ({ commander: p.commander, entries: Number(p.entries), ppg: p.ppg, shrunkPpg: p.shrunk_ppg })),
     conversion: conv.map((x) => ({
       commander: x.commander, entriesInCutEvents: Number(x.entries_in_cut_events), topCutEntries: Number(x.top_cut_entries), conversion: x.conversion,
