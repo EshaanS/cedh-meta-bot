@@ -1,0 +1,2 @@
+test/__snapshots__/*.txt text eol=lf
+test/fixtures/*.json text eol=lf
