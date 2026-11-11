@@ -46,6 +46,8 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
     await entry("test-pl-a", 1, "testpltwo0000000000000000000", "Kinnan, Bonder Prodigy", 1, 1);
     await entry("test-pl-a", 2, "testplvet0000000000000000000", "Sisay, Weatherlight Captain", 0, 1);
     await entry("test-pl-a", 3, "testplthree00000000000000000", null, 0, 0);
+    // The same player on a second standings row of the same event: must not count as a second top cut.
+    await entry("test-pl-a", 4, "testplone0000000000000000000", "Kinnan, Bonder Prodigy", 1, 0);
     // B: two (opted out) wins; one cuts again; three's first cut comes in their 7th event.
     await event("test-pl-b", "2031-03-20T12:00:00Z", 36, 4);
     await entry("test-pl-b", 0, "testpltwo0000000000000000000", "Kinnan, Bonder Prodigy", 2, 0);
@@ -54,6 +56,7 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
     // C: no recorded bracket; the official winner is a removed player (no name).
     await event("test-pl-c", "2031-03-25T12:00:00Z", 33, 0);
     await entry("test-pl-c", 0, "testplgone000000000000000000", "Tivit, Seller of Secrets", 0, 0);
+    await entry("test-pl-c", 1, null, null, 0, 0); // a player without an account
     await sql`insert into event_winners (tid, winner_commander, status, winner_player_id, player_checked_at)
               values ('test-pl-c', 'Tivit, Seller of Secrets', 'found', 'testplgone000000000000000000', now())`;
   });
@@ -72,7 +75,7 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
     ]);
   });
 
-  test("top players: ordered by wins then top cuts; opted-out and removed players are absent", async () => {
+  test("top players: ordered by wins then top cuts, one count per event; opted-out and removed players are absent", async () => {
     const rows = await sql<{ player_name: string; wins: string; top_cuts: string; largest_event: number; top_commander: string | null }[]>`
       select * from stat_top_players('global', ${MONTH}::date, 10)`;
     assert.deepEqual([...rows].map((r) => ({ ...r, wins: Number(r.wins), top_cuts: Number(r.top_cuts) })), [
@@ -89,6 +92,13 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
       { player_name: "Test Player One", reason: "first win", event_name: "Event test-pl-a", participant_count: 40 },
       { player_name: "Test Player Three", reason: "first top cut", event_name: "Event test-pl-b", participant_count: 36 },
     ]);
+  });
+
+  test("player coverage: share of the month's qualifying entries with an account id", async () => {
+    const [r] = await sql<{ month_entries: string; entries_with_player: string; pct_entries_with_player: number }[]>`
+      select * from stat_player_coverage('global', ${MONTH}::date)`;
+    assert.deepEqual({ ...r, month_entries: Number(r!.month_entries), entries_with_player: Number(r!.entries_with_player) },
+      { month_entries: 10, entries_with_player: 9, pct_entries_with_player: 90 });
   });
 
   test("removing the opt-out shows the player again", async () => {

@@ -144,14 +144,26 @@ test("hostile organizer text and player names are neutralized, an opted-out winn
   }
 });
 
+test("the default budget keeps every section of the global post", () => {
+  const { embed } = composePost(loadFixture("global-2026-10"));
+  assert.equal(POST_CONFIG.contentBudget, 4500);
+  for (const name of ["Winners", "Top players", "Rising players", "Top-cut conversion", "Rising commanders", "Cooling commanders"]) {
+    assert.ok(field(embed, name), `${name} is present`);
+  }
+  assert.equal(field(embed, "Winners")!.value.split("\n").length, 10);
+  assert.equal(field(embed, "Most played")!.value.split("\n").length, 10);
+});
+
 test("budget trimming drops bottom sections first and keeps the post within budget", () => {
+  const tight = { ...POST_CONFIG, contentBudget: 3000 };
   const data = loadFixture("global-2026-10");
   const long = (s: string) => `${s}, ${"Q".repeat(60)} / Partner ${s}, ${"R".repeat(60)}`;
   data.metaShare = data.metaShare.map((m) => ({ ...m, commander: long(m.commander) }));
   data.ppg = data.ppg.map((p) => ({ ...p, commander: `${p.commander} ${"Z".repeat(80)}` }));
   const before = composePost(loadFixture("global-2026-10")).embed;
-  const { embed } = composePost(data);
+  const { embed } = composePost(data, tight);
   assertWithinLimits(embed);
+  assert.ok(contentLength(embed) <= tight.contentBudget);
   if (field(before, "Cooling commanders")) assert.equal(field(embed, "Cooling commanders"), undefined, "Cooling commanders should be trimmed first");
   assert.ok(field(embed, "Winners"), "Winners must survive trimming");
   assert.ok(field(embed, "Top players"), "Top players trims after the commander sections");
@@ -223,6 +235,7 @@ test("top players and rising players: line formats and caps", () => {
     "4. Aiko Tanabe — 2 top cuts",
     "5. Extra 0 — 1 top cut",
   ]);
+  assert.equal(field(embed, "Rising players")!.name, "Rising players — October (first win or top cut in 3 years of data)");
   assert.deepEqual(field(embed, "Rising players")!.value.split("\n"), [
     "Noor Haddad — first win · 64p Big Event",
     "Felix Brandt — first top cut · 40p Unnamed event",
@@ -245,6 +258,15 @@ test("scene change wording and entry counts", () => {
       assert.doesNotMatch(line, /n = /);
     }
   }
+});
+
+test("coverage line: share of the month's entries with a linked player, omitted when unknown", () => {
+  const data = loadFixture("pacific-northwest-2026-10");
+  data.coverage = { qualifyingEvents: 114, pctEntriesWithLeader: 76.3, pctEntriesWithPlayer: 72.6 };
+  assert.equal(field(composePost(data).embed, "Coverage")!.value,
+    "114 qualifying events over 6 months · 76% of entries with decklists · 73% of October entries have a linked player");
+  data.coverage.pctEntriesWithPlayer = null;
+  assert.equal(field(composePost(data).embed, "Coverage")!.value, "114 qualifying events over 6 months · 76% of entries with decklists");
 });
 
 test("shortenCommander, sanitizeOrganizerText and monthlyAvg", () => {

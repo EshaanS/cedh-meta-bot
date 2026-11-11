@@ -21,7 +21,8 @@
   },
   "coverage": {
     "qualifyingEvents": 272,
-    "pctEntriesWithLeader": 86.84339715267551
+    "pctEntriesWithLeader": 86.84339715267551,
+    "pctEntriesWithPlayer": 99.535192563081
   },
   "results": [
     {
