@@ -9,7 +9,8 @@ export const POST_CONFIG = {
   playerHistoryYears: 3,
   eventNameMax: 50,
   winnersMax: 10,
-  playerNameMax: 32,
+  /** Longer player names are cut at the last whole word that fits, with an ellipsis. */
+  playerNameMax: 40,
   topPlayersMax: 5,
   risingPlayersMax: 3,
   topCutMax: 5,
@@ -25,8 +26,26 @@ export const POST_CONFIG = {
   coolingMinEntries: 10,
   /** Rising needs entries above the prior-3-month average and Cooling off below it, so counts never contradict. */
   trendNeedsMatchingCounts: 1,
+
+  // Look. Dividers and emoji count against contentBudget like any other text.
+  /** Embed accent color (gold). */
+  embedColor: 0xc9a84c,
+  /** Field placed between the scene, people and decks blocks. An empty dividerName turns dividers off. */
+  dividerName: "━━━━━━━━━━━━━━━━━━━━",
+  /** Discord rejects an empty field value, so the divider's value is a zero-width space. */
+  dividerValue: "\u200b",
+  /** Put after the number on ranked lines. "\\." shows as "1." but stops Discord from turning the lines into a
+   *  markdown list, which adds its own indent and spacing. The text preview always shows a plain "1.". */
+  listNumberSuffix: "\\.",
+  /** Prefix of each section's field name ("" for none). "scene" goes on the first scene field only. */
+  sectionEmoji: {
+    scene: "📍", winners: "🏆", topPlayers: "👑", risingPlayers: "🌱", topCut: "🎯", mostPlayed: "📊", best: "⭐",
+    conversion: "🔀", risingCommanders: "📈", coolingCommanders: "📉", coverage: "ℹ️", sources: "🔗",
+  },
 } as const;
-export type PostConfig = { [K in keyof typeof POST_CONFIG]: number };
+type Widen<T> = T extends number ? number : T extends string ? string : { -readonly [K in keyof T]: Widen<T[K]> };
+export type PostConfig = Widen<typeof POST_CONFIG>;
+type SectionKey = keyof PostConfig["sectionEmoji"];
 
 /** Discord embed limits (characters). */
 export const DISCORD_LIMITS = { title: 256, description: 4096, fieldName: 256, fieldValue: 1024, footer: 2048, fields: 25, total: 6000 } as const;
@@ -58,7 +77,7 @@ export type PostData = {
 };
 
 export type EmbedField = { name: string; value: string; inline?: boolean };
-export type Embed = { title: string; description?: string; fields: EmbedField[] };
+export type Embed = { title: string; description?: string; color?: number; fields: EmbedField[] };
 
 const ATTRIBUTION_MD = "Data provided by [TopDeck.gg](https://topdeck.gg) · Methods: [cedhstats.org](https://cedhstats.org/about)";
 const ATTRIBUTION_PREVIEW = "Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)";
@@ -66,17 +85,30 @@ const MONTHS = ["January", "February", "March", "April", "May", "June", "July", 
 
 /**
  * Organizer-written text (event names): removes URLs and Discord mention/markdown characters, collapses
- * whitespace, and truncates with an ellipsis.
+ * whitespace, and truncates with an ellipsis. With `wholeWords` (used for player names) the cut falls at the
+ * last space before the limit instead of mid-word, unless that would drop more than half of the allowed length
+ * (a single very long word is still cut mid-word).
  */
-export function sanitizeOrganizerText(text: string, max: number): string {
+export function sanitizeOrganizerText(text: string, max: number, opts: { wholeWords?: boolean } = {}): string {
   const cleaned = text
     .replace(/\bhttps?:\/\/\S+/gi, "")
     .replace(/\b(discord\.gg|discord(app)?\.com\/invite)\/\S+/gi, "")
     .replace(/[@<>*_~`|[\]]/g, "")
     .replace(/\s+/g, " ")
     .trim();
-  return cleaned.length <= max ? cleaned : `${cleaned.slice(0, max - 1).trimEnd()}…`;
+  if (cleaned.length <= max) return cleaned;
+  const cut = cleaned.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  const midWord = cleaned[max - 1] !== " ";
+  if (opts.wholeWords && (!midWord || lastSpace >= max / 2)) {
+    // Also drop a separator left dangling at the end ("Name //", "Name -").
+    return `${(midWord ? cut.slice(0, lastSpace) : cut).replace(/[\s/\-–—,.:;·(]+$/, "")}…`;
+  }
+  return `${cut.trimEnd()}…`;
 }
+
+/** Wording for stat_rising_players reasons that read better spelled out (the 5 is that function's cutoff). */
+const RISING_REASON_TEXT: Record<string, string> = { "early top cut": "top cut in first 5 events" };
 
 /** Partner pairs become "Kraum / Tymna the Weaver" (each half cut at its first comma); singles stay whole. */
 export function shortenCommander(name: string): string {
@@ -137,12 +169,16 @@ function fitLines(lines: string[], max = DISCORD_LIMITS.fieldValue): string[] {
 }
 
 type Caps = { winners: number; topPlayers: number; risingPlayers: number; topCut: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number };
-type Section = { name: string; lines: string[]; inline?: boolean };
+/** The post's three visual blocks, in order: scene (inline fields), people (players), decks (commanders). */
+type Block = "scene" | "people" | "decks";
+/** `numbered` sections hold their lines without the rank; it is added when the embed and the preview are built. */
+type Section = { key: SectionKey; block: Block; name: string; lines: string[]; inline?: boolean; numbered?: boolean };
+const withEmoji = (emoji: string, name: string) => (emoji ? `${emoji} ${name}` : name);
 
 function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   const s: Section[] = [];
   // Player names are user-written, so they get the same cleaning as organizer text.
-  const playerText = (name: string) => sanitizeOrganizerText(name, c.playerNameMax);
+  const playerText = (name: string) => sanitizeOrganizerText(name, c.playerNameMax, { wholeWords: true });
   const mon = monthOf(data.month);
   const prevMon = monthOf(data.month, -1);
 
@@ -151,11 +187,12 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   if (sc.events > 0) {
     const evChange = changeVs(sc.events, sc.prevEvents, prevMon);
     const plChange = changeVs(sc.players, sc.prevPlayers, prevMon);
-    s.push({ name: `Events — ${mon}`, lines: [`${int(sc.events)}${evChange ? ` (${evChange})` : ""}`], inline: true });
-    s.push({ name: "Players", lines: [`${int(sc.players)}${plChange ? ` (${plChange})` : ""}`], inline: true });    if (sc.drawRate !== null) s.push({ name: "Draw rate", lines: [pct(sc.drawRate, 0)], inline: true });
+    s.push({ key: "scene", block: "scene", name: `Events — ${mon}`, lines: [`${int(sc.events)}${evChange ? ` (${evChange})` : ""}`], inline: true });
+    s.push({ key: "scene", block: "scene", name: "Players", lines: [`${int(sc.players)}${plChange ? ` (${plChange})` : ""}`], inline: true });
+    if (sc.drawRate !== null) s.push({ key: "scene", block: "scene", name: "Draw rate", lines: [pct(sc.drawRate, 0)], inline: true });
     if (sc.largestEventName && sc.largestEventPlayers) {
       const name = sanitizeOrganizerText(sc.largestEventName, c.eventNameMax) || "Unnamed event";
-      s.push({ name: "Largest event", lines: [`${sc.largestEventPlayers} players · ${name}`], inline: true });
+      s.push({ key: "scene", block: "scene", name: "Largest event", lines: [`${sc.largestEventPlayers} players · ${name}`], inline: true });
     }
   }
 
@@ -172,7 +209,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
       : r.result;
     return `• ${r.participantCount}p · ${name} · ${outcome}`;
   });
-  if (winnerLines.length) s.push({ name: `Winners — ${mon} (largest events)`, lines: fitLines(winnerLines) });
+  if (winnerLines.length) s.push({ key: "winners", block: "people", name: `Winners — ${mon} (largest events)`, lines: fitLines(winnerLines) });
 
   // Player sections need no decklists, so they show for non-reportable regions too.
   const topPlayers = data.topPlayers
@@ -181,10 +218,11 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .slice(0, caps.topPlayers);
   if (topPlayers.length) {
     s.push({
+      key: "topPlayers", block: "people", numbered: true,
       name: `Top players — ${mon}`,
-      lines: topPlayers.map((p, i) => {
+      lines: topPlayers.map((p) => {
         const record = [p.wins > 0 ? plural(p.wins, "win", "wins") : "", p.topCuts > 0 ? plural(p.topCuts, "top cut", "top cuts") : ""].filter(Boolean).join(", ");
-        return `${i + 1}. ${p.name} — ${record}${p.commander ? ` · ${shortenCommander(p.commander)}` : ""}`;
+        return `${p.name} — ${record}${p.commander ? ` · ${shortenCommander(p.commander)}` : ""}`;
       }),
     });
   }
@@ -195,10 +233,11 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .slice(0, caps.risingPlayers);
   if (risingPlayers.length) {
     s.push({
+      key: "risingPlayers", block: "people",
       name: `Rising players — ${mon} (first win or top cut in ${c.playerHistoryYears} years of data)`,
       lines: risingPlayers.map((p) => {
         const event = sanitizeOrganizerText(p.eventName ?? "Unnamed event", c.eventNameMax) || "Unnamed event";
-        return `${p.name} — ${p.reason} · ${p.participantCount}p ${event}`;
+        return `${p.name} — ${RISING_REASON_TEXT[p.reason] ?? p.reason} · ${p.participantCount}p ${event}`;
       }),
     });
   }
@@ -206,19 +245,30 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   if (!data.resolved.reportable) return s;
 
   const top = data.topCutAppearances.slice(0, caps.topCut);
-  if (top.length) s.push({ name: `Top-cut appearances — ${mon}`, lines: top.map((t, i) => `${i + 1}. ${shortenCommander(t.commander)} — ${t.topCutEntries}`) });
+  if (top.length) {
+    s.push({
+      key: "topCut", block: "decks", numbered: true,
+      name: `Top-cut appearances — ${mon}`,
+      lines: top.map((t) => `${shortenCommander(t.commander)} — ${t.topCutEntries}`),
+    });
+  }
 
   const most = data.metaShare.slice(0, caps.mostPlayed);
   if (most.length) {
-    // A snapshot of the 6-month window; movement is shown by Rising and Cooling off.
-    s.push({ name: "Most played (6 months)", lines: most.map((m, i) => `${i + 1}. ${shortenCommander(m.commander)} — ${pct(m.metaShare)}`) });
+    // A snapshot of the 6-month window; movement is shown by Rising and Cooling commanders.
+    s.push({
+      key: "mostPlayed", block: "decks", numbered: true,
+      name: "Most played (6 months)",
+      lines: most.map((m) => `${shortenCommander(m.commander)} — ${pct(m.metaShare)}`),
+    });
   }
 
   const best = data.ppg.filter((p) => p.entries >= c.bestResultsMinEntries).sort((a, b) => b.shrunkPpg - a.shrunkPpg).slice(0, caps.best);
   if (best.length) {
     s.push({
+      key: "best", block: "decks", numbered: true,
       name: `Best results (adjusted PPG, ${c.bestResultsMinEntries}+ entries)`,
-      lines: best.map((p, i) => `${i + 1}. ${shortenCommander(p.commander)} — ${p.shrunkPpg.toFixed(2)} (${int(p.entries)} entries)`),
+      lines: best.map((p) => `${shortenCommander(p.commander)} — ${p.shrunkPpg.toFixed(2)} (${int(p.entries)} entries)`),
     });
   }
 
@@ -229,8 +279,9 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
   if (conv.length) {
     const base = data.baselineConversion === null ? "" : ` (baseline ${pct(data.baselineConversion, 0)})`;
     s.push({
+      key: "conversion", block: "decks", numbered: true,
       name: `Top-cut conversion${base}`,
-      lines: conv.map((x, i) => `${i + 1}. ${shortenCommander(x.commander)} — ${pct(x.conversion, 0)} (${int(x.entriesInCutEvents)} entries)`),
+      lines: conv.map((x) => `${shortenCommander(x.commander)} — ${pct(x.conversion, 0)} (${int(x.entriesInCutEvents)} entries)`),
     });
   }
 
@@ -245,7 +296,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .filter((t) => t.isNew || ((t.shareChange ?? 0) > 0 && (!matching || t.lastMonthEntries > t.prior3AvgEntries)))
     .sort((a, b) => Number(b.isNew) - Number(a.isNew) || (b.shareChange ?? 0) - (a.shareChange ?? 0))
     .slice(0, caps.rising);
-  if (rising.length) s.push({ name: "Rising commanders (by share growth vs prior 3 months)", lines: rising.map(countLine) });
+  if (rising.length) s.push({ key: "risingCommanders", block: "decks", name: "Rising commanders (by share growth vs prior 3 months)", lines: rising.map(countLine) });
 
   const topCommanders = new Set(data.metaShare.slice(0, c.coolingTopN).map((m) => m.commander));
   const cooling = data.trend
@@ -254,7 +305,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps): Section[] {
     .filter((t) => !matching || t.lastMonthEntries < t.prior3AvgEntries)
     .sort((a, b) => a.shareChange! - b.shareChange!)
     .slice(0, caps.cooling);
-  if (cooling.length) s.push({ name: "Cooling commanders (by share drop vs prior 3 months)", lines: cooling.map(countLine) });
+  if (cooling.length) s.push({ key: "coolingCommanders", block: "decks", name: "Cooling commanders (by share drop vs prior 3 months)", lines: cooling.map(countLine) });
 
   return s;
 }
@@ -273,14 +324,22 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
     winners: config.winnersMax, topPlayers: config.topPlayersMax, risingPlayers: config.risingPlayersMax, topCut: config.topCutMax, mostPlayed: config.mostPlayedMax, best: config.bestResultsMax,
     conversion: config.conversionMax, rising: config.risingMax, cooling: config.coolingMax,
   };
-  // Trim order, bottom sections first, each to a floor; then deeper cuts in the same order.
+  // Trim order: the decks block first, bottom-up (each section to a floor, then deeper), and only then the
+  // people block, bottom-up in the same way. The scene, coverage and Sources are never trimmed.
   const step = (k: keyof Caps, floor: number) => () => caps[k] > floor && (caps[k]--, true);
   const trims = [
     step("cooling", 0), step("rising", 0), step("conversion", 3), step("best", 3), step("mostPlayed", 5), step("topCut", 3),
+    step("conversion", 0), step("best", 0), step("mostPlayed", 3), step("topCut", 0),
     step("risingPlayers", 1), step("topPlayers", 3), step("winners", 5),
-    step("conversion", 0), step("best", 0), step("topCut", 0), step("mostPlayed", 3),
     step("risingPlayers", 0), step("topPlayers", 0), step("winners", 3),
   ];
+  const emoji = config.sectionEmoji;
+  const coverageName = withEmoji(emoji.coverage, "Coverage");
+  const sourcesName = withEmoji(emoji.sources, "Sources");
+  // The emoji goes on a section's first field (the scene is several inline fields under one emoji).
+  const named = (list: Section[]) => list.map((x, i) => ({ ...x, name: list.findIndex((y) => y.key === x.key) === i ? withEmoji(emoji[x.key], x.name) : x.name }));
+  const startsBlock = (list: Section[], i: number) => config.dividerName !== "" && i > 0 && list[i - 1]!.block !== list[i]!.block;
+  const ranked = (x: Section, suffix: string) => (x.numbered ? x.lines.map((l, i) => `${i + 1}${suffix} ${l}`) : x.lines);
 
   const title = `${data.resolved.label} — cEDH meta, ${monthOf(data.month)} ${data.month.slice(0, 4)}`;
   const notes: string[] = [];
@@ -290,14 +349,19 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   let embed: Embed;
   let sections: Section[];
   for (;;) {
-    sections = buildSections(data, config, caps);
+    sections = named(buildSections(data, config, caps));
+    const list = sections;
     embed = {
       title,
       ...(notes.length ? { description: notes.join("\n") } : {}),
+      color: config.embedColor,
       fields: [
-        ...sections.map((x) => ({ name: x.name, value: x.lines.join("\n"), ...(x.inline ? { inline: true } : {}) })),
-        { name: "Coverage", value: coverageLine(data) },
-        { name: "Sources", value: ATTRIBUTION_MD },
+        ...list.flatMap((x, i) => [
+          ...(startsBlock(list, i) ? [{ name: config.dividerName, value: config.dividerValue }] : []),
+          { name: x.name, value: ranked(x, config.listNumberSuffix).join("\n"), ...(x.inline ? { inline: true } : {}) },
+        ]),
+        { name: coverageName, value: coverageLine(data) },
+        { name: sourcesName, value: ATTRIBUTION_MD },
       ],
     };
     if (contentLength(embed) <= config.contentBudget) break;
@@ -307,9 +371,13 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const violations = discordLimitViolations(embed);
   if (violations.length) throw new Error(`embed exceeds Discord limits: ${violations.join("; ")}`);
 
-  const inline = sections.filter((x) => x.inline).map((x) => `${x.name}: ${x.lines.join(" ")}`);
-  const blocks = sections.filter((x) => !x.inline).flatMap((x) => ["", x.name, ...x.lines]);
-  const text = [title, ...notes, ...(inline.length ? ["", ...inline] : []), ...blocks, "", coverageLine(data), ATTRIBUTION_PREVIEW].join("\n");
+  const final = sections;
+  const inline = final.filter((x) => x.inline).map((x) => `${x.name}: ${x.lines.join(" ")}`);
+  const blocks = final.flatMap((x, i) => (x.inline ? [] : [...(startsBlock(final, i) ? ["", config.dividerName] : []), "", x.name, ...ranked(x, ".")]));
+  const text = [
+    title, ...notes, ...(inline.length ? ["", ...inline] : []), ...blocks,
+    "", `${coverageName}: ${coverageLine(data)}`, `${sourcesName}: ${ATTRIBUTION_PREVIEW}`,
+  ].join("\n");
   return { embed, text };
 }
 

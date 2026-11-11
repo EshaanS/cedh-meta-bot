@@ -21,7 +21,10 @@ const FIXTURES = ["pacific-northwest-2026-10", "global-2026-10", "si-2026-10"];
 const fixturePath = (name: string) => fileURLToPath(new URL(`./fixtures/${name}.json`, import.meta.url));
 const snapshotPath = (name: string) => fileURLToPath(new URL(`./__snapshots__/${name}.txt`, import.meta.url));
 const loadFixture = (name: string): PostData => JSON.parse(readFileSync(fixturePath(name), "utf8")) as PostData;
-const field = (embed: ReturnType<typeof composePost>["embed"], prefix: string) => embed.fields.find((f) => f.name.startsWith(prefix));
+/** A field name without its emoji prefix; a divider becomes "". */
+const plain = (name: string) => name.replace(/^[^A-Za-z]+/, "");
+const field = (embed: ReturnType<typeof composePost>["embed"], prefix: string) => embed.fields.find((f) => plain(f.name).startsWith(prefix));
+const isDivider = (f: { name: string }) => f.name === POST_CONFIG.dividerName;
 
 function matchSnapshot(name: string, actual: string) {
   const path = snapshotPath(name);
@@ -49,7 +52,7 @@ for (const name of FIXTURES) {
   test(`single attribution in a linked Sources field, no footer: ${name}`, () => {
     const { embed, text } = composePost(loadFixture(name));
     const sources = embed.fields.at(-1)!;
-    assert.equal(sources.name, "Sources");
+    assert.equal(sources.name, "🔗 Sources");
     assert.match(sources.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
     assert.equal("footer" in embed, false);
     assert.equal(embed.fields.filter((f) => f.value.includes("Data provided by")).length, 1);
@@ -60,7 +63,7 @@ for (const name of FIXTURES) {
     const { embed } = composePost(loadFixture(name));
     const order = ["Events", "Players", "Draw rate", "Largest event", "Winners", "Top players", "Rising players", "Top-cut appearances",
       "Most played", "Best results", "Top-cut conversion", "Rising commanders", "Cooling commanders", "Coverage", "Sources"];
-    const seen = embed.fields.map((f) => order.findIndex((o) => f.name.startsWith(o)));
+    const seen = embed.fields.filter((f) => !isDivider(f)).map((f) => order.findIndex((o) => plain(f.name).startsWith(o)));
     assert.ok(seen.every((i) => i >= 0), "unknown section");
     assert.deepEqual(seen, [...seen].sort((a, b) => a - b), "sections out of order");
     const all = `${embed.title} ${embed.description ?? ""}`;
@@ -130,10 +133,10 @@ test("hostile organizer text and player names are neutralized, an opted-out winn
   assertWithinLimits(embed);
   const winners = field(embed, "Winners")!.value.split("\n");
   assert.match(winners[1]!, /· a player on Kinnan, Bonder Prodigy$/);
-  assert.match(winners[0]!, /· everyone Mallory 42 free\( x y n+… on Kinnan, Bonder Prodigy$/);
+  assert.match(winners[0]!, /· everyone Mallory 42 free\( x y… on Kinnan, Bonder Prodigy$/);
   const topLines = field(embed, "Top players")!.value.split("\n");
   assert.equal(topLines.length, 1, "a name that sanitizes to nothing is dropped");
-  assert.ok(topLines[0]!.split(" — ")[0]!.length <= 3 + POST_CONFIG.playerNameMax);
+  assert.ok(topLines[0]!.split(" — ")[0]!.length <= "1\\. ".length + POST_CONFIG.playerNameMax);
   const organizerText = [field(embed, "Winners")!.value, field(embed, "Largest event")!.value, field(embed, "Top players")!.value, field(embed, "Rising players")!.value];
   for (const bad of ["@everyone", "@here", "<@", "**", "__", "~~", "`", "|", "[click", "](", "https://evil", "discord.gg"]) {
     for (const v of organizerText) assert.ok(!v.includes(bad), `organizer text contains ${bad}`);
@@ -209,7 +212,10 @@ test("fallback note names both regions; non-reportable regions show only scene, 
   data.resolved = { ...data.resolved, reportable: false };
   const { embed } = composePost(data);
   assert.match(embed.description ?? "", /Not enough decklists yet for commander stats\./);
-  for (const f of embed.fields) assert.match(f.name, /^(Events|Players|Draw rate|Largest event|Winners|Top players|Rising players|Coverage|Sources)/);
+  for (const f of embed.fields.filter((x) => !isDivider(x))) {
+    assert.match(plain(f.name), /^(Events|Players|Draw rate|Largest event|Winners|Top players|Rising players|Coverage|Sources)/);
+  }
+  assert.equal(embed.fields.filter(isDivider).length, 1, "one divider: scene | people, and no decks block");
 });
 
 test("top players and rising players: line formats and caps", () => {
@@ -229,17 +235,17 @@ test("top players and rising players: line formats and caps", () => {
   ];
   const { embed } = composePost(data);
   assert.deepEqual(field(embed, "Top players")!.value.split("\n"), [
-    "1. Mara Ellison — 2 wins, 3 top cuts · Kraum / Tymna the Weaver",
-    "2. Tobias Quill — 1 win, 1 top cut · Kinnan, Bonder Prodigy",
-    "3. Ines Varga — 1 win",
-    "4. Aiko Tanabe — 2 top cuts",
-    "5. Extra 0 — 1 top cut",
+    "1\\. Mara Ellison — 2 wins, 3 top cuts · Kraum / Tymna the Weaver",
+    "2\\. Tobias Quill — 1 win, 1 top cut · Kinnan, Bonder Prodigy",
+    "3\\. Ines Varga — 1 win",
+    "4\\. Aiko Tanabe — 2 top cuts",
+    "5\\. Extra 0 — 1 top cut",
   ]);
-  assert.equal(field(embed, "Rising players")!.name, "Rising players — October (first win or top cut in 3 years of data)");
+  assert.equal(field(embed, "Rising players")!.name, "🌱 Rising players — October (first win or top cut in 3 years of data)");
   assert.deepEqual(field(embed, "Rising players")!.value.split("\n"), [
     "Noor Haddad — first win · 64p Big Event",
     "Felix Brandt — first top cut · 40p Unnamed event",
-    "Third — early top cut · 20p C",
+    "Third — top cut in first 5 events · 20p C",
   ]);
 });
 
@@ -269,6 +275,83 @@ test("coverage line: share of the month's entries with a linked player, omitted 
   assert.equal(field(composePost(data).embed, "Coverage")!.value, "114 qualifying events over 6 months · 76% of entries with decklists");
 });
 
+test("layout: three blocks with dividers, emoji on every section, gold color, no markdown lists", () => {
+  const { embed, text } = composePost(loadFixture("global-2026-10"));
+  assert.equal(embed.color, 0xc9a84c);
+  const blocks: string[][] = [[]];
+  for (const f of embed.fields) {
+    if (isDivider(f)) {
+      assert.equal(f.value, "\u200b");
+      assert.equal(f.inline, undefined);
+      blocks.push([]);
+    } else blocks.at(-1)!.push(f.name);
+  }
+  assert.deepEqual(blocks, [
+    ["📍 Events — October", "Players", "Draw rate", "Largest event"],
+    ["🏆 Winners — October (largest events)", "👑 Top players — October", "🌱 Rising players — October (first win or top cut in 3 years of data)"],
+    ["🎯 Top-cut appearances — October", "📊 Most played (6 months)", "⭐ Best results (adjusted PPG, 30+ entries)", "🔀 Top-cut conversion (baseline 26%)",
+      "📈 Rising commanders (by share growth vs prior 3 months)", "📉 Cooling commanders (by share drop vs prior 3 months)", "ℹ️ Coverage", "🔗 Sources"],
+  ]);
+  // No line may start a markdown list ("1. x", "- x", "* x"): Discord would restyle it.
+  for (const f of embed.fields) for (const line of f.value.split("\n")) assert.doesNotMatch(line, /^\s*(\d+\.|[-*+])\s/, `${f.name}: ${line}`);
+  assert.match(field(embed, "Most played")!.value, /^1\\\. .+\n2\\\. /);
+  // The preview shows plain numbers and the same dividers.
+  assert.match(text, /\n1\. Kraum \/ Tymna the Weaver — 157\n/);
+  assert.equal(text.split("\n").filter((l) => l === POST_CONFIG.dividerName).length, 2);
+  // Dividers and emoji are part of the counted content.
+  const bare = composePost(loadFixture("global-2026-10"), {
+    ...POST_CONFIG, dividerName: "",
+    sectionEmoji: Object.fromEntries(Object.keys(POST_CONFIG.sectionEmoji).map((k) => [k, ""])) as Record<keyof typeof POST_CONFIG.sectionEmoji, string>,
+  }).embed;
+  assert.equal(bare.fields.filter(isDivider).length, 0);
+  assert.equal(bare.fields.at(-1)!.name, "Sources");
+  assert.ok(contentLength(embed) > contentLength(bare));
+});
+
+test("trim order: the decks block is cut bottom-up before anything in the people block", () => {
+  const data = loadFixture("global-2026-10");
+  const full = composePost(data).embed;
+  const count = (e: typeof full, name: string) => field(e, name)?.value.split("\n").length ?? 0;
+  const people = ["Winners", "Top players", "Rising players"];
+  const decks = ["Top-cut appearances", "Most played", "Best results", "Top-cut conversion", "Rising commanders", "Cooling commanders"];
+  const decksAtFloor = (e: typeof full) => decks.every((d) => count(e, d) === (d === "Most played" ? 3 : 0));
+  let sawPeopleTrim = false;
+  for (let budget = contentLength(full); budget >= 800; budget -= 50) {
+    const e = composePost(data, { ...POST_CONFIG, contentBudget: budget }).embed;
+    const peopleTrimmed = people.some((p) => count(e, p) < count(full, p));
+    if (peopleTrimmed) {
+      sawPeopleTrim = true;
+      assert.ok(decksAtFloor(e), `budget ${budget}: people trimmed while decks still had room to give`);
+    }
+  }
+  assert.ok(sawPeopleTrim, "the loop reached the people block");
+  // Bottom-up inside decks: the first cut comes out of Cooling commanders.
+  const first = composePost(data, { ...POST_CONFIG, contentBudget: contentLength(full) - 1 }).embed;
+  assert.equal(count(first, "Cooling commanders"), count(full, "Cooling commanders") - 1);
+  for (const name of [...people, ...decks.slice(0, 5)]) assert.equal(count(first, name), count(full, name), name);
+});
+
+test("player names are cut at a word boundary, not mid-word", () => {
+  const max = POST_CONFIG.playerNameMax;
+  const words = (s: string) => sanitizeOrganizerText(s, max, { wholeWords: true });
+  assert.equal(max, 40);
+  assert.equal(words("Hooligan Riley Atkinson Crucible"), "Hooligan Riley Atkinson Crucible"); // fits now
+  assert.equal(words("Hooligan Riley Atkinson Crucible of Worlds Podcast"), "Hooligan Riley Atkinson Crucible of…");
+  assert.equal(words("Jonathan Fitzgerald Montgomery-Smith // PodcastName"), "Jonathan Fitzgerald Montgomery-Smith…"); // dangling "//" dropped
+  assert.equal(words("Exactly forty characters long name here!"), "Exactly forty characters long name here!");
+  // The cut already falls between words: nothing more is dropped.
+  assert.equal(words("Exactly thirty-nine characters in name! and more"), "Exactly thirty-nine characters in name!…");
+  // One very long word (or a short first word) is still cut mid-word instead of vanishing.
+  assert.equal(words("X".repeat(60)), `${"X".repeat(39)}…`);
+  assert.equal(words(`Al ${"y".repeat(60)}`), `Al ${"y".repeat(36)}…`);
+  for (const s of ["Hooligan Riley Atkinson Crucible of Worlds Podcast", "X".repeat(60), `Al ${"y".repeat(60)}`]) assert.ok(words(s).length <= max);
+  // Event names keep the plain cut.
+  assert.equal(sanitizeOrganizerText("Hooligan Riley Atkinson Crucible of Worlds Podcast", 32), "Hooligan Riley Atkinson Crucibl…");
+  const data = loadFixture("pacific-northwest-2026-10");
+  data.topPlayers = [{ name: "Hooligan Riley Atkinson Crucible of Worlds Podcast", wins: 1, topCuts: 2, commander: null }];
+  assert.equal(field(composePost(data).embed, "Top players")!.value, "1\\. Hooligan Riley Atkinson Crucible of… — 1 win, 2 top cuts");
+});
+
 test("shortenCommander, sanitizeOrganizerText and monthlyAvg", () => {
   assert.equal(shortenCommander("Kraum, Ludevic's Opus / Tymna the Weaver"), "Kraum / Tymna the Weaver");
   assert.equal(shortenCommander("Kinnan, Bonder Prodigy"), "Kinnan, Bonder Prodigy");
@@ -284,6 +367,6 @@ test("shortenCommander, sanitizeOrganizerText and monthlyAvg", () => {
 test("most played is a snapshot: share only, no movement markers", () => {
   for (const name of FIXTURES) {
     const lines = field(composePost(loadFixture(name)).embed, "Most played")!.value.split("\n");
-    for (const l of lines) assert.match(l, /^\d+\. .+ — \d+\.\d%$/, l);
+    for (const l of lines) assert.match(l, /^\d+\\\. .+ — \d+\.\d%$/, l);
   }
 });

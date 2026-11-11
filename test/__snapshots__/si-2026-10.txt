@@ -1,12 +1,14 @@
 Europe — cEDH meta, October 2026
 Showing Europe: Slovenia didn't have enough data.
 
-Events — October: 48 (+50% vs September)
+📍 Events — October: 48 (+50% vs September)
 Players: 1,535 (+36% vs September)
 Draw rate: 31%
 Largest event: 96 players · CEDH Norte Bilbao + Zaragoza + Pamplona
 
-Winners — October (largest events)
+━━━━━━━━━━━━━━━━━━━━
+
+🏆 Winners — October (largest events)
 • 96p · CEDH Norte Bilbao + Zaragoza + Pamplona · Mara Ellison on Arcum Dagsson
 • 77p · 1.cEDH069 Major Die Fabrik · Tobias Quill on Rograkh / Thrasios
 • 55p · The Warsaw Pact 2.0 - cEDH European Championship… · Zirda, the Dawnwaker
@@ -18,26 +20,28 @@ Winners — October (largest events)
 • 42p · LITTLE PARIS SIEGE III · Hugo Lindqvist on Crystal, Inhuman Princess
 • 41p · Mana Burn II - European cEDH Championship Qualifi… · Camille Rousseau on Kinnan, Bonder Prodigy
 
-Top players — October
+👑 Top players — October
 1. Mara Ellison — 2 wins, 3 top cuts · Arcum Dagsson
 2. Tobias Quill — 1 win, 2 top cuts · Rograkh / Thrasios
 3. Ines Varga — 1 win, 1 top cut · Sisay, Weatherlight Captain
 4. Aiko Tanabe — 3 top cuts · Kraum / Tymna the Weaver
 5. Rafael Montoya — 2 top cuts
 
-Rising players — October (first win or top cut in 3 years of data)
+🌱 Rising players — October (first win or top cut in 3 years of data)
 Noor Haddad — first top cut · 96p CEDH Norte Bilbao + Zaragoza + Pamplona
 Tobias Quill — first win · 77p 1.cEDH069 Major Die Fabrik
-Felix Brandt — early top cut · 54p Imperial Siege Nuremberg
+Felix Brandt — top cut in first 5 events · 54p Imperial Siege Nuremberg
 
-Top-cut appearances — October
+━━━━━━━━━━━━━━━━━━━━
+
+🎯 Top-cut appearances — October
 1. Kinnan, Bonder Prodigy — 35
 2. Kraum / Tymna the Weaver — 35
 3. Rograkh / Silas Renn — 30
 4. Rograkh / Thrasios — 28
 5. Sisay, Weatherlight Captain — 23
 
-Most played (6 months)
+📊 Most played (6 months)
 1. Kraum / Tymna the Weaver — 9.5%
 2. Kinnan, Bonder Prodigy — 7.9%
 3. Rograkh / Silas Renn — 6.5%
@@ -49,29 +53,29 @@ Most played (6 months)
 9. Thrasios / Tymna the Weaver — 2.2%
 10. Etali, Primal Conqueror — 1.9%
 
-Best results (adjusted PPG, 30+ entries)
+⭐ Best results (adjusted PPG, 30+ entries)
 1. Scion of the Ur-Dragon — 1.58 (70 entries)
 2. Rocco, Cabaretti Caterer — 1.47 (59 entries)
 3. Kodama of the East Tree / Tymna the Weaver — 1.44 (35 entries)
 4. Arcum Dagsson — 1.44 (63 entries)
 5. Winota, Joiner of Forces — 1.41 (69 entries)
 
-Top-cut conversion (baseline 29%)
+🔀 Top-cut conversion (baseline 29%)
 1. Rowan, Scion of War — 49% (57 entries)
 2. Scion of the Ur-Dragon — 48% (63 entries)
 3. Arcum Dagsson — 46% (56 entries)
 4. Winota, Joiner of Forces — 42% (50 entries)
 5. Kodama of the East Tree / Tymna the Weaver — 42% (31 entries)
 
-Rising commanders (by share growth vs prior 3 months)
+📈 Rising commanders (by share growth vs prior 3 months)
 Dack Fayden, Helping Hand — 19 entries in October, new
 Zirda, the Dawnwaker — 14 entries in October (avg 2/month)
 Urza, Lord High Artificer — 14 entries in October (avg 5/month)
 
-Cooling commanders (by share drop vs prior 3 months)
+📉 Cooling commanders (by share drop vs prior 3 months)
 Dargo / Tymna the Weaver — 23 entries in October (avg 26/month)
 Etali, Primal Conqueror — 18 entries in October (avg 20/month)
 Tivit, Seller of Secrets — 13 entries in October (avg 14/month)
 
-272 qualifying events over 6 months · 87% of entries with decklists · 100% of October entries have a linked player
-Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)
+ℹ️ Coverage: 272 qualifying events over 6 months · 87% of entries with decklists · 100% of October entries have a linked player
+🔗 Sources: Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

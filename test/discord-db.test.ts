@@ -179,7 +179,7 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     assert.equal(d.edits.at(-1)!.embeds?.length, 1);
     assert.match(d.edits.at(-1)!.content!, /Preview of the October report/);
     const embed = d.edits.at(-1)!.embeds![0] as { fields: { name: string; value: string }[] };
-    assert.equal(embed.fields.at(-1)!.name, "Sources");
+    assert.match(embed.fields.at(-1)!.name, /Sources$/);
     for (const e of d.edits.slice(0, -1)) assert.doesNotMatch(e.content ?? "", /Data provided by/);
     for (const c of choices) assert.doesNotMatch(c.name, /\((continent|country|custom region)\)/);
   });
