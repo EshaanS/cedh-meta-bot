@@ -64,7 +64,12 @@ test("pie drawing: equal wedges clockwise from the top in WUBRG order, a grey ri
   for (const [x, y] of [[0, 0], [127, 0], [0, 127], [127, 127], [64, 1]] as const) assert.equal(pixel(five, 128, x, y)[3], 0, "outside the pie is transparent");
 
   const two = renderPie("WU");
-  assert.deepEqual([at(two, 0, 30), at(two, 180, 30), at(two, 90, 30)], [solid(W), solid(U), solid(ring)], "two colors: top and bottom halves");
+  assert.deepEqual([at(two, 270, 30), at(two, 90, 30), at(two, 0, 30), at(two, 180, 30)], [solid(W), solid(U), solid(ring), solid(ring)], "two colors: left and right halves, the first color on the left");
+  for (const pair of COLOR_IDENTITIES.filter((x) => x.length === 2)) {
+    const [left, right] = [...pair].map((l) => solid(PIE_CONFIG.colors[l as "W"]));
+    const pie = renderPie(pair);
+    assert.deepEqual([at(pie, 270, 30), at(pie, 315, 30), at(pie, 225, 30), at(pie, 90, 30), at(pie, 45, 30), at(pie, 135, 30)], [left, left, left, right, right, right], pair);
+  }
   const one = renderPie("B");
   assert.deepEqual([at(one, 0, 0), at(one, 45, 40), at(one, 200, 20)], [solid(B), solid(B), solid(B)], "one color: a full disc with no lines");
   const four = renderPie("UBRG");

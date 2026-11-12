@@ -17,9 +17,12 @@ export const PIE_CONFIG = {
   gap: 0.05,
   /** The colorless pie is a ring with nothing inside; this is the ring's width. */
   colorlessRing: 0.15,
+  /** Where the first wedge is centered, in degrees clockwise from the top, by number of colors (0 when not
+   *  listed). Two colors are split down the middle, the first color on the left, so they read left to right. */
+  firstWedgeAt: { 2: -90 } as Record<number, number>,
   /**
    * Wedges are equal, in WUBRG order, clockwise, the first one centered at the top (so the five-color pie is
-   * the color wheel on the back of a card). The ring and the lines between wedges are a mid grey, because the
+   * the color wheel on the back of a card); see firstWedgeAt for two colors. The ring and the lines between wedges are a mid grey, because the
    * white wedge needs an edge on Discord's light background and the black wedge on its dark one.
    */
   colors: {
@@ -42,6 +45,7 @@ export function renderPie(colors: string, size: number = PIE_CONFIG.size): Uint8
   const inner = radius - (n === 0 ? c.colorlessRing : c.ring) * size;
   const halfGap = (c.gap * size) / 2;
   const step = (2 * Math.PI) / Math.max(n, 1);
+  const first = ((c.firstWedgeAt[n] ?? 0) * Math.PI) / 180;
   const out = new Uint8Array(size * size * 4);
 
   /** The color at a point, or null where the image is transparent. */
@@ -53,8 +57,8 @@ export function renderPie(colors: string, size: number = PIE_CONFIG.size): Uint8
     if (d > inner) return c.colors.ring;
     if (n === 0) return null;
     if (n === 1) return wedges[0]!;
-    // Angle clockwise from the top, shifted by half a wedge so that wedge 0 is centered at the top.
-    const angle = (Math.atan2(dx, -dy) + step / 2 + 2 * Math.PI) % (2 * Math.PI);
+    // Angle clockwise from the center of wedge 0, shifted by half a wedge so that wedge 0 starts at zero.
+    const angle = (Math.atan2(dx, -dy) - first + step / 2 + 4 * Math.PI) % (2 * Math.PI);
     const index = Math.min(n - 1, Math.floor(angle / step));
     // Distance to the nearer edge of the wedge, measured across the edge.
     const within = angle - index * step;
