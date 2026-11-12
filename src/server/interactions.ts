@@ -3,7 +3,8 @@
 // the reply.
 import type { Sql } from "../../scripts/lib/db";
 import { redact } from "../../scripts/lib/errors";
-import { composePost, loadPostData } from "../../scripts/lib/post";
+import { composePost, loadPostData, POST_CONFIG } from "../../scripts/lib/post";
+import { loadColorEmoji } from "./color-emoji";
 import { isGuildAllowed, monthName, POST_FROM_DAY, previousMonth } from "./config";
 import {
   addPlaces, centerOptions, createRegion, deleteRegion, findGuildRegion, fold, listGuildRegions, matchCenters, matchPlaces, placeOptions,
@@ -268,7 +269,8 @@ async function preview(deps: InteractionDeps, guildId: string): Promise<MessageP
   const now = deps.now();
   const [cfg] = await sql<{ region_id: string }[]>`select region_id from guild_configs where guild_id = ${guildId}`;
   const month = previousMonth(now);
-  const { embeds } = composePost(await loadPostData(sql, cfg?.region_id ?? "global", month));
+  const data = await loadPostData(sql, cfg?.region_id ?? "global", month);
+  const { embeds } = composePost(data, POST_CONFIG, { colorEmoji: await loadColorEmoji(deps.discord, deps.appId) });
   const lines = [`Preview of the ${monthName(month)} report (only you can see this).`];
   if (now.getUTCDate() < POST_FROM_DAY) {
     lines.push(`${monthName(month)} data is still settling; the posted version goes out on or after ${POST_FROM_DAY} ${monthName(currentMonth(now))}.`);

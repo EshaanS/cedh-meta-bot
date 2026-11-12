@@ -41,6 +41,9 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
           return [...new Set([...realGuilds, ...(opts.guilds ?? []), ...others.map((o) => o.id), "brtest-a", "brtest-b", "brtest-limit"])];
         },
         putCommands: async () => null,
+        listAppEmojis: async () => [],
+        createAppEmoji: async () => assert.fail("should not upload"),
+        deleteAppEmoji: async () => assert.fail("should not delete"),
       },
     };
   }

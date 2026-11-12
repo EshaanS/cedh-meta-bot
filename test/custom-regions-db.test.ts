@@ -25,6 +25,9 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     editOriginal: async (_app: string, _token: string, payload: Sent) => { edits.push(payload); },
     listGuildIds: async () => guildIds,
     putCommands: async () => null,
+    listAppEmojis: async () => [],
+    createAppEmoji: async () => assert.fail("should not upload"),
+    deleteAppEmoji: async () => assert.fail("should not delete"),
   };
   const deps = () => ({ sql: () => sql, discord, appId: "1", allowlist: "all" as const, now: () => now });
   type Opt = { name: string; type: number; value: string; focused?: boolean };

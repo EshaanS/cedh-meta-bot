@@ -6,8 +6,11 @@
 import type { Sql } from "./db";
 
 export const POST_CONFIG = {
-  /** Characters across all embeds of the message. Discord's hard limit for one message's embeds is 6,000. */
+  /** Characters across all embeds of the message, as a reader sees them: a pie emoji counts as the circles it
+   *  stands for. Discord's hard limit for one message's embeds is 6,000. */
   contentBudget: 4800,
+  /** Characters across all embeds as sent, pie emoji markup included. Over this, the pies go back to circles. */
+  messageMax: 5900,
   /** Years of player history ingested; shown on Rising players so "first" isn't read as "new to the game". */
   playerHistoryYears: 3,
   eventNameMax: 50,
@@ -109,6 +112,11 @@ export const POST_CONFIG = {
    *  shows none. ⚪ and ⚫ can fade into Discord's light and dark backgrounds; all symbols are set here. */
   colorSquares: 1,
   colorSymbols: { W: "⚪", U: "🔵", B: "⚫", R: "🔴", G: "🟢", colorless: "🔘", separator: " " },
+  /** One pie emoji per commander in place of its row of circles, where the application has that pie
+   *  (composePost's `opts.colorEmoji`; the app reads its own emoji from Discord). An identity with no pie keeps
+   *  its circles, and so does the text preview. A pie is one symbol on screen but about 29 characters of markup
+   *  ("<:ci_wubr:1300000000000000000>"): the budget counts it as its circles, and messageMax counts the markup. */
+  colorPies: 1,
 } as const;
 type Widen<T> = T extends number ? number : T extends string ? string : { -readonly [K in keyof T]: Widen<T[K]> };
 export type PostConfig = Widen<typeof POST_CONFIG>;
@@ -256,7 +264,8 @@ export function discordLimitViolations(embeds: Embed[]): string[] {
   return v;
 }
 
-/** What trimming can change. The first block are line caps; detail, spacing, bars and squares are levels. */
+/** What trimming can change. The first block are line caps; detail, spacing, bars and squares are levels
+ *  (squares: 2 pie emoji where there is one, 1 circles, 0 nothing). */
 type Caps = {
   winners: number; topPlayers: number; risingPlayers: number; topCut: number; mostPlayed: number; best: number; conversion: number; rising: number; cooling: number;
   topCutDetail: number; spacing: number; bars: number; squares: number;
@@ -354,7 +363,13 @@ function outcomeText(r: Result, playerText: (name: string) => string, deck: (com
   return r.result === "winner" ? winner : r.result === "final drawn" ? `drawn final: ${commanders.join(", ")}` : r.result;
 }
 
-function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows): Section[] {
+/** A color identity as circles: "⚪ 🔵" for "WU", the colorless symbol for "". */
+function colorCircles(identity: string, c: PostConfig): string {
+  if (identity === "") return c.colorSymbols.colorless;
+  return [...identity].map((l) => (l in c.colorSymbols ? c.colorSymbols[l as "W" | "U" | "B" | "R" | "G"] : "")).filter(Boolean).join(c.colorSymbols.separator);
+}
+
+function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows, pies: Record<string, string>): Section[] {
   const s: Section[] = [];
   const mon = monthOf(data.month);
   const prevMon = monthOf(data.month, -1);
@@ -362,12 +377,11 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows): S
   const icon = (key: keyof PostConfig["lineIcons"]) => (c.lineIcons[key] ? `${c.lineIcons[key]} ` : "");
   const two = c.detailOnSecondLine > 0;
   const entries = (n: number) => plural(n, "entry", "entries");
-  /** Color identity symbols of a commander ("" when unknown or switched off). */
+  /** Color identity of a commander: its pie emoji, or circles ("" when unknown or switched off). */
   const colors = (commander: string) => {
     const id = caps.squares > 0 ? data.colors?.[commander] : undefined;
     if (id === undefined) return "";
-    if (id === "") return c.colorSymbols.colorless;
-    return [...id].map((l) => (l in c.colorSymbols ? c.colorSymbols[l as "W" | "U" | "B" | "R" | "G"] : "")).filter(Boolean).join(c.colorSymbols.separator);
+    return (caps.squares > 1 ? pies[id] : undefined) ?? colorCircles(id, c);
   };
   /** " · ⚪ 🔵" to end a line of details, or nothing. */
   const withColors = (commander: string) => (colors(commander) ? ` · ${colors(commander)}` : "");
@@ -560,9 +574,17 @@ function previewText(parts: Part[]): string {
  * (blank spacing, share bars, color symbols); the decks block is cut bottom-up (each section to a floor, then
  * deeper); then the player sections; and Winners last. The headline, the scene, Coverage and Sources are
  * never trimmed.
+ *
+ * `opts.colorEmoji` maps a color identity ("WU", "" for colorless) to the markup of the application's pie
+ * emoji for it (colorEmojiMarkup in color-emoji.ts). The embeds use it; the text preview shows circles. The
+ * budget counts a pie as its circles, so pies never cost a line; they go back to circles only when the
+ * message as sent would pass messageMax or a field would pass Discord's limit.
  */
-export function composePost(data: PostData, config: PostConfig = POST_CONFIG): { embeds: Embed[]; text: string } {
+export function composePost(data: PostData, config: PostConfig = POST_CONFIG, opts: { colorEmoji?: Record<string, string> } = {}): { embeds: Embed[]; text: string } {
   const emoji = config.sectionEmoji;
+  const pies = config.colorPies > 0 ? (opts.colorEmoji ?? {}) : {};
+  /** The preview is plain text, which can't show a custom emoji: each pie is written as its circles. */
+  const plain = (text: string) => Object.entries(pies).reduce((t, [identity, markup]) => t.replaceAll(markup, colorCircles(identity, config)), text);
   const mon = monthOf(data.month);
   const look = config.embeds;
   const title = `${data.region.label} — cEDH meta, ${mon} ${data.month.slice(0, 4)}`;
@@ -572,7 +594,7 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
     const embeds = strip(parts);
     const violations = discordLimitViolations(embeds);
     if (violations.length) throw new Error(`post exceeds Discord limits: ${violations.join("; ")}`);
-    return { embeds, text: previewText(parts) };
+    return { embeds, text: plain(previewText(parts)) };
   };
 
   if (data.scene.events === 0) {
@@ -582,7 +604,7 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const fullCaps: Caps = {
     winners: config.winnersMax, topPlayers: config.topPlayersMax, risingPlayers: config.risingPlayersMax, topCut: config.topCutMax,
     mostPlayed: config.mostPlayedMax, best: config.bestResultsMax, conversion: config.conversionMax, rising: config.risingMax, cooling: config.coolingMax,
-    topCutDetail: config.topCutDetail, spacing: 1, bars: config.shareBars > 0 ? 1 : 0, squares: config.colorSquares > 0 ? 1 : 0,
+    topCutDetail: config.topCutDetail, spacing: 1, bars: config.shareBars > 0 ? 1 : 0, squares: config.colorSquares > 0 ? (Object.keys(pies).length > 0 ? 2 : 1) : 0,
   };
   const caps: Caps = { ...fullCaps };
   const step = (k: keyof Caps, floor: number) => () => caps[k] > floor && (caps[k]--, true);
@@ -602,9 +624,11 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const render = (x: Section, items: string[][]) =>
     items.map((it, i) => (x.ranked ? [`${mark(i)} ${it[0]!}`, ...it.slice(1)] : it).join("\n")).join(spaced(x) ? "\n\n" : "\n");
   /** Safety net: keeps items from the top while the field value fits Discord's limit. */
+  let fieldCut = false;
   const fit = (x: Section, items: string[][]) => {
     let kept = items;
     while (kept.length > 0 && render(x, kept).length > DISCORD_LIMITS.fieldValue) kept = kept.slice(0, -1);
+    if (kept.length < items.length) fieldCut = true;
     return kept;
   };
   const fieldsOf = (x: Section): StyledField[] => {
@@ -617,9 +641,13 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
   const about: StyledField[] = [{ name: withEmoji(emoji.coverage, "Coverage"), value: coverageLine(data), style: "pair" }, sources];
   const blockTitle = (template: string) => (template ? { title: fill(template, { month: mon }) } : {});
 
+  /** What a reader sees: the length with every pie counted as the circles it stands for. */
+  const shownLength = (embeds: Embed[]) => contentLength(embeds.map((e) => ({ ...e, fields: e.fields.map((f) => ({ ...f, value: plain(f.value) })) })));
+
   let parts: Part[];
   for (;;) {
-    const sections = named(buildSections(data, config, caps, selectRows(data, config, caps)));
+    fieldCut = false;
+    const sections = named(buildSections(data, config, caps, selectRows(data, config, caps), pies));
     const of = (block: Block) => sections.filter((x) => x.block === block).flatMap(fieldsOf);
     const people = of("people");
     const decks = of("decks");
@@ -629,7 +657,15 @@ export function composePost(data: PostData, config: PostConfig = POST_CONFIG): {
       ...(decks.length ? [{ ...blockTitle(look.decks.title), color: look.decks.color, fields: decks }] : []),
       { ...blockTitle(look.about.title), color: look.about.color, fields: about },
     ];
-    if (contentLength(strip(parts)) <= config.contentBudget) break;
+    const embeds = strip(parts);
+    // Pies are markup the reader never sees, so they don't count against the budget; but the message, markup
+    // included, has to fit Discord, and no line is given up for a pie: if the markup makes the message too
+    // long or pushes a field past its limit, every pie goes back to circles.
+    if (caps.squares > 1 && (fieldCut || contentLength(embeds) > config.messageMax)) {
+      caps.squares = 1;
+      continue;
+    }
+    if (shownLength(embeds) <= config.contentBudget) break;
     if (!trims.find((t) => t())) break;
   }
   return finish(parts);

@@ -30,6 +30,7 @@
     "pair-report": "tsx --env-file-if-exists=.env scripts/pair-report.ts",
     "color-identity": "tsx --env-file-if-exists=.env scripts/fetch-color-identity.ts",
     "color-report": "tsx --env-file-if-exists=.env scripts/color-report.ts",
+    "color-emoji": "tsx --env-file-if-exists=.env scripts/color-emoji.ts",
     "places": "tsx --env-file-if-exists=.env scripts/load-populated-places.ts"
   },
   "devDependencies": {

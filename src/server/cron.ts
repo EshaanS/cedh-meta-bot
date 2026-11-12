@@ -4,13 +4,15 @@
 // guild's month rather than risking a double post.
 import type { Sql } from "../../scripts/lib/db";
 import { redact } from "../../scripts/lib/errors";
-import { composePost, loadPostData, type Embed } from "../../scripts/lib/post";
+import { composePost, loadPostData, POST_CONFIG, type Embed } from "../../scripts/lib/post";
+import { loadColorEmoji } from "./color-emoji";
 import { isGuildAllowed, POST_FROM_DAY, previousMonth } from "./config";
 import { deleteGuildData } from "./custom-regions";
 import { DISCORD_ERRORS, DiscordError, type DiscordClient } from "./discord";
 
 export type CronOptions = { dryRun?: boolean; monthOverride?: string; timeBudgetMs?: number };
-export type CronDeps = { sql: Sql; discord: DiscordClient; allowlist: Set<string> | "all"; now: Date };
+/** `appId` is the Discord application id: with it, posts use the application's color pie emoji. */
+export type CronDeps = { sql: Sql; discord: DiscordClient; allowlist: Set<string> | "all"; now: Date; appId?: string };
 export type CronSummary = {
   status: "before_post_day" | "data_not_ready" | "ok";
   target: string;
@@ -69,12 +71,15 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
       order by guild_id`
   ).filter((c) => isGuildAllowed(allowlist, c.guild_id) && !summary.pruned.includes(c.guild_id));
 
+  // The application's pie emoji, read once per run (none when there is nothing to post, or on any failure).
+  const colorEmoji = candidates.length ? await loadColorEmoji(discord, deps.appId) : {};
+
   // One message per server: every embed of the post goes out together.
   const composed = new Map<string, Promise<Embed[]>>();
   const embedsFor = (regionId: string) => {
     let p = composed.get(regionId);
     if (!p) {
-      p = loadPostData(sql, regionId, target).then((data) => composePost(data).embeds);
+      p = loadPostData(sql, regionId, target).then((data) => composePost(data, POST_CONFIG, { colorEmoji }).embeds);
       composed.set(regionId, p);
     }
     return p;

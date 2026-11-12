@@ -129,6 +129,35 @@ commanders have no match. The commands didn't change, so `register-commands` is 
 
 After deploying, run `/preview` and look at it on a light and a dark theme, on desktop and on a phone.
 
+## Color identity pies (no migration)
+
+A commander's colors can show as one pie emoji in place of the row of circles: a small circle cut into equal
+wedges, one per color. The pies are application emoji, which the bot can use in every server without any extra
+permission. There are 32 (one per color identity), drawn by the project itself; no image is stored in the
+repository or the database.
+
+```
+npm run color-emoji -- --out pies     # optional: writes the 32 PNGs and pies/sheet.png to look at; no Discord call
+npm run color-emoji                   # uploads the pies the application doesn't have yet
+```
+
+The upload needs `DISCORD_APP_ID` and `DISCORD_BOT_TOKEN` in `.env`, makes 33 Discord calls (one list, 32
+uploads), and is safe to run again. The uploaded emoji appear in the Developer Portal under the application's
+Emojis tab. Nothing has to be deployed afterwards beyond the code itself: the app reads its emoji list from
+Discord when it posts (kept for ten minutes), so `/preview` shows pies within ten minutes of the upload. Run it
+once per Discord application (a test application and a production one each need their own).
+
+- `npm run color-emoji -- --replace` deletes the pies and uploads them again; use it after changing the
+  drawing (`PIE_CONFIG` in `scripts/lib/color-pie.ts`).
+- `npm run color-emoji -- --remove` deletes them; posts show circles again. Setting `colorPies: 0` in
+  `POST_CONFIG` does the same without touching Discord.
+- A color identity with no pie, a failed call to Discord, or a missing `DISCORD_APP_ID` on Vercel all mean
+  circles; the post is never held back for a pie.
+- `pies/` is not in `.gitignore`; write the review images outside the repository or delete them afterwards.
+
+Then run `/preview` and check the pies on a light and a dark theme, on desktop and on a phone: the white wedge
+on light, the black wedge on dark, and whether four and five colors can be told apart at message size.
+
 ## Player data and opt-outs
 Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,
 keep names current, and honor privacy requests (`docs/permissions.md`).

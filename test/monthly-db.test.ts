@@ -124,4 +124,77 @@ describe("monthly post against Postgres", { skip: url ? false : "TEST_DATABASE_U
     const [res] = await sql<{ region_id: string; steps_up: number; reportable: boolean }[]>`select * from resolve_region('global', '2038-08-01'::date)`;
     assert.deepEqual({ ...res }, { region_id: "global", steps_up: 0, reportable: false });
   });
+
+  test("the application's pie emoji reach /preview and the cron's post; an identity without a pie keeps its circles", async () => {
+    const { handleInteraction } = await import("../src/server/interactions");
+    const { runCron } = await import("../src/server/cron");
+    const { resetColorEmojiCache } = await import("../src/server/color-emoji");
+    const GUILD = "mo-guild"; // not "test-…": test/discord-db.test.ts deletes those
+    type Shown = { fields: { name: string; value: string }[] }[];
+    const sent: Shown[] = [];
+    const edits: { embeds?: Shown }[] = [];
+    let emojiCalls = 0;
+    const discord = {
+      createMessage: async (_channel: string, payload: { embeds?: unknown[] }) => { sent.push(payload.embeds as Shown); },
+      editOriginal: async (_app: string, _token: string, payload: { embeds?: unknown[] }) => { edits.push({ embeds: payload.embeds as Shown }); },
+      // No list of servers: the cron then skips its prune step, so this file never deletes another file's servers.
+      listGuildIds: async () => { throw new Error("not listed in this test"); },
+      putCommands: async () => null,
+      // The application has a pie for white-blue and none for colorless.
+      listAppEmojis: async () => { emojiCalls++; return [{ id: "1300000000000000001", name: "ci_wu" }, { id: "1300000000000000002", name: "unrelated" }]; },
+      createAppEmoji: async () => assert.fail("should not upload"),
+      deleteAppEmoji: async () => assert.fail("should not delete"),
+    };
+    const mostPlayed = (embeds: Shown) => embeds.flatMap((e) => e.fields).find((f) => f.name.endsWith("Most played"))!.value.split("\n\n");
+    const expected = ["🥇 **Mo Alpha**\n▰▰▰▰▰▰▰▰▰▰ 23.1% · 12 entries · <:ci_wu:1300000000000000001>", "🥈 **Mo Beta**\n▰▰▰▰▰▰▰▰▰▰ 23.1% · 12 entries · 🔘", "🥉 **Mo Gamma**\n▰▰▰▰▰▱▱▱▱▱ 11.5% · 6 entries"];
+    const removeRows = async () => {
+      await sql`delete from commander_colors where name in ('Mo Alpha', 'Mo Beta')`;
+      await sql`delete from guild_configs where guild_id = ${GUILD}`;
+      await sql`delete from ingest_log where window_start = '2038-08-01T00:00:00Z'`;
+    };
+    await removeRows();
+    try {
+      await sql`
+        insert into commander_colors (name_key, name, card_name, colors)
+        select card_name_key(n), n, n, c from (values ('Mo Alpha', 'WU'), ('Mo Beta', '')) v(n, c)`;
+      resetColorEmojiCache();
+
+      // /preview, 20 September 2038: the August report for a server with no settings, which is Global.
+      const now = new Date(Date.UTC(2038, 8, 20));
+      const r = await handleInteraction(
+        { type: 2, token: "tok", guild_id: GUILD, data: { name: "preview" } },
+        { sql: () => sql, discord, appId: "77", allowlist: new Set([GUILD]), now: () => now },
+      );
+      await r.background?.();
+      assert.deepEqual(mostPlayed(edits.at(-1)!.embeds!).slice(0, 3), expected);
+
+      // The cron's post for the same month. Another file's cron can prune this server's row in the instant
+      // between listing servers and pruning, so the row is put back and the run repeated if nothing was posted.
+      await sql`
+        insert into ingest_log (window_start, window_end, tournaments, entries, team_events_skipped, invalid_skipped)
+        values ('2038-08-01T00:00:00Z', '2038-09-01T00:00:00Z', 0, 0, 0, 0)`;
+      for (let attempt = 0; attempt < 3 && sent.length === 0; attempt++) {
+        await sql`insert into guild_configs (guild_id, region_id, channel_id) values (${GUILD}, 'global', 'mo-chan') on conflict (guild_id) do nothing`;
+        const summary = await runCron({ sql, discord, allowlist: new Set([GUILD]), now, appId: "77" }, { monthOverride: AUGUST });
+        assert.match(summary.pruneError ?? "", /not listed in this test/);
+        assert.deepEqual(summary.failed, []);
+      }
+      assert.equal(sent.length, 1);
+      assert.deepEqual(mostPlayed(sent[0]!).slice(0, 3), expected);
+      assert.equal(emojiCalls, 1, "the list is read once and kept for ten minutes");
+
+      // Without an application id the cron asks Discord for nothing and posts circles.
+      await sql`update guild_configs set last_posted_month = null where guild_id = ${GUILD}`;
+      resetColorEmojiCache();
+      for (let attempt = 0; attempt < 3 && sent.length === 1; attempt++) {
+        await sql`insert into guild_configs (guild_id, region_id, channel_id) values (${GUILD}, 'global', 'mo-chan') on conflict (guild_id) do nothing`;
+        await runCron({ sql, discord, allowlist: new Set([GUILD]), now }, { monthOverride: AUGUST });
+      }
+      assert.equal(sent.length, 2);
+      assert.equal(mostPlayed(sent[1]!)[0], "🥇 **Mo Alpha**\n▰▰▰▰▰▰▰▰▰▰ 23.1% · 12 entries · ⚪ 🔵");
+      assert.equal(emojiCalls, 1);
+    } finally {
+      await removeRows();
+    }
+  });
 });

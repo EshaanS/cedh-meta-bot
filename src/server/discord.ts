@@ -1,5 +1,6 @@
 // Minimal Discord REST client over fetch. Every message is sent with allowed_mentions: { parse: [] }.
 // Honors 429 retry_after. Errors carry Discord's JSON error code; interaction tokens are redacted from messages.
+import type { AppEmoji } from "../../scripts/lib/color-emoji";
 import type { Embed } from "../../scripts/lib/post";
 
 export const DISCORD_ERRORS = {
@@ -27,6 +28,11 @@ export interface DiscordClient {
   editOriginal(appId: string, interactionToken: string, payload: MessagePayload): Promise<void>;
   listGuildIds(): Promise<string[]>;
   putCommands(appId: string, guildId: string | null, commands: unknown[]): Promise<unknown>;
+  /** The emoji the application owns (up to 2,000). It can use them in any server. */
+  listAppEmojis(appId: string): Promise<AppEmoji[]>;
+  /** Uploads a PNG as an application emoji. */
+  createAppEmoji(appId: string, name: string, png: Uint8Array): Promise<AppEmoji>;
+  deleteAppEmoji(appId: string, emojiId: string): Promise<void>;
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -84,6 +90,18 @@ export function discordClient(opts: { token: string; base?: string; fetchImpl?: 
     putCommands(appId, guildId, commands) {
       const path = guildId ? `/applications/${appId}/guilds/${guildId}/commands` : `/applications/${appId}/commands`;
       return call("PUT", path, commands);
+    },
+    async listAppEmojis(appId) {
+      const page = (await call("GET", `/applications/${appId}/emojis`)) as { items?: { id: string; name: string }[] } | null;
+      return (page?.items ?? []).map((e) => ({ id: e.id, name: e.name }));
+    },
+    async createAppEmoji(appId, name, png) {
+      const image = `data:image/png;base64,${Buffer.from(png).toString("base64")}`;
+      const made = (await call("POST", `/applications/${appId}/emojis`, { name, image })) as { id: string; name: string };
+      return { id: made.id, name: made.name };
+    },
+    async deleteAppEmoji(appId, emojiId) {
+      await call("DELETE", `/applications/${appId}/emojis/${emojiId}`);
     },
   };
 }

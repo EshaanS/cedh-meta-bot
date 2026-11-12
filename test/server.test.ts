@@ -47,6 +47,9 @@ const noDiscord: DiscordClient = {
   editOriginal: async () => assert.fail("should not edit"),
   listGuildIds: async () => [],
   putCommands: async () => null,
+  listAppEmojis: async () => [],
+  createAppEmoji: async () => assert.fail("should not upload"),
+  deleteAppEmoji: async () => assert.fail("should not delete"),
 };
 const deps = (allowlist: Set<string> | "all"): InteractionDeps => ({
   sql: () => assert.fail("should not query"),

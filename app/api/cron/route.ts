@@ -14,7 +14,7 @@ export async function GET(request: Request): Promise<Response> {
   }
   const url = new URL(request.url);
   const summary = await runCron(
-    { sql: getSql(), discord: discordClient({ token: requireEnv("DISCORD_BOT_TOKEN") }), allowlist: guildAllowlist(), now: new Date() },
+    { sql: getSql(), discord: discordClient({ token: requireEnv("DISCORD_BOT_TOKEN") }), allowlist: guildAllowlist(), now: new Date(), appId: process.env.DISCORD_APP_ID },
     { dryRun: url.searchParams.get("dry_run") === "1", monthOverride: url.searchParams.get("month") ?? undefined },
   );
   console.log(JSON.stringify(summary));
