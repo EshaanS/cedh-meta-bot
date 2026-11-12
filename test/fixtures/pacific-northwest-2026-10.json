@@ -62,34 +62,39 @@
   ],
   "topPlayers": [
     {
-      "name": "Wren Castellan",
-      "wins": 1,
-      "topCuts": 2,
-      "commander": "Ob Nixilis, Captive Kingpin"
-    },
-    {
       "name": "Dmitri Volkov",
       "wins": 1,
       "topCuts": 2,
+      "points": 33,
       "commander": "Kinnan, Bonder Prodigy"
     },
     {
-      "name": "Rafael Montoya",
+      "name": "Wren Castellan",
       "wins": 1,
-      "topCuts": 1,
-      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+      "topCuts": 2,
+      "points": 22,
+      "commander": "Ob Nixilis, Captive Kingpin"
     },
     {
-      "name": "Noor Haddad",
+      "name": "Mateus Carvalho",
       "wins": 1,
       "topCuts": 1,
-      "commander": "Tasigur, the Golden Fang"
+      "points": 29,
+      "commander": "Rocco, Cabaretti Caterer"
     },
     {
       "name": "Felix Brandt",
       "wins": 1,
       "topCuts": 1,
+      "points": 27,
       "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh"
+    },
+    {
+      "name": "Greta Solberg",
+      "wins": 1,
+      "topCuts": 1,
+      "points": 27,
+      "commander": "Super-Skrull"
     }
   ],
   "risingPlayers": [
@@ -1906,10 +1911,12 @@
     "Magda, Brazen Outlaw": "R",
     "Ob Nixilis, Captive Kingpin": "BR",
     "Ral, Monsoon Mage": "UR",
+    "Rocco, Cabaretti Caterer": "WRG",
     "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept": "UBR",
     "Rograkh, Son of Rohgahh / Thrasios, Triton Hero": "URG",
     "Scion of the Ur-Dragon": "WUBRG",
     "Sisay, Weatherlight Captain": "WUBRG",
+    "Super-Skrull": "WUBRG",
     "Tasigur, the Golden Fang": "UBG",
     "Tayam, Luminous Enigma": "WBG",
     "Thrasios, Triton Hero / Tymna the Weaver": "WUBG",

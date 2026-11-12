@@ -1,6 +1,6 @@
 Global — cEDH meta, October 2026
-🏆 MBG Commanderpalooza #3 (TimeTwister event) (150 players) went to Mara Ellison on Kraum / Tymna the Weaver
-🎯 Kraum / Tymna the Weaver made the most top cuts: 157
+🏆 MBG Commanderpalooza #3 (TimeTwister event) (150 players) went to Mara Ellison on Kraum / Tymna
+🎯 Kraum / Tymna made the most top cuts: 157
 📈 Dack Fayden, Helping Hand is the commander to watch: 93 entries in October, new since Sep 26
 
 📍 Events — October: 349 (+8% vs September)
@@ -12,7 +12,7 @@ Largest event: 150 players · MBG Commanderpalooza #3 (TimeTwister event)
 
 🏆 Winners (largest events)
 MBG Commanderpalooza #3 (TimeTwister event) · 150 players
-🏆 Mara Ellison on Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+🏆 Mara Ellison on Kraum / Tymna · ⚪ 🔵 ⚫ 🔴
 
 BAKED ZITI 4: Goldsabertooth’s NY cEDH · 119 players
 🏆 Tobias Quill on Dack Fayden, Helping Hand · ⚪
@@ -26,21 +26,21 @@ CEDH Norte Bilbao + Zaragoza + Pamplona · 96 players
 Collectible Ventures: S.N.L. / Mages 10K Birthday… · 94 players
 🏆 Lena Marchetti on Kinnan, Bonder Prodigy · 🔵 🟢
 
-👑 Top players
+👑 Top players (wins, then top cuts, then points)
 🥇 Soren Blake
-🏆 5 wins · 🎯 5 top cuts · Thrasios / Tymna the Weaver · ⚪ 🔵 ⚫ 🟢
+🏆 5 wins · 🎯 5 top cuts · 100 points · Thrasios / Tymna · ⚪ 🔵 ⚫ 🟢
 
 🥈 Priya Nandakumar
-🏆 3 wins · 🎯 4 top cuts · King T'Challa · ⚪ 🔵
+🏆 3 wins · 🎯 4 top cuts · 68 points · King T'Challa · ⚪ 🔵
 
 🥉 Hugo Lindqvist
-🏆 2 wins · 🎯 4 top cuts
+🏆 2 wins · 🎯 4 top cuts · 55 points
 
 4️⃣ Camille Rousseau
-🏆 2 wins · 🎯 3 top cuts · Crystal, Inhuman Princess · ⚪ 🔵 🔴 🟢
+🏆 2 wins · 🎯 3 top cuts · 53 points · Crystal, Inhuman Princess · ⚪ 🔵 🔴 🟢
 
-5️⃣ Mara Ellison
-🏆 2 wins · 🎯 2 top cuts · Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+5️⃣ Elias Thornbury
+🏆 2 wins · 🎯 2 top cuts · 54 points · Thrasios / Tymna · ⚪ 🔵 ⚫ 🟢
 
 🌱 Rising players (first win or top cut in 3 years of data)
 Jonah Whitlock
@@ -55,7 +55,7 @@ Devon Okafor
 ── 🃏 Commanders — October ──
 
 🎯 Top-cut appearances
-🥇 Kraum / Tymna the Weaver
+🥇 Kraum / Tymna
 157 cuts · 9.2% of cuts vs 8.5% of field · ⚪ 🔵 ⚫ 🔴
 
 🥈 Kinnan, Bonder Prodigy
@@ -71,7 +71,7 @@ Devon Okafor
 90 cuts · 5.3% of cuts vs 4.9% of field · 🔵 ⚫ 🔴
 
 📊 Most played
-🥇 Kraum / Tymna the Weaver
+🥇 Kraum / Tymna
 ▰▰▰▰▰▰▰▰▰▰ 8.3% · 595 entries · ⚪ 🔵 ⚫ 🔴
 
 🥈 Kinnan, Bonder Prodigy
@@ -93,7 +93,7 @@ Devon Okafor
 🥈 Yisan, the Wanderer Bard
 1.59 · 22 entries · 🟢
 
-🥉 Malcolm / Tymna the Weaver
+🥉 Malcolm / Tymna
 1.52 · 19 entries · ⚪ 🔵 ⚫
 
 4️⃣ Kenrith, the Returned King
@@ -103,7 +103,7 @@ Devon Okafor
 1.43 · 70 entries · ⚪ 🔴 🟢
 
 🔀 Top-cut conversion (baseline 26%, 10+ entries)
-🥇 Malcolm / Tymna the Weaver
+🥇 Malcolm / Tymna
 56% · 10 of 18 entries · ⚪ 🔵 ⚫
 
 🥈 Ashling, Flame Dancer

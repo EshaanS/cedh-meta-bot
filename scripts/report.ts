@@ -110,10 +110,10 @@ async function main() {
     section(`Winners in ${values.month} (10 largest qualifying 32+ events)`, ["participant_count", "event_name", "result", "result_commanders", "winner"],
       winners.map((w) => ({ ...w, winner: w.winner_hidden ? "(opted out)" : (w.winner_name ?? "") })));
 
-    const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; largest_event: number; top_commander: string | null }[]>`
+    const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; points: string; largest_event: number; top_commander: string | null }[]>`
       select * from stat_top_players(${r}, ${month}::date, 10)`;
-    section(`Top players in ${values.month} (qualifying events; by wins, then top cuts, then largest event)`,
-      ["player_name", "wins", "top_cuts", "largest_event", "top_commander"], topPlayers);
+    section(`Top players in ${values.month} (qualifying events; by wins, then top cuts, then points, then largest event)`,
+      ["player_name", "wins", "top_cuts", "points", "largest_event", "top_commander"], topPlayers);
 
     const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
       select * from stat_rising_players(${r}, ${month}::date, 10)`;

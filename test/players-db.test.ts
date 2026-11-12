@@ -89,19 +89,27 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
     ]);
   });
 
-  test("top players: ordered by wins then top cuts, one count per event; opted-out and removed players are absent", async () => {
-    const rows = await sql<{ player_name: string; wins: string; top_cuts: string; largest_event: number; top_commander: string | null }[]>`
+  test("top players: ordered by wins, top cuts, points, then the largest event; one count per event; opted-out and removed players are absent", async () => {
+    const rows = await sql<{ player_name: string; wins: string; top_cuts: string; points: string; largest_event: number; top_commander: string | null }[]>`
       select * from stat_top_players('global', ${MONTH}::date, 10)`;
-    assert.deepEqual([...rows].map((r) => ({ ...r, wins: Number(r.wins), top_cuts: Number(r.top_cuts) })), [
-      { player_name: "Test Player One", wins: 1, top_cuts: 2, largest_event: 40, top_commander: "Kinnan, Bonder Prodigy" },
-      { player_name: "Test Player Four", wins: 1, top_cuts: 1, largest_event: 30, top_commander: null },
-      { player_name: "Test Veteran", wins: 0, top_cuts: 1, largest_event: 40, top_commander: "Sisay, Weatherlight Captain" },
-      { player_name: "Test Player Three", wins: 0, top_cuts: 1, largest_event: 36, top_commander: "Tivit, Seller of Secrets" },
-      { player_name: "Test Player Five", wins: 0, top_cuts: 1, largest_event: 30, top_commander: null },
-      { player_name: "Test Player Six", wins: 0, top_cuts: 1, largest_event: 30, top_commander: null },
-      { player_name: "Test Player Eight", wins: 0, top_cuts: 1, largest_event: 28, top_commander: null },
-      { player_name: "Test Player Nine", wins: 0, top_cuts: 1, largest_event: 28, top_commander: null },
+    // Every entry here has 3 Swiss wins and 1 draw, so an event is worth 16 points plus 5 per bracket win.
+    assert.deepEqual([...rows].map((r) => ({ ...r, wins: Number(r.wins), top_cuts: Number(r.top_cuts), points: Number(r.points) })), [
+      // One has two standings rows in event A (26 and 21 points): the event counts once, with the better row.
+      { player_name: "Test Player One", wins: 1, top_cuts: 2, points: 42, largest_event: 40, top_commander: "Kinnan, Bonder Prodigy" },
+      { player_name: "Test Player Four", wins: 1, top_cuts: 1, points: 26, largest_event: 30, top_commander: null },
+      // No wins and one top cut each. Points come first: Three played two events (the one without a cut counts
+      // too) and is ahead of the Veteran, whose only event was larger.
+      { player_name: "Test Player Three", wins: 0, top_cuts: 1, points: 32, largest_event: 36, top_commander: "Tivit, Seller of Secrets" },
+      // Equal points: the larger event first.
+      { player_name: "Test Player Five", wins: 0, top_cuts: 1, points: 21, largest_event: 30, top_commander: null },
+      { player_name: "Test Player Nine", wins: 0, top_cuts: 1, points: 21, largest_event: 28, top_commander: null },
+      { player_name: "Test Veteran", wins: 0, top_cuts: 1, points: 16, largest_event: 40, top_commander: "Sisay, Weatherlight Captain" },
+      { player_name: "Test Player Six", wins: 0, top_cuts: 1, points: 16, largest_event: 30, top_commander: null },
+      { player_name: "Test Player Eight", wins: 0, top_cuts: 1, points: 16, largest_event: 28, top_commander: null },
     ]);
+    // The limit is applied after the ordering.
+    const top3 = await sql<{ player_name: string }[]>`select player_name from stat_top_players('global', ${MONTH}::date, 3)`;
+    assert.deepEqual(top3.map((r) => r.player_name), ["Test Player One", "Test Player Four", "Test Player Three"]);
   });
 
   test("rising players: one per event, largest event first; a veteran and an opted-out player don't qualify", async () => {

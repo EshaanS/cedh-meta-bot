@@ -1,6 +1,6 @@
 Pacific Northwest — cEDH meta, October 2026
-🏆 Guardian Games CEDH Monthly PDX (66 players) went to Rafael Montoya on Kraum / Tymna the Weaver
-🎯 Kraum / Tymna the Weaver made the most top cuts: 14
+🏆 Guardian Games CEDH Monthly PDX (66 players) went to Rafael Montoya on Kraum / Tymna
+🎯 Kraum / Tymna made the most top cuts: 14
 📈 Rograkh / Silas Renn is the commander to watch: 21 entries in October (avg 9/month)
 
 📍 Events — October: 19 (same as September)
@@ -12,7 +12,7 @@ Largest event: 66 players · Guardian Games CEDH Monthly PDX
 
 🏆 Winners (largest events)
 Guardian Games CEDH Monthly PDX · 66 players
-🏆 Rafael Montoya on Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+🏆 Rafael Montoya on Kraum / Tymna · ⚪ 🔵 ⚫ 🔴
 
 Gem State CEDH Ad Naus for a Cause! · 44 players
 🏆 Noor Haddad on Tasigur, the Golden Fang · 🔵 ⚫ 🟢
@@ -24,23 +24,23 @@ Olympic Commander Challenger Series 1k Vol 4 - 20… · 34 players
 🏆 Greta Solberg on Azami, Lady of Scrolls · 🔵
 
 Commander Invitational Qualifier Cardboard Battle… · 32 players
-🏆 Mateus Carvalho on Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+🏆 Mateus Carvalho on Kraum / Tymna · ⚪ 🔵 ⚫ 🔴
 
-👑 Top players
-🥇 Wren Castellan
-🏆 1 win · 🎯 2 top cuts · Ob Nixilis, Captive Kingpin · ⚫ 🔴
+👑 Top players (wins, then top cuts, then points)
+🥇 Dmitri Volkov
+🏆 1 win · 🎯 2 top cuts · 33 points · Kinnan, Bonder Prodigy · 🔵 🟢
 
-🥈 Dmitri Volkov
-🏆 1 win · 🎯 2 top cuts · Kinnan, Bonder Prodigy · 🔵 🟢
+🥈 Wren Castellan
+🏆 1 win · 🎯 2 top cuts · 22 points · Ob Nixilis, Captive Kingpin · ⚫ 🔴
 
-🥉 Rafael Montoya
-🏆 1 win · 🎯 1 top cut · Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+🥉 Mateus Carvalho
+🏆 1 win · 🎯 1 top cut · 29 points · Rocco, Cabaretti Caterer · ⚪ 🔴 🟢
 
-4️⃣ Noor Haddad
-🏆 1 win · 🎯 1 top cut · Tasigur, the Golden Fang · 🔵 ⚫ 🟢
+4️⃣ Felix Brandt
+🏆 1 win · 🎯 1 top cut · 27 points · Francisco / Rograkh · ⚫ 🔴
 
-5️⃣ Felix Brandt
-🏆 1 win · 🎯 1 top cut · Francisco / Rograkh · ⚫ 🔴
+5️⃣ Greta Solberg
+🏆 1 win · 🎯 1 top cut · 27 points · Super-Skrull · ⚪ 🔵 ⚫ 🔴 🟢
 
 🌱 Rising players (first win or top cut in 3 years of data)
 Sana Qureshi
@@ -55,7 +55,7 @@ Felix Brandt
 ── 🃏 Commanders — October ──
 
 🎯 Top-cut appearances
-🥇 Kraum / Tymna the Weaver
+🥇 Kraum / Tymna
 14 cuts · 13.6% of cuts vs 6.7% of field · ⚪ 🔵 ⚫ 🔴
 
 🥈 Kinnan, Bonder Prodigy
@@ -64,14 +64,14 @@ Felix Brandt
 🥉 Rograkh / Silas Renn
 5 cuts · 4.9% of cuts vs 4.5% of field · 🔵 ⚫ 🔴
 
-4️⃣ Thrasios / Tymna the Weaver
+4️⃣ Thrasios / Tymna
 5 cuts · 4.9% of cuts vs 4.0% of field · ⚪ 🔵 ⚫ 🟢
 
 5️⃣ Sisay, Weatherlight Captain
 4 cuts · 3.9% of cuts vs 5.2% of field · ⚪ 🔵 ⚫ 🔴 🟢
 
 📊 Most played
-🥇 Kraum / Tymna the Weaver
+🥇 Kraum / Tymna
 ▰▰▰▰▰▰▰▰▰▰ 6.5% · 27 entries · ⚪ 🔵 ⚫ 🔴
 
 🥈 Kinnan, Bonder Prodigy
@@ -90,13 +90,13 @@ Felix Brandt
 🥇 Kinnan, Bonder Prodigy
 1.58 · 25 entries · 🔵 🟢
 
-🥈 Kraum / Tymna the Weaver
+🥈 Kraum / Tymna
 1.32 · 27 entries · ⚪ 🔵 ⚫ 🔴
 
 🥉 Rograkh / Silas Renn
 1.28 · 21 entries · 🔵 ⚫ 🔴
 
-4️⃣ Thrasios / Tymna the Weaver
+4️⃣ Thrasios / Tymna
 1.28 · 16 entries · ⚪ 🔵 ⚫ 🟢
 
 5️⃣ Ral, Monsoon Mage
@@ -106,10 +106,10 @@ Felix Brandt
 🥇 Kinnan, Bonder Prodigy
 52% · 11 of 21 entries · 🔵 🟢
 
-🥈 Kraum / Tymna the Weaver
+🥈 Kraum / Tymna
 52% · 14 of 27 entries · ⚪ 🔵 ⚫ 🔴
 
-🥉 Thrasios / Tymna the Weaver
+🥉 Thrasios / Tymna
 31% · 5 of 16 entries · ⚪ 🔵 ⚫ 🟢
 
 4️⃣ Rograkh / Silas Renn

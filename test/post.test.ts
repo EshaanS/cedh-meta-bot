@@ -160,7 +160,7 @@ test("embeds: four in one message, each with a title and its own color; an empty
   assert.deepEqual(embeds.map((e) => e.color), [0xc9a84c, 0x4a90d9, 0x4caf7a, 0x8a8f98]);
   assert.deepEqual(embeds.map((e) => e.fields.map((f) => f.name)), [
     ["📍 Events — October", "Players", "Draw rate", "Largest event"],
-    ["🏆 Winners (largest events)", "👑 Top players", "🌱 Rising players (first win or top cut in 3 years of data)"],
+    ["🏆 Winners (largest events)", "👑 Top players (wins, then top cuts, then points)", "🌱 Rising players (first win or top cut in 3 years of data)"],
     ["🎯 Top-cut appearances", "📊 Most played", "⭐ Best results (adjusted PPG, 10+ entries)", "🔀 Top-cut conversion (baseline 26%, 10+ entries)",
       "📈 Rising commanders (by share growth vs prior 3 months)", "📉 Cooling commanders (by share drop vs prior 3 months)"],
     ["ℹ️ Coverage", "🔗 Sources"],
@@ -249,7 +249,7 @@ test("a small region shows its own data only: what has rows is listed, the rest 
   assert.deepEqual(embeds.map((e) => e.title), ["Seattle Metro — cEDH meta, October 2026", "👥 Players — October", "🃏 Commanders — October", "ℹ️ About this report"]);
   assert.deepEqual(fields(embeds).map((f) => plain(f.name)), [
     "Events — October", "Players", "Draw rate", "Largest event",
-    "Winners (largest events)", "Top players", "Rising players (first win or top cut in 3 years of data)",
+    "Winners (largest events)", "Top players (wins, then top cuts, then points)", "Rising players (first win or top cut in 3 years of data)",
     "Top-cut appearances", "Most played", "Coverage", "Sources",
   ]);
   // No commander reaches the stat functions' 10 entries in a 43-player month, so there is no Best results
@@ -270,14 +270,14 @@ test("a small region shows its own data only: what has rows is listed, the rest 
 test("headline: biggest event and winner, top-cut leader or most played, rising commander or player", () => {
   const global = composePost(loadFixture("global-2026-10")).embeds[0]!;
   assert.deepEqual(global.description!.split("\n"), [
-    "🏆 **MBG Commanderpalooza #3 (TimeTwister event)** (150 players) went to **Mara Ellison** on Kraum / Tymna the Weaver",
-    "🎯 **Kraum / Tymna the Weaver** made the most top cuts: 157",
+    "🏆 **MBG Commanderpalooza #3 (TimeTwister event)** (150 players) went to **Mara Ellison** on Kraum / Tymna",
+    "🎯 **Kraum / Tymna** made the most top cuts: 157",
     "📈 **Dack Fayden, Helping Hand** is the commander to watch: 93 entries in October, new since Sep 26",
   ]);
   const data = loadFixture("global-2026-10");
   const head = (d: PostData, cfg: PostConfig = POST_CONFIG) => composePost(d, cfg).embeds[0]!.description?.split("\n") ?? [];
   // Too few cuts for a leader, or a tie for the most: the most played commander, with the month named.
-  assert.equal(head(data, { ...POST_CONFIG, headlineMinCuts: 500 })[1], "📊 **Kraum / Tymna the Weaver** is the most played commander: 8.3% of October entries");
+  assert.equal(head(data, { ...POST_CONFIG, headlineMinCuts: 500 })[1], "📊 **Kraum / Tymna** is the most played commander: 8.3% of October entries");
   const tied = loadFixture("global-2026-10");
   tied.topCutAppearances[1] = { ...tied.topCutAppearances[1]!, topCutEntries: tied.topCutAppearances[0]!.topCutEntries };
   assert.match(head(tied)[1]!, /^📊 .* is the most played commander: 8\.3% of October entries$/);
@@ -286,9 +286,9 @@ test("headline: biggest event and winner, top-cut leader or most played, rising 
   assert.equal(head(data)[2], "🌱 **Jonah Whitlock** is the player to watch: first top cut at BAKED ZITI 4: Goldsabertooth’s NY cEDH (119 players)");
   // Winner variants: an opted-out winner, a commander alone, no single winner.
   data.results[0] = { ...data.results[0]!, winnerName: null, winnerHidden: true };
-  assert.match(head(data)[0]!, /went to a player on Kraum \/ Tymna the Weaver$/);
+  assert.match(head(data)[0]!, /went to a player on Kraum \/ Tymna$/);
   data.results[0] = { ...data.results[0]!, winnerHidden: false };
-  assert.match(head(data)[0]!, /went to Kraum \/ Tymna the Weaver$/);
+  assert.match(head(data)[0]!, /went to Kraum \/ Tymna$/);
   data.results[0] = { ...data.results[0]!, result: "no single winner", resultCommanders: null };
   assert.equal(head(data)[0], "🏆 **MBG Commanderpalooza #3 (TimeTwister event)** (150 players) was the biggest event");
   // No 32+ event: the scene's largest event. Nothing at all: the line is left out.
@@ -296,11 +296,11 @@ test("headline: biggest event and winner, top-cut leader or most played, rising 
   assert.equal(head(data)[0], "🏆 **MBG Commanderpalooza #3 (TimeTwister event)** (150 players) was the biggest event");
   data.scene = { ...data.scene, largestEventName: null };
   data.risingPlayers = [];
-  assert.deepEqual(head(data), ["🎯 **Kraum / Tymna the Weaver** made the most top cuts: 157"]);
+  assert.deepEqual(head(data), ["🎯 **Kraum / Tymna** made the most top cuts: 157"]);
   // Switched off: no description at all. The copy is config. The headline shows no color symbols.
   assert.equal(composePost(loadFixture("global-2026-10"), { ...POST_CONFIG, headline: 0 }).embeds[0]!.description, undefined);
   const copy = { ...POST_CONFIG.headlineCopy, topCut: "{commander} leads with {cuts} cuts" };
-  assert.equal(head(loadFixture("global-2026-10"), { ...POST_CONFIG, headlineCopy: copy })[1], "Kraum / Tymna the Weaver leads with 157 cuts");
+  assert.equal(head(loadFixture("global-2026-10"), { ...POST_CONFIG, headlineCopy: copy })[1], "Kraum / Tymna leads with 157 cuts");
   assert.doesNotMatch(global.description!, CIRCLES);
   // The headline is never trimmed.
   const tight = composePost(loadFixture("global-2026-10"), { ...POST_CONFIG, contentBudget: 1500 }).embeds;
@@ -325,7 +325,7 @@ test("winners: two lines each, labels for every result type, at most five", () =
   const ten = { winnersMax: 10 };
   const old = lines(composePost(data, { ...PLAIN, ...ten }).embeds, "Winners");
   assert.equal(old.length, 10);
-  assert.match(old[0]!, /^• 150p · .* · Kraum \/ Tymna the Weaver$/);
+  assert.match(old[0]!, /^• 150p · .* · Kraum \/ Tymna$/);
   assert.match(old[1]!, /· drawn final: Kinnan, Bonder Prodigy, unknown commander$/);
   assert.match(old[2]!, /· no single winner$/);
   assert.match(old[3]!, /· winner not recorded$/);
@@ -337,7 +337,7 @@ test("winners: two lines each, labels for every result type, at most five", () =
   // The event and its size, then the outcome with the colors last; a trophy only where there is a winner.
   const event = "**MBG Commanderpalooza #3 (TimeTwister event)** · 150 players";
   assert.deepEqual(items(composePost(data, { ...POST_CONFIG, ...ten }).embeds, "Winners").slice(0, 7), [
-    [event, "🏆 Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴"],
+    [event, "🏆 Kraum / Tymna · ⚪ 🔵 ⚫ 🔴"],
     [event, "drawn final: Kinnan, Bonder Prodigy · 🔵 🟢, unknown commander"],
     [event, "no single winner"],
     [event, "winner not recorded"],
@@ -361,7 +361,7 @@ test("the 1,024-character field guard: lines are dropped, never a second field",
   // Five long winners fit one field.
   const five = composePost(data).embeds;
   assertWithinLimits(five);
-  assert.deepEqual(five[1]!.fields.map((f) => plain(f.name)), ["Winners (largest events)", "Top players", "Rising players (first win or top cut in 3 years of data)"]);
+  assert.deepEqual(five[1]!.fields.map((f) => plain(f.name)), ["Winners (largest events)", "Top players (wins, then top cuts, then points)", "Rising players (first win or top cut in 3 years of data)"]);
   assert.equal(items(five, "Winners").length, 5);
   // Ten do not: the field keeps as many as fit, from the top, and stays one field.
   const ten = composePost(data, { ...POST_CONFIG, winnersMax: 10, contentBudget: 6000 }).embeds;
@@ -388,7 +388,7 @@ test("hostile organizer text and player names are neutralized, an opted-out winn
     winnerName: i === 1 ? null : nastyPlayer, winnerHidden: i === 1,
   }));
   data.scene = { ...data.scene, largestEventName: nasty[0]!, largestEventPlayers: 500 };
-  data.topPlayers = [{ name: nastyPlayer, wins: 2, topCuts: 3, commander: "Kinnan, Bonder Prodigy" }, { name: "@<>*_~`|[]", wins: 1, topCuts: 1, commander: null }];
+  data.topPlayers = [{ name: nastyPlayer, wins: 2, topCuts: 3, points: 31, commander: "Kinnan, Bonder Prodigy" }, { name: "@<>*_~`|[]", wins: 1, topCuts: 1, points: 12, commander: null }];
   data.risingPlayers = [{ name: nastyPlayer, reason: "first win", eventName: nasty[1]!, participantCount: 499 }];
   const { embeds, text } = composePost(data);
   assertWithinLimits(embeds);
@@ -419,7 +419,7 @@ test("caps: five items per list and three for the rising kinds, whatever the dat
   const data = loadFixture("global-2026-10");
   const many = (n: number) => Array.from({ length: n }, (_, i) => i);
   data.results = many(12).map((i) => ({ ...data.results[0]!, eventName: `Event ${i}`, participantCount: 200 - i }));
-  data.topPlayers = many(12).map((i) => ({ name: `Player ${i}`, wins: 12 - i, topCuts: 12, commander: null }));
+  data.topPlayers = many(12).map((i) => ({ name: `Player ${i}`, wins: 12 - i, topCuts: 12, points: 60 - i, commander: null }));
   data.risingPlayers = many(12).map((i) => ({ name: `Riser ${i}`, reason: "first win", eventName: `Event ${i}`, participantCount: 200 - i }));
   data.trend = [
     ...many(8).map((i) => ({ commander: `Up ${i}`, lastMonthEntries: 40 - i, prior3AvgEntries: 5, shareChange: 2 - i / 10, isNew: false, firstSeen: "2024-01-01" })),
@@ -586,11 +586,11 @@ test("top players and rising players: line formats and caps", () => {
   const data = loadFixture("pacific-northwest-2026-10");
   data.colors = { "Kinnan, Bonder Prodigy": "UG" };
   data.topPlayers = [
-    { name: "Mara Ellison", wins: 2, topCuts: 3, commander: "Kraum, Ludevic's Opus / Tymna the Weaver" },
-    { name: "Tobias Quill", wins: 1, topCuts: 1, commander: "Kinnan, Bonder Prodigy" },
-    { name: "Ines Varga", wins: 1, topCuts: 0, commander: null },
-    { name: "Aiko Tanabe", wins: 0, topCuts: 2, commander: null },
-    ...Array.from({ length: 4 }, (_, i) => ({ name: `Extra ${i}`, wins: 0, topCuts: 1, commander: null })),
+    { name: "Mara Ellison", wins: 2, topCuts: 3, points: 40, commander: "Kraum, Ludevic's Opus / Tymna the Weaver" },
+    { name: "Tobias Quill", wins: 1, topCuts: 1, points: 21, commander: "Kinnan, Bonder Prodigy" },
+    { name: "Ines Varga", wins: 1, topCuts: 0, points: 1, commander: null },
+    { name: "Aiko Tanabe", wins: 0, topCuts: 2, points: 30, commander: null },
+    ...Array.from({ length: 4 }, (_, i) => ({ name: `Extra ${i}`, wins: 0, topCuts: 1, points: 7, commander: null })),
   ];
   data.risingPlayers = [
     { name: "Noor Haddad", reason: "first win", eventName: "Big **Event**", participantCount: 64 },
@@ -600,11 +600,11 @@ test("top players and rising players: line formats and caps", () => {
   ];
   const old = composePost(data, PLAIN).embeds;
   assert.deepEqual(lines(old, "Top players"), [
-    "1\\. Mara Ellison — 2 wins, 3 top cuts · Kraum / Tymna the Weaver",
-    "2\\. Tobias Quill — 1 win, 1 top cut · Kinnan, Bonder Prodigy",
-    "3\\. Ines Varga — 1 win",
-    "4\\. Aiko Tanabe — 2 top cuts",
-    "5\\. Extra 0 — 1 top cut",
+    "1\\. Mara Ellison — 2 wins, 3 top cuts, 40 points · Kraum / Tymna",
+    "2\\. Tobias Quill — 1 win, 1 top cut, 21 points · Kinnan, Bonder Prodigy",
+    "3\\. Ines Varga — 1 win, 1 point",
+    "4\\. Aiko Tanabe — 2 top cuts, 30 points",
+    "5\\. Extra 0 — 1 top cut, 7 points",
   ]);
   assert.deepEqual(lines(old, "Rising players"), [
     "Noor Haddad — first win · 64p Big Event",
@@ -614,14 +614,15 @@ test("top players and rising players: line formats and caps", () => {
 
   const { embeds } = composePost(data);
   assert.deepEqual(items(embeds, "Top players"), [
-    ["🥇 **Mara Ellison**", "🏆 2 wins · 🎯 3 top cuts · Kraum / Tymna the Weaver"],
-    ["🥈 **Tobias Quill**", "🏆 1 win · 🎯 1 top cut · Kinnan, Bonder Prodigy · 🔵 🟢"],
-    ["🥉 **Ines Varga**", "🏆 1 win"],
-    ["4️⃣ **Aiko Tanabe**", "🎯 2 top cuts"],
-    ["5️⃣ **Extra 0**", "🎯 1 top cut"],
+    ["🥇 **Mara Ellison**", "🏆 2 wins · 🎯 3 top cuts · 40 points · Kraum / Tymna"],
+    ["🥈 **Tobias Quill**", "🏆 1 win · 🎯 1 top cut · 21 points · Kinnan, Bonder Prodigy · 🔵 🟢"],
+    ["🥉 **Ines Varga**", "🏆 1 win · 1 point"],
+    ["4️⃣ **Aiko Tanabe**", "🎯 2 top cuts · 30 points"],
+    ["5️⃣ **Extra 0**", "🎯 1 top cut · 7 points"],
   ]);
   // The month is in the embed's title, so the field names don't repeat it.
-  assert.equal(field(embeds, "Top players")!.name, "👑 Top players");
+  // The header says how the list is ordered, and every line shows the three numbers it is ordered by.
+  assert.equal(field(embeds, "Top players")!.name, "👑 Top players (wins, then top cuts, then points)");
   assert.equal(field(embeds, "Rising players")!.name, "🌱 Rising players (first win or top cut in 3 years of data)");
   assert.deepEqual(items(embeds, "Rising players"), [
     ["**Noor Haddad**", "🏆 first win · 64 players · Big Event"],
@@ -653,9 +654,9 @@ test("medals: 🥇🥈🥉 then keycaps to 🔟, a number after that or when swi
   const twelve = items(composePost(data, { ...POST_CONFIG, mostPlayedMax: 12 }).embeds, "Most played");
   assert.deepEqual(twelve.map((it) => it[0]!.split(" ")[0]), ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟", "11\\.", "12\\."]);
   const off = composePost(data, { ...POST_CONFIG, medals: 0 });
-  assert.match(field(off.embeds, "Most played")!.value, /^1\\\. \*\*Kraum \/ Tymna the Weaver\*\*\n.+\n\n2\\\. /);
+  assert.match(field(off.embeds, "Most played")!.value, /^1\\\. \*\*Kraum \/ Tymna\*\*\n.+\n\n2\\\. /);
   // The preview shows plain numbers.
-  assert.match(off.text, /\n1\. Kraum \/ Tymna the Weaver\n157 cuts · 9\.2% of cuts vs 8\.5% of field · ⚪ 🔵 ⚫ 🔴\n/);
+  assert.match(off.text, /\n1\. Kraum \/ Tymna\n157 cuts · 9\.2% of cuts vs 8\.5% of field · ⚪ 🔵 ⚫ 🔴\n/);
   // Unranked sections never get one.
   for (const name of ["Winners", "Rising players", "Rising commanders", "Cooling commanders"]) {
     assert.doesNotMatch(field(composePost(data).embeds, name)!.value, /🥇|^1\\\./m, name);
@@ -701,7 +702,7 @@ test("color identity: circles in WUBRG order with a space between, a pair's unio
   const cfg = { ...POST_CONFIG, shareBars: 0 };
   assert.deepEqual(items(composePost(data, cfg).embeds, "Most played"), [
     ["🥇 **Sisay, Weatherlight Captain**", "10.0% · 50 entries · ⚪ 🔵 ⚫ 🔴 🟢"],
-    ["🥈 **Kraum / Tymna the Weaver**", "8.0% · 40 entries · ⚪ 🔵 ⚫ 🔴"],
+    ["🥈 **Kraum / Tymna**", "8.0% · 40 entries · ⚪ 🔵 ⚫ 🔴"],
     ["🥉 **Kinnan, Bonder Prodigy**", "6.0% · 30 entries · 🔵 🟢"],
     ["4️⃣ **Kozilek, the Great Distortion**", "4.0% · 20 entries · 🔘"],
     ["5️⃣ **Not A Card**", "2.0% · 10 entries"],
@@ -733,7 +734,7 @@ test("color identity: circles in WUBRG order with a space between, a pair's unio
 test("commandersShown: winners, top players, deck stats and trend rows that can be listed; no placeholder", () => {
   const data = loadFixture("pacific-northwest-2026-10");
   data.results = [{ ...data.results[0]!, result: "final drawn", resultCommanders: "Only In Results; unknown" }];
-  data.topPlayers = [{ name: "X", wins: 1, topCuts: 1, commander: "Only A Top Player's" }, { name: "Y", wins: 0, topCuts: 1, commander: null }];
+  data.topPlayers = [{ name: "X", wins: 1, topCuts: 1, points: 10, commander: "Only A Top Player's" }, { name: "Y", wins: 0, topCuts: 1, points: 5, commander: null }];
   data.trend = [
     { commander: "Trend Ten", lastMonthEntries: 10, prior3AvgEntries: 1, shareChange: 1, isNew: false, firstSeen: null },
     { commander: "Trend Nine", lastMonthEntries: 9, prior3AvgEntries: 1, shareChange: 1, isNew: false, firstSeen: null },
@@ -781,7 +782,7 @@ test("trim order: decoration first, then commanders bottom-up, then the player s
   assert.equal(others(ratio, "Top-cut"), others(full, "Top-cut"));
   const countOnly = at(contentLength(ratio) - 1);
   assert.doesNotMatch(value(countOnly, "Top-cut appearances"), /field/);
-  assert.match(value(countOnly, "Top-cut appearances"), /^🥇 \*\*Kraum \/ Tymna the Weaver\*\*\n157 cuts · ⚪ 🔵 ⚫ 🔴\n\n/);
+  assert.match(value(countOnly, "Top-cut appearances"), /^🥇 \*\*Kraum \/ Tymna\*\*\n157 cuts · ⚪ 🔵 ⚫ 🔴\n\n/);
   assert.equal(others(countOnly, "Top-cut"), others(full, "Top-cut"));
   // 3: the blank lines go. 4: the share bars. 5: the color symbols. No item has been dropped yet.
   const tight = at(contentLength(countOnly) - 1);
@@ -873,23 +874,23 @@ test("top-cut appearances: share of cuts against share of field, with shorter fo
   ];
   const old = (detail: number) => lines(composePost(data, { ...PLAIN, topCutDetail: detail }).embeds, "Top-cut appearances");
   assert.deepEqual(old(2), [
-    "1\\. Kraum / Tymna the Weaver — 20 cuts · 10.0% of cuts vs 8.0% of field",
+    "1\\. Kraum / Tymna — 20 cuts · 10.0% of cuts vs 8.0% of field",
     "2\\. Kinnan, Bonder Prodigy — 10 cuts · 5.0% of cuts vs 10.0% of field",
     "3\\. No Field Numbers — 3 cuts",
     "4\\. One Cut — 1 cut · 0.5% of cuts vs 0.1% of field",
   ]);
   assert.deepEqual(old(1), [
-    "1\\. Kraum / Tymna the Weaver — 20 cuts · 1.25× its field share",
+    "1\\. Kraum / Tymna — 20 cuts · 1.25× its field share",
     "2\\. Kinnan, Bonder Prodigy — 10 cuts · 0.50× its field share",
     "3\\. No Field Numbers — 3 cuts",
     "4\\. One Cut — 1 cut · 5.00× its field share",
   ]);
-  assert.deepEqual(old(0), ["1\\. Kraum / Tymna the Weaver — 20 cuts", "2\\. Kinnan, Bonder Prodigy — 10 cuts", "3\\. No Field Numbers — 3 cuts", "4\\. One Cut — 1 cut"]);
+  assert.deepEqual(old(0), ["1\\. Kraum / Tymna — 20 cuts", "2\\. Kinnan, Bonder Prodigy — 10 cuts", "3\\. No Field Numbers — 3 cuts", "4\\. One Cut — 1 cut"]);
 
   // The name, then the numbers and the colors on their own line.
   data.colors = { "Kinnan, Bonder Prodigy": "UG" };
   assert.deepEqual(items(composePost(data).embeds, "Top-cut appearances"), [
-    ["🥇 **Kraum / Tymna the Weaver**", "20 cuts · 10.0% of cuts vs 8.0% of field"],
+    ["🥇 **Kraum / Tymna**", "20 cuts · 10.0% of cuts vs 8.0% of field"],
     ["🥈 **Kinnan, Bonder Prodigy**", "10 cuts · 5.0% of cuts vs 10.0% of field · 🔵 🟢"],
     ["🥉 **No Field Numbers**", "3 cuts"],
     ["4️⃣ **One Cut**", "1 cut · 0.5% of cuts vs 0.1% of field"],
@@ -914,13 +915,30 @@ test("player names are cut at a word boundary, not mid-word", () => {
   // Event names keep the plain cut.
   assert.equal(sanitizeOrganizerText("Hooligan Riley Atkinson Crucible of Worlds Podcast", 32), "Hooligan Riley Atkinson Crucibl…");
   const data = loadFixture("pacific-northwest-2026-10");
-  data.topPlayers = [{ name: "Hooligan Riley Atkinson Crucible of Worlds Podcast", wins: 1, topCuts: 2, commander: null }];
-  assert.equal(field(composePost(data, PLAIN).embeds, "Top players")!.value, "1\\. Hooligan Riley Atkinson Crucible of… — 1 win, 2 top cuts");
-  assert.equal(field(composePost(data).embeds, "Top players")!.value, "🥇 **Hooligan Riley Atkinson Crucible of…**\n🏆 1 win · 🎯 2 top cuts");
+  data.topPlayers = [{ name: "Hooligan Riley Atkinson Crucible of Worlds Podcast", wins: 1, topCuts: 2, points: 14, commander: null }];
+  assert.equal(field(composePost(data, PLAIN).embeds, "Top players")!.value, "1\\. Hooligan Riley Atkinson Crucible of… — 1 win, 2 top cuts, 14 points");
+  assert.equal(field(composePost(data).embeds, "Top players")!.value, "🥇 **Hooligan Riley Atkinson Crucible of…**\n🏆 1 win · 🎯 2 top cuts · 14 points");
 });
 
 test("shortenCommander, sanitizeOrganizerText and monthlyAvg", () => {
-  assert.equal(shortenCommander("Kraum, Ludevic's Opus / Tymna the Weaver"), "Kraum / Tymna the Weaver");
+  assert.equal(shortenCommander("Kraum, Ludevic's Opus / Tymna the Weaver"), "Kraum / Tymna");
+  // A half with no comma has nothing to cut: it is shortened only when it has a nickname.
+  assert.equal(shortenCommander("Thrasios, Triton Hero / Vial Smasher the Fierce"), "Thrasios / Vial Smasher");
+  assert.equal(shortenCommander("Kodama of the East Tree / Sakashima of a Thousand Faces"), "Kodama / Sakashima");
+  assert.equal(shortenCommander("Jaheira, Friend of the Forest / Clan Crafter"), "Jaheira / Clan Crafter", "a Background stays as written");
+  assert.equal(shortenCommander("Rose Tyler / The Tenth Doctor"), "Rose Tyler / The Tenth Doctor");
+  // Nicknames are for pair halves only, and only for the exact name; a single commander is never shortened.
+  assert.equal(shortenCommander("Tymna the Weaver"), "Tymna the Weaver");
+  assert.equal(shortenCommander("Kinnan, Bonder Prodigy"), "Kinnan, Bonder Prodigy");
+  assert.equal(shortenCommander("Tymna the Weaver, Again / toString"), "Tymna the Weaver / toString");
+  // The list is one config entry.
+  assert.equal(shortenCommander("Kraum, Ludevic's Opus / Tymna the Weaver", {}), "Kraum / Tymna the Weaver");
+  assert.equal(shortenCommander("Clan Crafter / Jaheira, Friend of the Forest", { "Clan Crafter": "Crafter" }), "Crafter / Jaheira");
+  assert.equal(POST_CONFIG.pairNicknames["Tymna the Weaver"], "Tymna");
+  const nick = loadFixture("pacific-northwest-2026-10");
+  const plainNames = composePost(nick, { ...POST_CONFIG, pairNicknames: {} });
+  assert.match(plainNames.text, /\n🥇 Kraum \/ Tymna the Weaver\n/);
+  assert.doesNotMatch(composePost(nick).text, /Tymna the Weaver/);
   assert.equal(shortenCommander("Kinnan, Bonder Prodigy"), "Kinnan, Bonder Prodigy");
   assert.equal(sanitizeOrganizerText("  **Big** <@1> @everyone  event  ", 50), "Big 1 everyone event");
   assert.equal(sanitizeOrganizerText("see https://x.example/y and discord.gg/zz", 50), "see and");

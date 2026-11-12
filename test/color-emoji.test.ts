@@ -136,18 +136,18 @@ test("a post with pies: one emoji where the circles were, the same lines, and th
   assert.equal(pieCount(global), 35);
   assert.equal(pieCount(composePost(loadFixture("si-2026-10"), POST_CONFIG, { colorEmoji: ALL_PIES }).embeds), 0);
   const mostPlayed = global.flatMap((e) => e.fields).find((f) => f.name.endsWith("Most played"))!.value.split("\n\n");
-  assert.equal(mostPlayed[0], "🥇 **Kraum / Tymna the Weaver**\n▰▰▰▰▰▰▰▰▰▰ 8.3% · 595 entries · <:ci_wubr:1300000000000000026>");
+  assert.equal(mostPlayed[0], "🥇 **Kraum / Tymna**\n▰▰▰▰▰▰▰▰▰▰ 8.3% · 595 entries · <:ci_wubr:1300000000000000026>");
   assert.equal(mostPlayed[1], "🥈 **Kinnan, Bonder Prodigy**\n▰▰▰▰▰▰▰▰▰▱ 7.5% · 536 entries · <:ci_ug:1300000000000000012>");
   // The headline never shows colors.
   assert.doesNotMatch(global[0]!.description!, /<:ci_|[⚪🔵⚫🔴🟢🔘]/u);
 });
 
 test("pies cost no line: the budget counts a pie as its circles", () => {
-  // The global post is over the budget as sent (4,969) and under it as read (4,187): it keeps every pie.
+  // The global post is over the budget as sent (4,972) and under it as read (4,190): it keeps every pie.
   const data = loadFixture("global-2026-10");
   const sent = composePost(data, POST_CONFIG, { colorEmoji: ALL_PIES }).embeds;
-  assert.equal(contentLength(composePost(data).embeds), 4187);
-  assert.equal(contentLength(sent), 4969);
+  assert.equal(contentLength(composePost(data).embeds), 4190);
+  assert.equal(contentLength(sent), 4972);
   assert.ok(contentLength(sent) > POST_CONFIG.contentBudget && contentLength(asCircles(sent)) <= POST_CONFIG.contentBudget);
   // Under budget pressure the same things are trimmed with pies as without.
   for (const contentBudget of [4000, 3500, 3000, 2000, 1000]) {
@@ -161,9 +161,9 @@ test("pies go back to circles when the message as sent would be too long or a fi
   const circles = composePost(data).embeds;
   assert.equal(POST_CONFIG.messageMax, 5900);
   assert.ok(POST_CONFIG.messageMax < DISCORD_LIMITS.total);
-  // As sent the post is 4,969: with a lower ceiling the circles are sent, and nothing else is given up.
-  assert.deepEqual(composePost(data, { ...POST_CONFIG, messageMax: 4968 }, { colorEmoji: ALL_PIES }).embeds, circles);
-  assert.equal(pieCount(composePost(data, { ...POST_CONFIG, messageMax: 4969 }, { colorEmoji: ALL_PIES }).embeds), 35);
+  // As sent the post is 4,972: with a lower ceiling the circles are sent, and nothing else is given up.
+  assert.deepEqual(composePost(data, { ...POST_CONFIG, messageMax: 4971 }, { colorEmoji: ALL_PIES }).embeds, circles);
+  assert.equal(pieCount(composePost(data, { ...POST_CONFIG, messageMax: 4972 }, { colorEmoji: ALL_PIES }).embeds), 35);
   // Markup so long that five Winners lines pass 1,024 characters: circles again, and Winners keeps its five lines.
   const huge = Object.fromEntries(Object.keys(ALL_PIES).map((k) => [k, `<:ci_${"x".repeat(150)}:1>`]));
   assert.deepEqual(composePost(data, { ...POST_CONFIG, messageMax: 100_000 }, { colorEmoji: huge }).embeds, circles);
@@ -192,7 +192,7 @@ test("pies: an identity without one keeps its circles; the switches turn them of
   const some = { WUBR: ALL_PIES.WUBR!, "": ALL_PIES[""]! };
   const { embeds, text } = composePost(data, POST_CONFIG, { colorEmoji: some });
   const winners = embeds.flatMap((e) => e.fields).find((f) => f.name.endsWith("Winners (largest events)"))!.value.split("\n\n");
-  assert.equal(winners[0], "**Guardian Games CEDH Monthly PDX** · 66 players\n🏆 Rafael Montoya on Kraum / Tymna the Weaver · <:ci_wubr:1300000000000000026>");
+  assert.equal(winners[0], "**Guardian Games CEDH Monthly PDX** · 66 players\n🏆 Rafael Montoya on Kraum / Tymna · <:ci_wubr:1300000000000000026>");
   assert.equal(winners[1], "**Gem State CEDH Ad Naus for a Cause!** · 44 players\n🏆 Noor Haddad on Tasigur, the Golden Fang · 🔵 ⚫ 🟢");
   assert.equal(text, composePost(data).text);
   // colorPies off: the map is ignored. colorSquares off: no colors of either kind.

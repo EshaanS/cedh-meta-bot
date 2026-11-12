@@ -91,6 +91,15 @@ export const POST_CONFIG = {
   listNumberSuffix: "\\.",
   /** Icons on lines ("" for none): wins, top cuts, a new commander, a rising one, a cooling one. */
   lineIcons: { win: "🏆", topCut: "🎯", newCommander: "🆕", rising: "🔥", cooling: "🧊" },
+  /** Partner pairs are shortened so two names fit a line: each half is cut at its first comma ("Kraum, Ludevic's
+   *  Opus" is "Kraum"). A half with no comma has nothing to cut, so the ones with a well-known short form are
+   *  listed here ("Tymna the Weaver" is "Tymna"). Halves not listed stay as written (Backgrounds, Doctors and
+   *  companions are short already). Single commanders are always shown in full. */
+  pairNicknames: {
+    "Tymna the Weaver": "Tymna", "Vial Smasher the Fierce": "Vial Smasher", "Sakashima of a Thousand Faces": "Sakashima",
+    "Kodama of the East Tree": "Kodama", "Sidar Kondo of Jamuraa": "Sidar Kondo", "Prava of the Steel Legion": "Prava",
+    "Durnan of the Yawning Portal": "Durnan",
+  } as Record<string, string>,
   /** Bold event names in Winners, player names in the player sections and commander names in the deck sections. */
   boldNames: 1,
   /** Winners: the event and its size on one line, the winner on the next. 0 is the single "• 150p · event ·
@@ -143,7 +152,9 @@ export type PostData = {
     winnerName: string | null; winnerHidden: boolean;
   }[];
   /** Opted-out and removed players never appear in these two lists (filtered in SQL). */
-  topPlayers: { name: string; wins: number; topCuts: number; commander: string | null }[];
+  /** points: 5 per win and 1 per draw over all of the player's games in the region's qualifying events that
+   *  month; it orders players with the same wins and top cuts (stat_top_players, migration 018). */
+  topPlayers: { name: string; wins: number; topCuts: number; points: number; commander: string | null }[];
   risingPlayers: { name: string; reason: string; eventName: string | null; participantCount: number }[];
   /** fieldEntries and the totals count entries with a commander in the month's events that had a top cut. */
   topCutAppearances: { commander: string; topCutEntries: number; fieldEntries: number; totalTopCutEntries: number; totalFieldEntries: number }[];
@@ -196,12 +207,13 @@ export function sanitizeOrganizerText(text: string, max: number, opts: { wholeWo
 /** Wording for stat_rising_players reasons that read better spelled out (the 5 is that function's cutoff). */
 const RISING_REASON_TEXT: Record<string, string> = { "early top cut": "top cut in first 5 events" };
 
-/** Partner pairs become "Kraum / Tymna the Weaver" (each half cut at its first comma); singles stay whole. */
-export function shortenCommander(name: string): string {
+/** Partner pairs become "Kraum / Tymna": each half is its nickname when it has one (pairNicknames), else cut
+ *  at its first comma. Singles stay whole. */
+export function shortenCommander(name: string, nicknames: Record<string, string> = POST_CONFIG.pairNicknames): string {
   if (!name.includes(" / ")) return name;
   return name
     .split(" / ")
-    .map((half) => half.split(",")[0]!.trim())
+    .map((half) => (Object.hasOwn(nicknames, half.trim()) ? nicknames[half.trim()]! : half.split(",")[0]!.trim()))
     .join(" / ");
 }
 
@@ -385,7 +397,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows, pi
   };
   /** " · ⚪ 🔵" to end a line of details, or nothing. */
   const withColors = (commander: string) => (colors(commander) ? ` · ${colors(commander)}` : "");
-  const name = (commander: string) => bold(shortenCommander(commander));
+  const name = (commander: string) => bold(shortenCommander(commander, c.pairNicknames));
   /** A commander item: its name on line 1 and the details with the colors on line 2, or all on one line. */
   const deckItem = (commander: string, detail: string, lead = "") =>
     two ? [`${lead}${name(commander)}`, `${detail}${withColors(commander)}`] : [`${lead}${name(commander)} — ${detail}${withColors(commander)}`];
@@ -403,7 +415,7 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows, pi
 
   // People. The embed's title carries the month, so these names don't repeat it.
   const winners = rows.winners.map((r) => {
-    const outcome = outcomeText(r, rows.playerText, (x) => `${shortenCommander(x)}${withColors(x)}`, (who) => who);
+    const outcome = outcomeText(r, rows.playerText, (x) => `${shortenCommander(x, c.pairNicknames)}${withColors(x)}`, (who) => who);
     if (c.winnersTwoLines < 1) return [`• ${r.participantCount}p · ${eventText(r.eventName, c)} · ${outcome}`];
     return [`${bold(eventText(r.eventName, c))} · ${plural(r.participantCount, "player", "players")}`, `${r.result === "winner" ? icon("win") : ""}${outcome}`];
   });
@@ -412,11 +424,11 @@ function buildSections(data: PostData, c: PostConfig, caps: Caps, rows: Rows, pi
   if (rows.topPlayers.length) {
     const iconsOn = c.lineIcons.win !== "" || c.lineIcons.topCut !== "";
     s.push({
-      key: "topPlayers", block: "people", ranked: true, name: "Top players",
+      key: "topPlayers", block: "people", ranked: true, name: "Top players (wins, then top cuts, then points)",
       items: rows.topPlayers.map((p) => {
-        const record = [p.wins > 0 ? `${icon("win")}${plural(p.wins, "win", "wins")}` : "", p.topCuts > 0 ? `${icon("topCut")}${plural(p.topCuts, "top cut", "top cuts")}` : ""]
+        const record = [p.wins > 0 ? `${icon("win")}${plural(p.wins, "win", "wins")}` : "", p.topCuts > 0 ? `${icon("topCut")}${plural(p.topCuts, "top cut", "top cuts")}` : "", plural(p.points, "point", "points")]
           .filter(Boolean).join(iconsOn ? " · " : ", ");
-        const deck = p.commander ? ` · ${shortenCommander(p.commander)}${withColors(p.commander)}` : "";
+        const deck = p.commander ? ` · ${shortenCommander(p.commander, c.pairNicknames)}${withColors(p.commander)}` : "";
         return two ? [bold(p.name), `${record}${deck}`] : [`${bold(p.name)} — ${record}${deck}`];
       }),
     });
@@ -518,15 +530,15 @@ function headlineLines(data: PostData, c: PostConfig, rows: Rows): string[] {
   const [lead, next] = rows.topCut;
   const mostPlayed = rows.most[0];
   if (lead && lead.topCutEntries >= c.headlineMinCuts && (!next || lead.topCutEntries > next.topCutEntries)) {
-    out.push(fill(copy.topCut, { icon: emoji.topCut, commander: shortenCommander(lead.commander), cuts: String(lead.topCutEntries) }));
+    out.push(fill(copy.topCut, { icon: emoji.topCut, commander: shortenCommander(lead.commander, c.pairNicknames), cuts: String(lead.topCutEntries) }));
   } else if (mostPlayed) {
-    out.push(fill(copy.mostPlayed, { icon: emoji.mostPlayed, commander: shortenCommander(mostPlayed.commander), share: pct(mostPlayed.metaShare), month: monthOf(data.month) }));
+    out.push(fill(copy.mostPlayed, { icon: emoji.mostPlayed, commander: shortenCommander(mostPlayed.commander, c.pairNicknames), share: pct(mostPlayed.metaShare), month: monthOf(data.month) }));
   }
 
   const risingCommander = rows.rising[0];
   const risingPlayer = rows.risingPlayers[0];
   if (risingCommander) {
-    out.push(fill(copy.risingCommander, { icon: emoji.risingCommanders, commander: shortenCommander(risingCommander.commander), detail: trendDetail(data, c, risingCommander) }));
+    out.push(fill(copy.risingCommander, { icon: emoji.risingCommanders, commander: shortenCommander(risingCommander.commander, c.pairNicknames), detail: trendDetail(data, c, risingCommander) }));
   } else if (risingPlayer) {
     out.push(fill(copy.risingPlayer, {
       icon: emoji.risingPlayers, player: risingPlayer.name, reason: RISING_REASON_TEXT[risingPlayer.reason] ?? risingPlayer.reason,
@@ -734,8 +746,8 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
     select event_name, participant_count, result, result_commanders, winner_name, winner_hidden from stat_month_results(${r}, ${end}::date, ${c.winnersMax}::int)`;
   const [playerCov] = await sql<{ pct_entries_with_player: number | null }[]>`
     select pct_entries_with_player from stat_player_coverage(${r}, ${end}::date)`;
-  const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; top_commander: string | null }[]>`
-    select player_name, wins, top_cuts, top_commander from stat_top_players(${r}, ${end}::date, ${c.topPlayersMax}::int)`;
+  const topPlayers = await sql<{ player_name: string; wins: string; top_cuts: string; points: string; top_commander: string | null }[]>`
+    select player_name, wins, top_cuts, points, top_commander from stat_top_players(${r}, ${end}::date, ${c.topPlayersMax}::int)`;
   const risingPlayers = await sql<{ player_name: string; reason: string; event_name: string | null; participant_count: number }[]>`
     select player_name, reason, event_name, participant_count from stat_rising_players(${r}, ${end}::date, ${c.risingPlayersMax}::int)`;
   const topCut = await sql<{ commander: string; top_cut_entries: string; field_entries: string; total_top_cut_entries: string; total_field_entries: string }[]>`
@@ -773,7 +785,7 @@ export async function loadPostData(sql: Sql, regionId: string, month: string): P
       eventName: x.event_name, participantCount: x.participant_count, result: x.result, resultCommanders: x.result_commanders,
       winnerName: x.winner_name, winnerHidden: x.winner_hidden,
     })),
-    topPlayers: topPlayers.map((p) => ({ name: p.player_name, wins: Number(p.wins), topCuts: Number(p.top_cuts), commander: p.top_commander })),
+    topPlayers: topPlayers.map((p) => ({ name: p.player_name, wins: Number(p.wins), topCuts: Number(p.top_cuts), points: Number(p.points), commander: p.top_commander })),
     risingPlayers: risingPlayers.map((p) => ({ name: p.player_name, reason: p.reason, eventName: p.event_name, participantCount: p.participant_count })),
     topCutAppearances: topCut.map((t) => ({
       commander: t.commander, topCutEntries: Number(t.top_cut_entries), fieldEntries: Number(t.field_entries),

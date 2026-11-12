@@ -33,31 +33,36 @@
       "name": "Felix Brandt",
       "wins": 1,
       "topCuts": 1,
+      "points": 17,
       "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh"
-    },
-    {
-      "name": "Callum Reyes",
-      "wins": 0,
-      "topCuts": 1,
-      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
-    },
-    {
-      "name": "Yuki Hoshino",
-      "wins": 0,
-      "topCuts": 1,
-      "commander": "Kefka, Court Mage"
-    },
-    {
-      "name": "Bram Verhoeven",
-      "wins": 0,
-      "topCuts": 1,
-      "commander": "Dack Fayden, Helping Hand"
     },
     {
       "name": "Zofia Kaminska",
       "wins": 0,
       "topCuts": 1,
+      "points": 16,
       "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh"
+    },
+    {
+      "name": "Yuki Hoshino",
+      "wins": 0,
+      "topCuts": 1,
+      "points": 13,
+      "commander": "Kefka, Court Mage"
+    },
+    {
+      "name": "Anika Raman",
+      "wins": 0,
+      "topCuts": 1,
+      "points": 11,
+      "commander": "Ob Nixilis, Captive Kingpin"
+    },
+    {
+      "name": "Bram Verhoeven",
+      "wins": 0,
+      "topCuts": 1,
+      "points": 11,
+      "commander": "Dack Fayden, Helping Hand"
     }
   ],
   "risingPlayers": [

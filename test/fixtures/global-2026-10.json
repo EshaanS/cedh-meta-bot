@@ -65,31 +65,36 @@
       "name": "Soren Blake",
       "wins": 5,
       "topCuts": 5,
+      "points": 100,
       "commander": "Thrasios, Triton Hero / Tymna the Weaver"
     },
     {
       "name": "Priya Nandakumar",
       "wins": 3,
       "topCuts": 4,
+      "points": 68,
       "commander": "King T'Challa"
     },
     {
       "name": "Hugo Lindqvist",
       "wins": 2,
       "topCuts": 4,
+      "points": 55,
       "commander": null
     },
     {
       "name": "Camille Rousseau",
       "wins": 2,
       "topCuts": 3,
+      "points": 53,
       "commander": "Crystal, Inhuman Princess"
     },
     {
-      "name": "Mara Ellison",
+      "name": "Elias Thornbury",
       "wins": 2,
       "topCuts": 2,
-      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver"
+      "points": 54,
+      "commander": "Thrasios, Triton Hero / Tymna the Weaver"
     }
   ],
   "risingPlayers": [

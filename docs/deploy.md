@@ -158,6 +158,23 @@ once per Discord application (a test application and a production one each need 
 Then run `/preview` and check the pies on a light and a dark theme, on desktop and on a phone: the white wedge
 on light, the black wedge on dark, and whether four and five colors can be told apart at message size.
 
+## Top players by points (migration 018)
+
+Players with the same wins and top cuts are ordered by the points they earned that month (5 per win, 1 per
+draw, over all their games in the region's qualifying events), then by the largest event they won or cut, then
+by name. The header says so and every line shows the points. Partner pairs also use short names for halves
+that have no comma to cut at (Kraum / Tymna in place of Kraum / Tymna the Weaver); the list is
+`pairNicknames` in `POST_CONFIG`.
+
+```
+npm run migrate
+```
+
+Run it **before** deploying this version. The new code reads a `points` column that only the new function
+returns, so the new code on the old function fails (`/preview` answers "Something went wrong" and the cron
+posts nothing). The old code on the new function keeps working, so there is no gap in between. The commands
+didn't change, so `register-commands` is not needed.
+
 ## Player data and opt-outs
 Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,
 keep names current, and honor privacy requests (`docs/permissions.md`).
