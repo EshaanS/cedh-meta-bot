@@ -1,20 +1,8 @@
 {
   "month": "2026-10",
-  "requested": {
+  "region": {
     "id": "g:100000000000000001:0a1b2c3d",
     "label": "Seattle Metro"
-  },
-  "resolved": {
-    "id": "g:100000000000000001:0a1b2c3d",
-    "label": "Seattle Metro",
-    "stepsUp": 0,
-    "reportable": false
-  },
-  "statsRegion": {
-    "id": "us-wa",
-    "label": "Washington (United States)",
-    "shortLabel": "Washington",
-    "reportable": true
   },
   "scene": {
     "events": 1,
@@ -26,8 +14,8 @@
     "drawRate": 0.2905027932960894
   },
   "coverage": {
-    "qualifyingEvents": 14,
-    "pctEntriesWithLeader": 73.85057471264368,
+    "qualifyingEvents": 1,
+    "pctEntriesWithLeader": 100,
     "pctEntriesWithPlayer": 100
   },
   "results": [
@@ -36,39 +24,86 @@
       "participantCount": 43,
       "result": "winner",
       "resultCommanders": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
-      "winnerName": "Mara Ellison",
+      "winnerName": "Felix Brandt",
       "winnerHidden": false
     }
   ],
   "topPlayers": [
     {
-      "name": "Mara Ellison",
+      "name": "Felix Brandt",
       "wins": 1,
       "topCuts": 1,
       "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh"
     },
     {
-      "name": "Tobias Quill",
+      "name": "Callum Reyes",
+      "wins": 0,
+      "topCuts": 1,
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept"
+    },
+    {
+      "name": "Yuki Hoshino",
       "wins": 0,
       "topCuts": 1,
       "commander": "Kefka, Court Mage"
     },
     {
-      "name": "Ines Varga",
+      "name": "Bram Verhoeven",
       "wins": 0,
       "topCuts": 1,
       "commander": "Dack Fayden, Helping Hand"
+    },
+    {
+      "name": "Zofia Kaminska",
+      "wins": 0,
+      "topCuts": 1,
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh"
     }
   ],
   "risingPlayers": [
     {
-      "name": "Noor Haddad",
-      "reason": "first top cut",
+      "name": "Felix Brandt",
+      "reason": "first win",
       "eventName": "Mind Full Games: October's Monthly 1k Event",
       "participantCount": 43
     }
   ],
   "topCutAppearances": [
+    {
+      "commander": "Magda, Brazen Outlaw",
+      "topCutEntries": 1,
+      "fieldEntries": 3,
+      "totalTopCutEntries": 10,
+      "totalFieldEntries": 43
+    },
+    {
+      "commander": "Ob Nixilis, Captive Kingpin",
+      "topCutEntries": 1,
+      "fieldEntries": 3,
+      "totalTopCutEntries": 10,
+      "totalFieldEntries": 43
+    },
+    {
+      "commander": "Vraska, Soul of Stone",
+      "topCutEntries": 1,
+      "fieldEntries": 3,
+      "totalTopCutEntries": 10,
+      "totalFieldEntries": 43
+    },
+    {
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
+      "topCutEntries": 1,
+      "fieldEntries": 2,
+      "totalTopCutEntries": 10,
+      "totalFieldEntries": 43
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "topCutEntries": 1,
+      "fieldEntries": 2,
+      "totalTopCutEntries": 10,
+      "totalFieldEntries": 43
+    },
     {
       "commander": "Dack Fayden, Helping Hand",
       "topCutEntries": 1,
@@ -84,13 +119,6 @@
       "totalFieldEntries": 43
     },
     {
-      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
-      "topCutEntries": 1,
-      "fieldEntries": 2,
-      "totalTopCutEntries": 10,
-      "totalFieldEntries": 43
-    },
-    {
       "commander": "Kefka, Court Mage",
       "topCutEntries": 1,
       "fieldEntries": 1,
@@ -101,13 +129,6 @@
       "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
       "topCutEntries": 1,
       "fieldEntries": 1,
-      "totalTopCutEntries": 10,
-      "totalFieldEntries": 43
-    },
-    {
-      "commander": "Magda, Brazen Outlaw",
-      "topCutEntries": 1,
-      "fieldEntries": 3,
       "totalTopCutEntries": 10,
       "totalFieldEntries": 43
     },
@@ -117,389 +138,739 @@
       "fieldEntries": 1,
       "totalTopCutEntries": 10,
       "totalFieldEntries": 43
-    },
-    {
-      "commander": "Ob Nixilis, Captive Kingpin",
-      "topCutEntries": 1,
-      "fieldEntries": 3,
-      "totalTopCutEntries": 10,
-      "totalFieldEntries": 43
-    },
-    {
-      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
-      "topCutEntries": 1,
-      "fieldEntries": 2,
-      "totalTopCutEntries": 10,
-      "totalFieldEntries": 43
-    },
-    {
-      "commander": "Vraska, Soul of Stone",
-      "topCutEntries": 1,
-      "fieldEntries": 3,
-      "totalTopCutEntries": 10,
-      "totalFieldEntries": 43
     }
   ],
   "metaShare": [
     {
-      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
-      "entries": 60,
-      "metaShare": 0.07317073170731707
-    },
-    {
-      "commander": "Kinnan, Bonder Prodigy",
-      "entries": 55,
-      "metaShare": 0.06707317073170732
-    },
-    {
       "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
-      "entries": 51,
-      "metaShare": 0.06219512195121951
-    },
-    {
-      "commander": "Kenrith, the Returned King",
-      "entries": 40,
-      "metaShare": 0.04878048780487805
+      "entries": 4,
+      "metaShare": 0.09302325581395349,
+      "topCuts": 0
     },
     {
       "commander": "Magda, Brazen Outlaw",
-      "entries": 33,
-      "metaShare": 0.04024390243902439
-    },
-    {
-      "commander": "Sisay, Weatherlight Captain",
-      "entries": 30,
-      "metaShare": 0.036585365853658534
-    },
-    {
-      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
-      "entries": 29,
-      "metaShare": 0.03536585365853658
-    },
-    {
-      "commander": "Etali, Primal Conqueror",
-      "entries": 21,
-      "metaShare": 0.025609756097560974
-    },
-    {
-      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
-      "entries": 21,
-      "metaShare": 0.025609756097560974
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
-      "entries": 21,
-      "metaShare": 0.025609756097560974
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
-      "entries": 19,
-      "metaShare": 0.023170731707317073
-    },
-    {
-      "commander": "Kefka, Court Mage",
-      "entries": 18,
-      "metaShare": 0.02195121951219512
-    },
-    {
-      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
-      "entries": 17,
-      "metaShare": 0.020731707317073172
+      "entries": 3,
+      "metaShare": 0.06976744186046512,
+      "topCuts": 1
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
-      "entries": 16,
-      "metaShare": 0.01951219512195122
+      "entries": 3,
+      "metaShare": 0.06976744186046512,
+      "topCuts": 1
     },
     {
-      "commander": "Scion of the Ur-Dragon",
-      "entries": 15,
-      "metaShare": 0.018292682926829267
-    },
-    {
-      "commander": "Tivit, Seller of Secrets",
-      "entries": 15,
-      "metaShare": 0.018292682926829267
-    },
-    {
-      "commander": "Crystal, Inhuman Princess",
-      "entries": 14,
-      "metaShare": 0.01707317073170732
-    },
-    {
-      "commander": "Tayam, Luminous Enigma",
-      "entries": 14,
-      "metaShare": 0.01707317073170732
-    },
-    {
-      "commander": "Chatterfang, Squirrel General",
-      "entries": 11,
-      "metaShare": 0.013414634146341463
-    },
-    {
-      "commander": "Helga, Skittish Seer",
-      "entries": 9,
-      "metaShare": 0.01097560975609756
-    }
-  ],
-  "ppg": [
-    {
-      "commander": "Chatterfang, Squirrel General",
-      "entries": 11,
-      "ppg": 1.7804878048780488,
-      "shrunkPpg": 1.4382376081825334
-    },
-    {
-      "commander": "Kinnan, Bonder Prodigy",
-      "entries": 55,
-      "ppg": 1.4933333333333334,
-      "shrunkPpg": 1.4284444444444446
-    },
-    {
-      "commander": "Kefka, Court Mage",
-      "entries": 18,
-      "ppg": 1.564102564102564,
-      "shrunkPpg": 1.3987854251012146
+      "commander": "Vraska, Soul of Stone",
+      "entries": 3,
+      "metaShare": 0.06976744186046512,
+      "topCuts": 1
     },
     {
       "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
-      "entries": 21,
-      "ppg": 1.4943820224719102,
-      "shrunkPpg": 1.3751712798026858
-    },
-    {
-      "commander": "Kenrith, the Returned King",
-      "entries": 40,
-      "ppg": 1.3818181818181818,
-      "shrunkPpg": 1.3378787878787881
-    },
-    {
-      "commander": "Crystal, Inhuman Princess",
-      "entries": 14,
-      "ppg": 1.4426229508196722,
-      "shrunkPpg": 1.3293153326904534
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
-      "entries": 21,
-      "ppg": 1.3763440860215055,
-      "shrunkPpg": 1.3147128245476003
-    },
-    {
-      "commander": "Magda, Brazen Outlaw",
-      "entries": 33,
-      "ppg": 1.336,
-      "shrunkPpg": 1.3035471698113206
-    },
-    {
-      "commander": "Tivit, Seller of Secrets",
-      "entries": 15,
-      "ppg": 1.3278688524590163,
-      "shrunkPpg": 1.2833723653395785
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
-      "entries": 19,
-      "ppg": 1.2873563218390804,
-      "shrunkPpg": 1.2681992337164751
-    },
-    {
-      "commander": "Scion of the Ur-Dragon",
-      "entries": 15,
-      "ppg": 1.2698412698412698,
-      "shrunkPpg": 1.2585034013605443
+      "entries": 2,
+      "metaShare": 0.046511627906976744,
+      "topCuts": 1
     },
     {
       "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
-      "entries": 29,
-      "ppg": 1.2520325203252032,
-      "shrunkPpg": 1.2512029201924673
+      "entries": 2,
+      "metaShare": 0.046511627906976744,
+      "topCuts": 1
     },
     {
       "commander": "Sisay, Weatherlight Captain",
-      "entries": 30,
-      "ppg": 1.2222222222222223,
-      "shrunkPpg": 1.2333333333333334
+      "entries": 2,
+      "metaShare": 0.046511627906976744,
+      "topCuts": 0
     },
     {
-      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
-      "entries": 17,
-      "ppg": 1.1830985915492958,
-      "shrunkPpg": 1.219261515036163
+      "commander": "Super-Skrull",
+      "entries": 2,
+      "metaShare": 0.046511627906976744,
+      "topCuts": 0
     },
     {
-      "commander": "Etali, Primal Conqueror",
-      "entries": 21,
-      "ppg": 1.188235294117647,
-      "shrunkPpg": 1.218364418938307
+      "commander": "Dack Fayden, Helping Hand",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 1
     },
     {
-      "commander": "Tayam, Luminous Enigma",
-      "entries": 14,
-      "ppg": 1.1551724137931034,
-      "shrunkPpg": 1.2109533468559837
+      "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 1
     },
     {
-      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
-      "entries": 51,
-      "ppg": 1.1941747572815533,
-      "shrunkPpg": 1.2099001777656229
+      "commander": "Kefka, Court Mage",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 1
     },
     {
       "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
-      "entries": 60,
-      "ppg": 1.08300395256917,
-      "shrunkPpg": 1.1247529644268774
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 1
     },
     {
-      "commander": "Ob Nixilis, Captive Kingpin",
-      "entries": 16,
-      "ppg": 0.7636363636363637,
-      "shrunkPpg": 1.0338383838383838
-    }
-  ],
-  "conversion": [
-    {
-      "commander": "Kefka, Court Mage",
-      "entriesInCutEvents": 17,
-      "topCutEntries": 7,
-      "conversion": 0.4117647058823529
-    },
-    {
-      "commander": "Kinnan, Bonder Prodigy",
-      "entriesInCutEvents": 52,
-      "topCutEntries": 20,
-      "conversion": 0.38461538461538464
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
-      "entriesInCutEvents": 19,
-      "topCutEntries": 7,
-      "conversion": 0.3684210526315789
-    },
-    {
-      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
-      "entriesInCutEvents": 56,
-      "topCutEntries": 20,
-      "conversion": 0.35714285714285715
+      "commander": "Magus Lucea Kane",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 1
     },
     {
       "commander": "Crystal, Inhuman Princess",
-      "entriesInCutEvents": 14,
-      "topCutEntries": 5,
-      "conversion": 0.35714285714285715
-    },
-    {
-      "commander": "Kenrith, the Returned King",
-      "entriesInCutEvents": 40,
-      "topCutEntries": 14,
-      "conversion": 0.35
-    },
-    {
-      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
-      "entriesInCutEvents": 21,
-      "topCutEntries": 7,
-      "conversion": 0.3333333333333333
-    },
-    {
-      "commander": "Etali, Primal Conqueror",
-      "entriesInCutEvents": 19,
-      "topCutEntries": 6,
-      "conversion": 0.3157894736842105
-    },
-    {
-      "commander": "Sisay, Weatherlight Captain",
-      "entriesInCutEvents": 29,
-      "topCutEntries": 9,
-      "conversion": 0.3103448275862069
-    },
-    {
-      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
-      "entriesInCutEvents": 20,
-      "topCutEntries": 6,
-      "conversion": 0.3
-    },
-    {
-      "commander": "Chatterfang, Squirrel General",
-      "entriesInCutEvents": 10,
-      "topCutEntries": 3,
-      "conversion": 0.3
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
     },
     {
       "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
-      "entriesInCutEvents": 17,
-      "topCutEntries": 5,
-      "conversion": 0.29411764705882354
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
     },
     {
-      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
-      "entriesInCutEvents": 28,
-      "topCutEntries": 8,
-      "conversion": 0.2857142857142857
+      "commander": "Etali, Primal Conqueror",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
+    },
+    {
+      "commander": "Jaheira, Friend of the Forest / Street Urchin",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
+    },
+    {
+      "commander": "Jhoira, Ageless Innovator",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
+    },
+    {
+      "commander": "Kinnan, Bonder Prodigy",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
+    },
+    {
+      "commander": "Marath, Will of the Wild",
+      "entries": 1,
+      "metaShare": 0.023255813953488372,
+      "topCuts": 0
+    }
+  ],
+  "ppg": [],
+  "conversion": [],
+  "baselineConversion": null,
+  "trend": [
+    {
+      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
+      "lastMonthEntries": 4,
+      "prior3AvgEntries": 3.3333333333333335,
+      "shareChange": 0.40465116279069746,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
     },
     {
       "commander": "Magda, Brazen Outlaw",
-      "entriesInCutEvents": 30,
-      "topCutEntries": 8,
-      "conversion": 0.26666666666666666
-    },
-    {
-      "commander": "Scion of the Ur-Dragon",
-      "entriesInCutEvents": 15,
-      "topCutEntries": 4,
-      "conversion": 0.26666666666666666
-    },
-    {
-      "commander": "Rograkh, Son of Rohgahh / Thrasios, Triton Hero",
-      "entriesInCutEvents": 47,
-      "topCutEntries": 12,
-      "conversion": 0.2553191489361702
-    },
-    {
-      "commander": "Tivit, Seller of Secrets",
-      "entriesInCutEvents": 14,
-      "topCutEntries": 3,
-      "conversion": 0.21428571428571427
-    },
-    {
-      "commander": "Tayam, Luminous Enigma",
-      "entriesInCutEvents": 13,
-      "topCutEntries": 1,
-      "conversion": 0.07692307692307693
+      "lastMonthEntries": 3,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareChange": 1.1069767441860465,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     },
     {
       "commander": "Ob Nixilis, Captive Kingpin",
-      "entriesInCutEvents": 15,
-      "topCutEntries": 1,
-      "conversion": 0.06666666666666667
+      "lastMonthEntries": 3,
+      "prior3AvgEntries": 1.3333333333333333,
+      "shareChange": 1.633720930232558,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Vraska, Soul of Stone",
+      "lastMonthEntries": 3,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2026-09-26"
+    },
+    {
+      "commander": "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh",
+      "lastMonthEntries": 2,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": 2.511627906976744,
+      "isNew": false,
+      "firstSeen": "2025-05-31"
+    },
+    {
+      "commander": "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept",
+      "lastMonthEntries": 2,
+      "prior3AvgEntries": 1,
+      "shareChange": 1.3410852713178292,
+      "isNew": false,
+      "firstSeen": "2025-06-11"
+    },
+    {
+      "commander": "Sisay, Weatherlight Captain",
+      "lastMonthEntries": 2,
+      "prior3AvgEntries": 3,
+      "shareChange": -0.21963824289405687,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Super-Skrull",
+      "lastMonthEntries": 2,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": 6.023255813953488,
+      "isNew": false,
+      "firstSeen": "2026-06-27"
+    },
+    {
+      "commander": "Crystal, Inhuman Princess",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareChange": -0.29767441860465127,
+      "isNew": false,
+      "firstSeen": "2026-06-20"
+    },
+    {
+      "commander": "Dack Fayden, Helping Hand",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2026-09-26"
+    },
+    {
+      "commander": "Dargo, the Shipwrecker / Tymna the Weaver",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": 0.7558139534883721,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Etali, Primal Conqueror",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 1,
+      "shareChange": 0.1705426356589146,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-07-12"
+    },
+    {
+      "commander": "Jaheira, Friend of the Forest / Street Urchin",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2026-10-17"
+    },
+    {
+      "commander": "Jhoira, Ageless Innovator",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Kefka, Court Mage",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 1.6666666666666667,
+      "shareChange": -0.29767441860465127,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "Kinnan, Bonder Prodigy",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 3,
+      "shareChange": -0.6098191214470284,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "Kraum, Ludevic's Opus / Tymna the Weaver",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 4,
+      "shareChange": -0.7073643410852714,
+      "isNew": false,
+      "firstSeen": "2025-06-11"
+    },
+    {
+      "commander": "Magus Lucea Kane",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2026-01-31"
+    },
+    {
+      "commander": "Marath, Will of the Wild",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": 2.511627906976744,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Marwyn, the Nurturer",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": 2.511627906976744,
+      "isNew": false,
+      "firstSeen": "2025-06-28"
+    },
+    {
+      "commander": "Oswald Fiddlebender",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": 2.511627906976744,
+      "isNew": false,
+      "firstSeen": "2025-06-21"
+    },
+    {
+      "commander": "Prismari, the Inspiration",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2026-04-18"
+    },
+    {
+      "commander": "Rakdos, the Muscle",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Sauron, the Dark Lord",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-06-28"
+    },
+    {
+      "commander": "Scion of the Ur-Dragon",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 1,
+      "shareChange": 0.1705426356589146,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Talion, the Kindly Lord",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": 2.511627906976744,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Yoshimaru, Ever Faithful",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": 0.7558139534883721,
+      "isNew": false,
+      "firstSeen": "2025-06-11"
+    },
+    {
+      "commander": "Urza, Lord High Artificer",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Winota, Joiner of Forces",
+      "lastMonthEntries": 1,
+      "prior3AvgEntries": 0,
+      "shareChange": null,
+      "isNew": true,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Aang, at the Crossroads",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-11-15"
+    },
+    {
+      "commander": "Chatterfang, Squirrel General",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-15"
+    },
+    {
+      "commander": "Clan Crafter / Jaheira, Friend of the Forest",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-01-24"
+    },
+    {
+      "commander": "Deadpool, Trading Card",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Derevi, Empyrial Tactician",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Emet-Selch of the Third Seat",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-02-21"
+    },
+    {
+      "commander": "Emiel the Blessed",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-08-09"
+    },
+    {
+      "commander": "Erinis, Gloom Stalker / Street Urchin",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-15"
+    },
+    {
+      "commander": "Esika, God of the Tree",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Glarb, Calamity's Augur",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Godo, Bandit Warlord",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 1,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Iron Spider, Stark Upgrade",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-07-03"
+    },
+    {
+      "commander": "K'rrik, Son of Yawgmoth",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Kediss, Emberclaw Familiar / Malcolm, Keen-Eyed Navigator",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Kenrith, the Returned King",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 2.3333333333333335,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Korvold, Fae-Cursed King",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Liliana, Heretical Healer",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-05-30"
+    },
+    {
+      "commander": "Malcolm, Keen-Eyed Navigator / Vial Smasher the Fierce",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Marneus Calgar",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Marvo, Deep Operative",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-01-31"
+    },
+    {
+      "commander": "Nick Fury, Agent of S.H.I.E.L.D.",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2026-06-21"
+    },
+    {
+      "commander": "Ral, Monsoon Mage",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Rocco, Cabaretti Caterer",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Rona, Herald of Invasion",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-07-05"
+    },
+    {
+      "commander": "Stella Lee, Wild Card",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 1,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Tasigur, the Golden Fang",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 1,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Tayam, Luminous Enigma",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Terra, Magical Adept",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Teshar, Ancestor's Apostle",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-15"
+    },
+    {
+      "commander": "The Cabbage Merchant",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-12-06"
+    },
+    {
+      "commander": "The Gitrog Monster",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "The Master of Keys",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "The Wandering Minstrel",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Tymna the Weaver",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "Thrasios, Triton Hero / Vial Smasher the Fierce",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Tiamat",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Tivit, Seller of Secrets",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
+    },
+    {
+      "commander": "Ulalek, Fused Atrocity",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-28"
+    },
+    {
+      "commander": "Vivi Ornitier",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-12"
+    },
+    {
+      "commander": "Xyris, the Writhing Storm",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-15"
+    },
+    {
+      "commander": "Yisan, the Wanderer Bard",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-07-05"
+    },
+    {
+      "commander": "Yuriko, the Tiger's Shadow",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.3333333333333333,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-13"
+    },
+    {
+      "commander": "Zur the Enchanter",
+      "lastMonthEntries": 0,
+      "prior3AvgEntries": 0.6666666666666666,
+      "shareChange": null,
+      "isNew": false,
+      "firstSeen": "2025-06-14"
     }
   ],
-  "baselineConversion": 0.2774936061381074,
-  "trend": [],
   "colors": {
-    "Chatterfang, Squirrel General": "BG",
     "Crystal, Inhuman Princess": "WURG",
     "Dack Fayden, Helping Hand": "W",
     "Dargo, the Shipwrecker / Tymna the Weaver": "WBR",
     "Etali, Primal Conqueror": "RG",
     "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh": "BR",
-    "Helga, Skittish Seer": "WUG",
     "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh": "WUR",
+    "Jaheira, Friend of the Forest / Street Urchin": "RG",
+    "Jhoira, Ageless Innovator": "UR",
     "Kefka, Court Mage": "UBR",
-    "Kenrith, the Returned King": "WUBRG",
     "Kinnan, Bonder Prodigy": "UG",
     "Kraum, Ludevic's Opus / Tymna the Weaver": "WUBR",
     "Magda, Brazen Outlaw": "R",
     "Magus Lucea Kane": "URG",
+    "Marath, Will of the Wild": "WRG",
     "Ob Nixilis, Captive Kingpin": "BR",
     "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept": "UBR",
     "Rograkh, Son of Rohgahh / Thrasios, Triton Hero": "URG",
-    "Scion of the Ur-Dragon": "WUBRG",
     "Sisay, Weatherlight Captain": "WUBRG",
-    "Tayam, Luminous Enigma": "WBG",
-    "Thrasios, Triton Hero / Tymna the Weaver": "WUBG",
-    "Thrasios, Triton Hero / Yoshimaru, Ever Faithful": "WUG",
-    "Tivit, Seller of Secrets": "WUB",
+    "Super-Skrull": "WUBRG",
     "Vraska, Soul of Stone": "WUR"
   }
 }

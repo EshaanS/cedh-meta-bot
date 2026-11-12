@@ -174,8 +174,8 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     assert.match(d.edits.at(-1)!.content!, /isn't a region I can report on/);
 
     await run(cmd("region", "set", [{ name: "region", type: 3, value: "si" }]));
-    assert.match(d.edits.at(-1)!.content!, /Region set to Slovenia\./);
-    assert.match(d.edits.at(-1)!.content!, /reports will show Europe/);
+    // No fallback line: a report is always about the chosen region.
+    assert.equal(d.edits.at(-1)!.content, "Region set to Slovenia.");
     assert.equal((await row("test-i1"))!.region_id, "si");
 
     const textChannel = (id: string) => ({ channels: { [id]: { id, type: 0 } } });
@@ -189,13 +189,17 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     assert.equal((await row("test-i1"))!.channel_id, "chan-ok");
 
     await run(cmd("region", "show"));
-    assert.match(d.edits.at(-1)!.content!, /Region: Slovenia/);
-    assert.match(d.edits.at(-1)!.content!, /Channel: <#chan-ok>/);
+    assert.match(d.edits.at(-1)!.content!, /^Region: Slovenia\nChannel: <#chan-ok>/);
+    assert.doesNotMatch(d.edits.at(-1)!.content!, /Europe|not enough data/);
 
     await run(cmd("preview"));
-    // The preview is one reply with every embed; the attribution is the last field of the last one.
-    const shown = d.edits.at(-1)!.embeds as { fields: { name: string; value: string }[] }[];
-    assert.ok(shown.length >= 2 && shown.length <= 10, `${shown.length} embeds in one reply`);
+    // Slovenia has no qualifying event in October 2026: the report is that one line about Slovenia, not
+    // Europe's report, in one reply, with the attribution as the last field.
+    const shown = d.edits.at(-1)!.embeds as { title?: string; description?: string; fields: { name: string; value: string }[] }[];
+    assert.equal(shown.length, 1);
+    assert.equal(shown[0]!.title, "Slovenia — cEDH meta, October 2026");
+    assert.equal(shown[0]!.description, "No qualifying events in Slovenia in October.");
+    assert.equal(shown[0]!.fields.length, 1);
     assert.match(d.edits.at(-1)!.content!, /Preview of the October report/);
     assert.match(shown.at(-1)!.fields.at(-1)!.name, /Sources$/);
     assert.match(shown.at(-1)!.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);

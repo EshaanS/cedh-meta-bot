@@ -73,15 +73,16 @@ new subcommands.
   is never guessed: the reply lists the options. If a place is written with a comma ("Portland, Oregon"), put
   semicolons between places. The reply says what was added, what was already there, and what was not added
   and why. `/region remove` takes the same options.
-- `/region set` lists the server's own regions first. `/region show` lists the places and says where commander
-  stats come from. `/region remove`, `/region delete` and `/region list` do what they say.
+- `/region set` lists the server's own regions first. `/region show` lists the places. `/region remove`,
+  `/region delete` and `/region list` do what they say.
 - A city is where the venue is, not the metro area around it: there are no events in Seattle itself, but there
   are in Tacoma, Issaquah and Lacey. For a metro, use a radius: `/region add around:Seattle km:50` adds
   everything within 50 km of Seattle as one place (10 to 200 km; 50 if `km` is left out). It can also be
   written in the list: `50 km of Seattle`.
-- A small region shows its own events, winners and players. Most played, Best results and Top-cut conversion
-  come from the smallest standard region around it (for example Washington) until it has enough decklists, and
-  the post says so.
+- A region's report uses only that region's events in the report month. A small region therefore shows short
+  lists, Best results and Top-cut conversion only when a commander has 10 or more entries in the month, and
+  the single line "No qualifying events in <region> in <Month>." when the month had none. Nothing is borrowed
+  from a larger region.
 - Limits: 5 custom regions per server, 25 places per region (a radius is one place), names up to 40 characters
   (`REGION_CONFIG` in `src/server/custom-regions.ts`).
 
@@ -102,14 +103,18 @@ prints how many places it stored (7,342). It is not part of `refresh`: the file 
 Running it again changes nothing. Register the commands after deploying, because `/region add` and
 `/region remove` have new options.
 
-## Post look and color squares (migration 017)
+## Post look and color circles (migration 017)
 The monthly post is one message with up to four embeds: the month in numbers with a three-line headline,
-players, commanders, and a last one with coverage and the TopDeck attribution. Every visual element (headline,
-medals, line icons, bold names, two-line items, share bars, color squares, embed titles and colors) is a
-switch in `POST_CONFIG` in `scripts/lib/post.ts`.
+players, commanders, and a last one with coverage and the TopDeck attribution. Everything in it describes the
+report month and the server's own region: lists are a top 5 (top 3 for rising players and rising and cooling
+commanders), every item takes two lines, and a blank line separates items. Every visual element (headline,
+medals, line icons, bold names, two-line items, blank lines, share bars, color circles, embed titles and
+colors) is a switch in `POST_CONFIG` in `scripts/lib/post.ts`.
 
-The color squares next to commander names come from Scryfall's color identity, stored in `commander_colors`.
-The bot reads the table and never calls Scryfall. Until the table is filled the post simply shows no squares.
+The color circles after a commander's details (⚪ 🔵 ⚫ 🔴 🟢, 🔘 for colorless) come from Scryfall's color
+identity, stored in `commander_colors`. The bot reads the table and never calls Scryfall. Until the table is
+filled the post simply shows no circles. ⚪ and ⚫ can fade into Discord's light and dark backgrounds; the
+symbols are one `POST_CONFIG` entry (`colorSymbols`).
 
 ```
 npm run migrate

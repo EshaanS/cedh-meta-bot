@@ -1,5 +1,5 @@
 // Stores the color identity of every card that can be a commander (Scryfall: is:commander, plus the
-// pair-commander tag for the Backgrounds) in commander_colors, for the color squares in the monthly post.
+// pair-commander tag for the Backgrounds) in commander_colors, for the color circles in the monthly post.
 // Usage: color-identity [--force]
 //   --force  fetch even when the stored list is under 24 hours old
 // One Scryfall search, about 20 pages, 1 request per second (CLAUDE.md data-source exception). Only names and

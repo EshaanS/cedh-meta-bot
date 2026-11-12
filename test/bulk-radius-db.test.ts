@@ -215,7 +215,7 @@ describe("bulk add, bulk remove and radius places against Postgres", { skip: url
     ].join("\n"));
     await say(A, "set", { region: "Munich area" });
     const show = await say(A, "show");
-    assert.match(show, /^Region: Munich area\nPlaces \(3\): within 30 km of Munich, Bayern, Germany; within 50 km of Munich, Bayern, Germany; within 60 km of Munich, Bayern, Germany\nCommander stats/);
+    assert.match(show, /^Region: Munich area\nPlaces \(3\): within 30 km of Munich, Bayern, Germany; within 50 km of Munich, Bayern, Germany; within 60 km of Munich, Bayern, Germany\nChannel: /);
     assert.doesNotMatch(show, /Data provided by/, "configuration replies show no TopDeck data");
 
     // The stored center never moves, and the database refuses a malformed radius.
@@ -362,12 +362,12 @@ describe("bulk add, bulk remove and radius places against Postgres", { skip: url
     assert.equal(await say(A, "delete", { region: "Bulk" }), "Deleted Bulk.");
   });
 
-  test("the fallback anchor of a radius: its state, the country across a state line, the continent across a border", async () => {
-    const { customStatsRegion } = await import("../scripts/lib/post");
+  // Posts no longer borrow from a larger region, so the app doesn't call custom_region_anchor any more. The
+  // function stays in the database and must keep returning what it did; a radius post shows the circle only.
+  test("a radius: custom_region_anchor is unchanged, and the post is about the events inside the circle only", async () => {
     // Every event within 60 km of Munich is in Bayern.
     const munich = await regionId(A, "Munich area");
     assert.equal(await anchor(munich), "de-by");
-    assert.deepEqual(await customStatsRegion(sql, munich, MONTH), { id: "de-by", label: "Bayern (Germany)", shortLabel: "Bayern", reportable: true });
 
     // Ulm is in Baden-Württemberg; Neu-Ulm, 2 km away, is in Bayern. The stats can't be labelled with either state.
     assert.match(await say(A, "create", { name: "Donau" }), /^Created/);
@@ -378,19 +378,18 @@ describe("bulk add, bulk remove and radius places against Postgres", { skip: url
     const donau = await regionId(A, "Donau");
     assert.deepEqual(await tids(donau), ["neuulm", "ulm"]);
     assert.equal(await anchor(donau), "de");
-    assert.deepEqual(await customStatsRegion(sql, donau, MONTH), { id: "de", label: "Germany", shortLabel: "Germany", reportable: true });
-    assert.equal(await say(A, "set", { region: "Donau" }), [
-      "Region set to Donau.",
-      "Commander stats (most played, best results, conversion): Germany, because Donau has too few entries with decklists. Events, winners and players are Donau's own.",
-    ].join("\n"));
+    assert.equal(await say(A, "set", { region: "Donau" }), "Region set to Donau.");
+    assert.doesNotMatch(await say(A, "show"), /Commander stats|not enough data|Reports currently show/);
     const preview = (await run(A, "preview")).embeds!;
     const embed = preview[0]!;
     const all = preview.flatMap((e) => e.fields);
     assert.equal(embed.title, "Donau — cEDH meta, June 2036");
-    assert.equal(embed.description!.split("\n")[0], "Commander stats: Germany, because Donau had too few entries.");
     const field = (prefix: string) => all.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix));
     assert.equal(field("Events")?.value, "2", "the two events inside the circle");
-    assert.equal(field("Most played — Germany (6 months)")!.value.split("\n").length, 10);
+    assert.equal(field("Coverage")?.value.split(" · ")[0], "2 qualifying events in June");
+    // Nothing from Germany or from anywhere outside the circle: no note, no region in a header, one month only.
+    assert.doesNotMatch(JSON.stringify(preview), /Commander stats|Germany|6 months|Showing /);
+    for (const f of all) assert.doesNotMatch(f.name, / — (?!June)/, f.name);
     assert.match(all.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
 
     // Salzburg is in Austria; Freilassing, inside the circle, is in Germany.

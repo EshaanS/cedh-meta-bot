@@ -7,7 +7,7 @@ import { composePost, loadPostData } from "../../scripts/lib/post";
 import { isGuildAllowed, monthName, POST_FROM_DAY, previousMonth } from "./config";
 import {
   addPlaces, centerOptions, createRegion, deleteRegion, findGuildRegion, fold, listGuildRegions, matchCenters, matchPlaces, placeOptions,
-  REGION_CONFIG, RegionError, regionPlaces, removePlaces, resolveAddRequest, statsSourceLine, targetRegion, type GuildRegion,
+  REGION_CONFIG, RegionError, regionPlaces, removePlaces, resolveAddRequest, targetRegion, type GuildRegion,
 } from "./custom-regions";
 import { addSummary, removeSummary } from "./place-matching";
 import { DISCORD_ERRORS, DiscordError, type DiscordClient, type MessagePayload } from "./discord";
@@ -122,7 +122,6 @@ async function autocomplete(deps: InteractionDeps, i: Interaction, guildId: stri
 
 const subcommand = (i: Interaction) => i.data?.options?.[0];
 const optionValue = (opts: Option[] | undefined, name: string) => opts?.find((o) => o.name === name)?.value;
-const monthStart = (yyyyMm: string) => `${yyyyMm}-01`;
 const currentMonth = (now: Date) => `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}`;
 const isPlaceOption = (name: string) => (REGION_CONFIG.placeOptionNames as readonly string[]).includes(name);
 /** The values of place, place2 … place5, in that order (undefined where the option was left out). */
@@ -131,7 +130,6 @@ const given = (v: unknown) => v !== undefined && v !== null && String(v).trim() 
 
 async function regionSet(deps: InteractionDeps, guildId: string, value: unknown): Promise<MessagePayload> {
   const sql = deps.sql();
-  const month = previousMonth(deps.now());
 
   // One of this server's own regions (by the id a choice carries, or by name with or without the list suffix).
   const typed = String(value ?? "").trim();
@@ -141,7 +139,7 @@ async function regionSet(deps: InteractionDeps, guildId: string, value: unknown)
     await sql`
       insert into guild_configs (guild_id, region_id) values (${guildId}, ${own.id})
       on conflict (guild_id) do update set region_id = excluded.region_id, updated_at = now()`;
-    return reply([`Region set to ${own.name}.`, await statsSourceLine(sql, own, month)].join("\n"));
+    return reply(`Region set to ${own.name}.`);
   }
 
   const id = typed.toLowerCase();
@@ -151,13 +149,8 @@ async function regionSet(deps: InteractionDeps, guildId: string, value: unknown)
   await sql`
     insert into guild_configs (guild_id, region_id) values (${guildId}, ${region.id})
     on conflict (guild_id) do update set region_id = excluded.region_id, updated_at = now()`;
-  const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
-    select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${region.id}, ${monthStart(month)}::date) rr`;
-  const lines = [`Region set to ${region.display_name}.`];
-  if (resolved && resolved.steps_up > 0) {
-    lines.push(`There isn't enough data for ${region.display_name} yet, so reports will show ${resolved.display_name} until there is.`);
-  }
-  return reply(lines.join("\n"));
+  // A report is always about the chosen region and uses only its own data, so there is nothing more to say.
+  return reply(`Region set to ${region.display_name}.`);
 }
 
 async function regionShow(deps: InteractionDeps, guildId: string): Promise<MessagePayload> {
@@ -173,11 +166,6 @@ async function regionShow(deps: InteractionDeps, guildId: string): Promise<Messa
   if (own) {
     const list = await regionPlaces(sql, own.id);
     lines.push(list.length ? `Places (${list.length}): ${list.map((p) => p.label).join("; ")}` : "Places: none yet (use /region add)");
-    lines.push(await statsSourceLine(sql, own, target));
-  } else {
-    const [resolved] = await sql<{ steps_up: number; display_name: string }[]>`
-      select rr.steps_up, region_label(rr.region_id) as display_name from resolve_region(${regionId}, ${monthStart(target)}::date) rr`;
-    if (resolved && resolved.steps_up > 0) lines.push(`Reports currently show ${resolved.display_name} (not enough data for the region yet).`);
   }
   lines.push(`Channel: ${cfg?.channel_id ? `<#${cfg.channel_id}>` : "not set (use /channel set)"}`);
   lines.push(`Last report posted: ${cfg?.last_posted ? monthName(cfg.last_posted.slice(0, 7)) + " " + cfg.last_posted.slice(0, 4) : "none yet"}`);

@@ -78,7 +78,7 @@ async function main() {
   console.log(viaPair.length ? table(viaPair) : "(none)");
 
   const unmatched = leaders.filter((l) => leaderColors(l.leader, colors, pairCardKey) === null).sort((a, b) => b.entries - a.entries || a.leader.localeCompare(b.leader));
-  section(`Not matched (no squares shown): ${unmatched.length} distinct, ${sum(unmatched)} entries`);
+  section(`Not matched (no color circles shown): ${unmatched.length} distinct, ${sum(unmatched)} entries`);
   console.log(unmatched.length ? renderTable(["leader", "entries", "unmatched_names"], unmatched.map((l) => ({
     leader: l.leader, entries: l.entries,
     unmatched_names: halvesOf(l.leader).filter((h) => leaderColors(h, colors, pairCardKey) === null).join("; "),

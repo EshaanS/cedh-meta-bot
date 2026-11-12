@@ -6,7 +6,7 @@
 // can be a radius around a city center (migration 016). Name matching is in ./place-matching.
 import { randomBytes } from "node:crypto";
 import type { Sql } from "../../scripts/lib/db";
-import { CUSTOM_REGION_NAME_MAX, customStatsRegion, sanitizeOrganizerText } from "../../scripts/lib/post";
+import { CUSTOM_REGION_NAME_MAX, sanitizeOrganizerText } from "../../scripts/lib/post";
 import {
   asResolved, emptyAddOutcome, matchName, norm, parseRadius, resolveList,
   type AddOutcome, type Candidate, type Lookup, type RemoveOutcome,
@@ -636,20 +636,4 @@ export async function deleteGuildData(sql: Sql, guildIds: string[]): Promise<voi
     await tx`delete from guild_configs where guild_id = any(${tx.array(guildIds, 1009)}::text[])`;
     await tx`delete from regions where owner_guild_id = any(${tx.array(guildIds, 1009)}::text[])`;
   });
-}
-
-// ---------- where a custom region's commander stats come from ----------
-
-/**
- * One line for /region set and /region show: a reportable custom region uses its own entries; otherwise the
- * statistical commander sections come from the standard region around it (see customStatsRegion).
- */
-export async function statsSourceLine(sql: Sql, region: GuildRegion, month: string): Promise<string> {
-  const end = `${month}-01`;
-  const [rep] = await sql<{ reportable: boolean }[]>`select reportable from region_reportability(${region.id}, ${end}::date)`;
-  if (rep?.reportable) return `Commander stats: ${region.name}'s own entries.`;
-  const from = await customStatsRegion(sql, region.id, end);
-  return from.reportable
-    ? `Commander stats (most played, best results, conversion): ${from.label}, because ${region.name} has too few entries with decklists. Events, winners and players are ${region.name}'s own.`
-    : "Commander stats: not enough decklists yet.";
 }

@@ -1,5 +1,5 @@
 Pacific Northwest — cEDH meta, October 2026
-🏆 Guardian Games CEDH Monthly PDX (66 players) went to Mara Ellison on Kraum / Tymna the Weaver
+🏆 Guardian Games CEDH Monthly PDX (66 players) went to Rafael Montoya on Kraum / Tymna the Weaver
 🎯 Kraum / Tymna the Weaver made the most top cuts: 14
 📈 Rograkh / Silas Renn is the commander to watch: 21 entries in October (avg 9/month)
 
@@ -12,91 +12,123 @@ Largest event: 66 players · Guardian Games CEDH Monthly PDX
 
 🏆 Winners (largest events)
 Guardian Games CEDH Monthly PDX · 66 players
-🏆 Mara Ellison on Kraum / Tymna the Weaver 🟨🟦🟪🟥
+🏆 Rafael Montoya on Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
 
 Gem State CEDH Ad Naus for a Cause! · 44 players
-🏆 Tobias Quill on Tasigur, the Golden Fang 🟦🟪🟩
+🏆 Noor Haddad on Tasigur, the Golden Fang · 🔵 ⚫ 🟢
 
 Mind Full Games: October's Monthly 1k Event · 43 players
-🏆 Francisco / Rograkh 🟪🟥
+🏆 Felix Brandt on Francisco / Rograkh · ⚫ 🔴
 
 Olympic Commander Challenger Series 1k Vol 4 - 20… · 34 players
-🏆 Ines Varga on Azami, Lady of Scrolls 🟦
+🏆 Greta Solberg on Azami, Lady of Scrolls · 🔵
 
 Commander Invitational Qualifier Cardboard Battle… · 32 players
-🏆 Devon Okafor on Kraum / Tymna the Weaver 🟨🟦🟪🟥
-
-Guardian Games PDX CEDH Halloween · 32 players
-🏆 Lena Marchetti on Lumra, Bellow of the Woods 🟩
+🏆 Mateus Carvalho on Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
 
 👑 Top players
-🥇 Mara Ellison — 🏆 2 wins · 🎯 3 top cuts
-Kraum / Tymna the Weaver 🟨🟦🟪🟥
-🥈 Tobias Quill — 🏆 1 win · 🎯 2 top cuts
-Tasigur, the Golden Fang 🟦🟪🟩
-🥉 Ines Varga — 🏆 1 win · 🎯 1 top cut
-Azami, Lady of Scrolls 🟦
-4️⃣ Aiko Tanabe — 🎯 3 top cuts
-Kraum / Tymna the Weaver 🟨🟦🟪🟥
-5️⃣ Rafael Montoya — 🎯 2 top cuts
+🥇 Wren Castellan
+🏆 1 win · 🎯 2 top cuts · Ob Nixilis, Captive Kingpin · ⚫ 🔴
+
+🥈 Dmitri Volkov
+🏆 1 win · 🎯 2 top cuts · Kinnan, Bonder Prodigy · 🔵 🟢
+
+🥉 Rafael Montoya
+🏆 1 win · 🎯 1 top cut · Kraum / Tymna the Weaver · ⚪ 🔵 ⚫ 🔴
+
+4️⃣ Noor Haddad
+🏆 1 win · 🎯 1 top cut · Tasigur, the Golden Fang · 🔵 ⚫ 🟢
+
+5️⃣ Felix Brandt
+🏆 1 win · 🎯 1 top cut · Francisco / Rograkh · ⚫ 🔴
 
 🌱 Rising players (first win or top cut in 3 years of data)
-🎯 Noor Haddad — first top cut
-66 players · Guardian Games CEDH Monthly PDX
-🏆 Tobias Quill — first win
-44 players · Gem State CEDH Ad Naus for a Cause!
-🎯 Felix Brandt — top cut in first 5 events
-34 players · Olympic Commander Challenger Series 1k Vol 4 - 20…
+Sana Qureshi
+🎯 first top cut · 66 players · Guardian Games CEDH Monthly PDX
+
+Noor Haddad
+🏆 first win · 44 players · Gem State CEDH Ad Naus for a Cause!
+
+Felix Brandt
+🏆 first win · 43 players · Mind Full Games: October's Monthly 1k Event
 
 ── 🃏 Commanders — October ──
 
-🎯 Top-cut appearances — October
-🥇 Kraum / Tymna the Weaver 🟨🟦🟪🟥
-14 cuts · 13.6% of cuts vs 6.7% of field
-🥈 Kinnan, Bonder Prodigy 🟦🟩
-11 cuts · 10.7% of cuts vs 5.2% of field
-🥉 Rograkh / Silas Renn 🟦🟪🟥
-5 cuts · 4.9% of cuts vs 4.5% of field
-4️⃣ Thrasios / Tymna the Weaver 🟨🟦🟪🟩
-5 cuts · 4.9% of cuts vs 4.0% of field
-5️⃣ Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
-4 cuts · 3.9% of cuts vs 5.2% of field
+🎯 Top-cut appearances
+🥇 Kraum / Tymna the Weaver
+14 cuts · 13.6% of cuts vs 6.7% of field · ⚪ 🔵 ⚫ 🔴
 
-📊 Most played (6 months)
-🥇 ▰▰▰▰▰▰▰▰▰▰ 7.2% · Kraum / Tymna the Weaver 🟨🟦🟪🟥
-🥈 ▰▰▰▰▰▰▰▰▰▰ 7.0% · Kinnan, Bonder Prodigy 🟦🟩
-🥉 ▰▰▰▰▰▰▰▰▰▱ 6.5% · Rograkh / Thrasios 🟦🟥🟩
-4️⃣ ▰▰▰▰▰▰▱▱▱▱ 4.1% · Rograkh / Silas Renn 🟦🟪🟥
-5️⃣ ▰▰▰▰▰▰▱▱▱▱ 4.1% · Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
-6️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.8% · Dargo / Tymna the Weaver 🟨🟪🟥
-7️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.7% · Thrasios / Tymna the Weaver 🟨🟦🟪🟩
-8️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.7% · Magda, Brazen Outlaw 🟥
-9️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.6% · Ral, Monsoon Mage 🟦🟥
-🔟 ▰▰▰▱▱▱▱▱▱▱ 2.5% · Etali, Primal Conqueror 🟥🟩
+🥈 Kinnan, Bonder Prodigy
+11 cuts · 10.7% of cuts vs 5.2% of field · 🔵 🟢
 
-⭐ Best results (adjusted PPG, 30+ entries)
-🥇 Kinnan, Bonder Prodigy 🟦🟩 — 1.42 (179 entries)
-🥈 Ishai / Rograkh 🟨🟦🟥 — 1.40 (62 entries)
-🥉 Tivit, Seller of Secrets 🟨🟦🟪 — 1.36 (44 entries)
-4️⃣ Rograkh / Thrasios 🟦🟥🟩 — 1.33 (166 entries)
-5️⃣ Etali, Primal Conqueror 🟥🟩 — 1.29 (63 entries)
+🥉 Rograkh / Silas Renn
+5 cuts · 4.9% of cuts vs 4.5% of field · 🔵 ⚫ 🔴
 
-🔀 Top-cut conversion (baseline 25%)
-🥇 Kinnan, Bonder Prodigy 🟦🟩 — 37% (171 entries)
-🥈 Thrasios / Yoshimaru 🟨🟦🟩 — 33% (40 entries)
-🥉 Kefka, Court Mage 🟦🟪🟥 — 31% (42 entries)
-4️⃣ Etali, Primal Conqueror 🟥🟩 — 30% (60 entries)
-5️⃣ Ishai / Rograkh 🟨🟦🟥 — 29% (59 entries)
+4️⃣ Thrasios / Tymna the Weaver
+5 cuts · 4.9% of cuts vs 4.0% of field · ⚪ 🔵 ⚫ 🟢
+
+5️⃣ Sisay, Weatherlight Captain
+4 cuts · 3.9% of cuts vs 5.2% of field · ⚪ 🔵 ⚫ 🔴 🟢
+
+📊 Most played
+🥇 Kraum / Tymna the Weaver
+▰▰▰▰▰▰▰▰▰▰ 6.5% · 27 entries · ⚪ 🔵 ⚫ 🔴
+
+🥈 Kinnan, Bonder Prodigy
+▰▰▰▰▰▰▰▰▰▱ 6.0% · 25 entries · 🔵 🟢
+
+🥉 Rograkh / Thrasios
+▰▰▰▰▰▰▰▰▱▱ 5.3% · 22 entries · 🔵 🔴 🟢
+
+4️⃣ Rograkh / Silas Renn
+▰▰▰▰▰▰▰▰▱▱ 5.0% · 21 entries · 🔵 ⚫ 🔴
+
+5️⃣ Sisay, Weatherlight Captain
+▰▰▰▰▰▰▰▰▱▱ 5.0% · 21 entries · ⚪ 🔵 ⚫ 🔴 🟢
+
+⭐ Best results (adjusted PPG, 10+ entries)
+🥇 Kinnan, Bonder Prodigy
+1.58 · 25 entries · 🔵 🟢
+
+🥈 Kraum / Tymna the Weaver
+1.32 · 27 entries · ⚪ 🔵 ⚫ 🔴
+
+🥉 Rograkh / Silas Renn
+1.28 · 21 entries · 🔵 ⚫ 🔴
+
+4️⃣ Thrasios / Tymna the Weaver
+1.28 · 16 entries · ⚪ 🔵 ⚫ 🟢
+
+5️⃣ Ral, Monsoon Mage
+1.23 · 10 entries · 🔵 🔴
+
+🔀 Top-cut conversion (baseline 25%, 10+ entries)
+🥇 Kinnan, Bonder Prodigy
+52% · 11 of 21 entries · 🔵 🟢
+
+🥈 Kraum / Tymna the Weaver
+52% · 14 of 27 entries · ⚪ 🔵 ⚫ 🔴
+
+🥉 Thrasios / Tymna the Weaver
+31% · 5 of 16 entries · ⚪ 🔵 ⚫ 🟢
+
+4️⃣ Rograkh / Silas Renn
+28% · 5 of 18 entries · 🔵 ⚫ 🔴
+
+5️⃣ Ob Nixilis, Captive Kingpin
+23% · 3 of 13 entries · ⚫ 🔴
 
 📈 Rising commanders (by share growth vs prior 3 months)
-🔥 Rograkh / Silas Renn 🟦🟪🟥
-21 entries in October (avg 9/month)
-🔥 Ob Nixilis, Captive Kingpin 🟪🟥
-13 entries in October (avg 7/month)
-🔥 Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
-21 entries in October (avg 13/month)
+🔥 Rograkh / Silas Renn
+21 entries in October (avg 9/month) · 🔵 ⚫ 🔴
+
+🔥 Ob Nixilis, Captive Kingpin
+13 entries in October (avg 7/month) · ⚫ 🔴
+
+🔥 Sisay, Weatherlight Captain
+21 entries in October (avg 13/month) · ⚪ 🔵 ⚫ 🔴 🟢
 
 ── ℹ️ About this report ──
 
-ℹ️ Coverage: 114 qualifying events over 6 months · 76% of entries with decklists · 99% of October entries have a linked player
+ℹ️ Coverage: 19 qualifying events in October · 78% of entries with decklists · 99% of entries have a linked player
 🔗 Sources: Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

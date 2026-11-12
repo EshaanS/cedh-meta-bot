@@ -235,12 +235,12 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     assert.equal(await say(B, "list"), "This server has no custom regions. Create one with /region create, then add places with /region add.");
   });
 
-  test("anchor and fallback: same state, same country, across countries, across continents, a hidden level, an empty region", async () => {
-    const { customStatsRegion } = await import("../scripts/lib/post");
+  // Posts no longer borrow from a larger region, so nothing in the app calls custom_region_anchor any more.
+  // The function stays in the database and must keep returning what it did.
+  test("custom_region_anchor is unchanged: same state, same country, across countries, across continents, a hidden level, an empty region", async () => {
     const anchor = async (id: string) => (await sql<{ a: string }[]>`select custom_region_anchor(${id}) as a`)[0]!.a;
     const metro = await regionId(A, "Seattle Metro"); // Tacoma
     assert.equal(await anchor(metro), "us-wa");
-    assert.deepEqual(await customStatsRegion(sql, metro, MONTH), { id: "us-wa", label: "Washington (United States)", shortLabel: "Washington", reportable: true });
 
     const sameCountry = await build(B, "Two states", [["tac", "Tacoma, Washington, United States (3 events)"], ["portland", "Portland, Oregon, United States (1 event)"]]);
     assert.equal(await anchor(sameCountry), "us", "the census region between state and country can't be selected, so it is skipped");
@@ -248,54 +248,56 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
     assert.equal(await anchor(twoCountries), "north-america");
     const twoContinents = await build(B, "Pacific Rim", [["tac", "Tacoma, Washington, United States (3 events)"], ["japan", "Japan"]]);
     assert.equal(await anchor(twoContinents), "global");
-    // Barcelona's province isn't selectable, so the anchor is Cataluña. Nothing in Spain or Europe is reportable
-    // in this window, so the walk goes on until it reaches a region that is.
+    // Barcelona's province isn't selectable, so the anchor is Cataluña.
     const bcn = await build(B, "Barcelona area", [["barcelona", "Barcelona, Barcelona, Spain (1 event)"]]);
     assert.equal(await anchor(bcn), "es-cataluna");
-    const walked = await customStatsRegion(sql, bcn, MONTH);
-    assert.ok(walked.reportable && !["es-cataluna", "es"].includes(walked.id), JSON.stringify(walked));
     assert.match(await say(B, "create", { name: "Empty" }), /^Created Empty\./);
     assert.equal(await anchor(await regionId(B, "Empty")), "global");
     assert.equal(await anchor("no-such-region"), "global");
     for (const name of ["Two states", "Cascadia", "Pacific Rim", "Barcelona area", "Empty"]) await say(B, "delete", { region: name });
   });
 
-  test("/region set, /region show and /preview for a custom region: its own facts, Washington's commander stats", async () => {
+  test("/region set, /region show and /preview for a custom region: its own data only, nothing borrowed, no fallback line", async () => {
     assert.match(await say(A, "create", { name: "Nothing yet" }), /^Created/);
     assert.equal(await say(A, "set", { region: "Nothing yet" }), "Nothing yet has no places yet. Add some with /region add, then run /region set again.");
     await say(A, "delete", { region: "Nothing yet" });
 
     const own = await complete(A, "set", "region", "seat");
     assert.deepEqual(own[0], { name: "Seattle Metro — this server", value: await regionId(A, "Seattle Metro") });
-    assert.equal(await say(A, "set", { region: own[0]!.value }), [
-      "Region set to Seattle Metro.",
-      "Commander stats (most played, best results, conversion): Washington (United States), because Seattle Metro has too few entries with decklists. Events, winners and players are Seattle Metro's own.",
-    ].join("\n"));
+    assert.equal(await say(A, "set", { region: own[0]!.value }), "Region set to Seattle Metro.");
     const show = await say(A, "show");
-    assert.match(show, /^Region: Seattle Metro\nPlaces \(1\): Tacoma, Washington, United States\nCommander stats \(most played, best results, conversion\): Washington \(United States\)/);
+    assert.match(show, /^Region: Seattle Metro\nPlaces \(1\): Tacoma, Washington, United States\nChannel: /);
+    assert.doesNotMatch(show, /Commander stats|not enough data|Reports currently show/);
     assert.doesNotMatch(show, /Data provided by/, "configuration replies show no TopDeck data");
 
+    // Tacoma has three events of two entries in the month: one commander with three entries, one with three.
+    // Washington has six events and ten commanders with ten entries each; none of that may show.
+    const names = (embeds: NonNullable<Sent["embeds"]>) => embeds.flatMap((e) => e.fields).map((f) => f.name.replace(/^[^A-Za-z]+/, ""));
     const reply = await run(A, "preview");
     const embed = reply.embeds![0]!;
     const all = reply.embeds!.flatMap((e) => e.fields);
     assert.equal(embed.title, "Seattle Metro — cEDH meta, March 2034");
-    // The note is the first line of the first embed; the headline follows it.
-    assert.equal(embed.description!.split("\n")[0], "Commander stats: Washington (United States), because Seattle Metro had too few entries.");
-    assert.match(embed.description!, /is the most played commander in Washington: /);
+    assert.match(embed.description!, /^🏆 \*\*Event tacoma\d\*\* \(20 players\) was the biggest event\n📊 \*\*Test Commander 0\*\* is the most played commander: 50\.0% of March entries$/);
+    assert.deepEqual(names(reply.embeds!), ["Events — March", "Players", "Draw rate", "Largest event", "Most played", "Coverage", "Sources"]);
     const value = (prefix: string) => all.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix))?.value;
     assert.equal(value("Events"), "3", "three Tacoma events, not Washington's six");
-    assert.equal(value("Most played — Washington (6 months)")!.split("\n").length, 10, "ten commanders from Washington");
-    assert.equal(all.some((f) => /Rising commanders|Cooling commanders/.test(f.name)), false);
+    assert.equal(value("Most played"), "🥇 **Test Commander 0**\n▰▰▰▰▰▰▰▰▰▰ 50.0% · 3 entries\n\n🥈 **Test Commander 1**\n▰▰▰▰▰▰▰▰▰▰ 50.0% · 3 entries");
+    assert.equal(value("Coverage"), "3 qualifying events in March · 100% of entries with decklists · 0% of entries have a linked player");
+    assert.doesNotMatch(JSON.stringify(reply.embeds), /Washington|Commander stats|6 months|Spokane Commander/);
     assert.match(all.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
 
-    // A custom region that is reportable itself uses its own entries everywhere.
+    // With Washington added as a place the region is Washington: its own ten commanders with ten entries each
+    // now reach the stat functions' floor, so Best results appears (and Rising commanders: they are all new
+    // this month), still with no note and no other region.
     assert.equal(await say(A, "add", { place: "r:us-wa", region: "Seattle Metro" }), "Seattle Metro: added 1 place (2 of 25).\nAdded: Washington (United States)");
-    assert.equal(await say(A, "set", { region: "Seattle Metro" }), "Region set to Seattle Metro.\nCommander stats: Seattle Metro's own entries.");
+    assert.equal(await say(A, "set", { region: "Seattle Metro" }), "Region set to Seattle Metro.");
     const full = (await run(A, "preview")).embeds!;
-    assert.doesNotMatch(full[0]!.description ?? "", /Commander stats:|most played commander in /, "no note: the stats are its own");
-    assert.ok(full.flatMap((e) => e.fields).some((f) => f.name === "📊 Most played (6 months)"));
-    assert.equal(await say(A, "remove", { place: "Washington (United States)", region: "Seattle Metro" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Washington (United States)");
-  });
+    assert.equal(full[0]!.title, "Seattle Metro — cEDH meta, March 2034");
+    assert.deepEqual(names(full), ["Events — March", "Players", "Draw rate", "Largest event", "Most played", "Best results (adjusted PPG, 10+ entries)",
+      "Rising commanders (by share growth vs prior 3 months)", "Coverage", "Sources"]);
+    assert.equal(full.flatMap((e) => e.fields).find((f) => f.name === "📊 Most played")!.value.split("\n\n").length, 5, "a top 5");
+    assert.doesNotMatch(JSON.stringify(full), /Commander stats|6 months|Washington/);
+    assert.equal(await say(A, "remove", { place: "Washington (United States)", region: "Seattle Metro" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Washington (United States)");  });
 
   test("isolation: another server can't see, set, change or delete a region, even with its id", async () => {
     const id = await regionId(A, "Seattle Metro");
