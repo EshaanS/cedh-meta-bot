@@ -1,11 +1,11 @@
-// Prints the monthly post for a region: the plain-text preview, the embed JSON, and the size against budget.
+// Prints the monthly post for a region: the plain-text preview, the embeds as JSON, and the size against budget.
 // Usage: preview --region <id> --month YYYY-MM [--save-fixture path.json]
 // Data provided by TopDeck.gg — https://topdeck.gg
 import { writeFile } from "node:fs/promises";
 import { parseArgs } from "node:util";
 import { connect } from "./lib/db";
 import { exitWithError } from "./lib/errors";
-import { composePost, contentLength, loadPostData, POST_CONFIG } from "./lib/post";
+import { composePost, contentLength, embedLength, loadPostData, POST_CONFIG } from "./lib/post";
 
 async function main() {
   const { values } = parseArgs({ options: { region: { type: "string" }, month: { type: "string" }, "save-fixture": { type: "string" } } });
@@ -17,11 +17,13 @@ async function main() {
       await writeFile(values["save-fixture"], `${JSON.stringify(data, null, 2)}\n`, "utf8");
       process.stderr.write(`saved fixture to ${values["save-fixture"]}\n`);
     }
-    const { embed, text } = composePost(data);
+    const { embeds, text } = composePost(data);
     console.log(text);
-    console.log("\n--- embed JSON ---");
-    console.log(JSON.stringify(embed, null, 2));
-    console.log(`\n--- content: ${contentLength(embed)} / ${POST_CONFIG.contentBudget} characters ---`);
+    console.log("\n--- embeds JSON (one message) ---");
+    console.log(JSON.stringify(embeds, null, 2));
+    const longest = embeds.flatMap((e) => e.fields).reduce((a, b) => (b.value.length > a.value.length ? b : a));
+    console.log(`\n--- content: ${contentLength(embeds)} / ${POST_CONFIG.contentBudget} characters in ${embeds.length} embeds (${embeds.map(embedLength).join(" + ")}); ` +
+      `longest field: ${longest.value.length} (${longest.name.trim() || "continued"}) ---`);
   } finally {
     await sql.end();
   }

@@ -102,6 +102,28 @@ prints how many places it stored (7,342). It is not part of `refresh`: the file 
 Running it again changes nothing. Register the commands after deploying, because `/region add` and
 `/region remove` have new options.
 
+## Post look and color squares (migration 017)
+The monthly post is one message with up to four embeds: the month in numbers with a three-line headline,
+players, commanders, and a last one with coverage and the TopDeck attribution. Every visual element (headline,
+medals, line icons, bold names, two-line items, share bars, color squares, embed titles and colors) is a
+switch in `POST_CONFIG` in `scripts/lib/post.ts`.
+
+The color squares next to commander names come from Scryfall's color identity, stored in `commander_colors`.
+The bot reads the table and never calls Scryfall. Until the table is filled the post simply shows no squares.
+
+```
+npm run migrate
+npm run color-identity
+```
+
+`npm run color-identity` makes one Scryfall search (about 23 pages, 1 request per second), stores names and
+color identity only (no images), and prints how many names it stored (about 4,200). It skips the fetch when
+the list is under 24 hours old (`--force` overrides) and is the last step of `npm run refresh`, so new
+commanders get their colors every month. `npm run color-report` is read-only and shows which registered
+commanders have no match. The commands didn't change, so `register-commands` is not needed.
+
+After deploying, run `/preview` and look at it on a light and a dark theme, on desktop and on a phone.
+
 ## Player data and opt-outs
 Reports name event winners and top players. TopDeck permits this on condition that we keep the attribution,
 keep names current, and honor privacy requests (`docs/permissions.md`).

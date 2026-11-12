@@ -277,20 +277,23 @@ describe("custom regions against Postgres", { skip: url ? false : "TEST_DATABASE
 
     const reply = await run(A, "preview");
     const embed = reply.embeds![0]!;
+    const all = reply.embeds!.flatMap((e) => e.fields);
     assert.equal(embed.title, "Seattle Metro — cEDH meta, March 2034");
-    assert.equal(embed.description, "Commander stats: Washington (United States), because Seattle Metro had too few entries.");
-    const value = (prefix: string) => embed.fields.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix))?.value;
+    // The note is the first line of the first embed; the headline follows it.
+    assert.equal(embed.description!.split("\n")[0], "Commander stats: Washington (United States), because Seattle Metro had too few entries.");
+    assert.match(embed.description!, /is the most played commander in Washington: /);
+    const value = (prefix: string) => all.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix))?.value;
     assert.equal(value("Events"), "3", "three Tacoma events, not Washington's six");
     assert.equal(value("Most played — Washington (6 months)")!.split("\n").length, 10, "ten commanders from Washington");
-    assert.equal(embed.fields.some((f) => /Rising commanders|Cooling commanders/.test(f.name)), false);
-    assert.match(embed.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
+    assert.equal(all.some((f) => /Rising commanders|Cooling commanders/.test(f.name)), false);
+    assert.match(all.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
 
     // A custom region that is reportable itself uses its own entries everywhere.
     assert.equal(await say(A, "add", { place: "r:us-wa", region: "Seattle Metro" }), "Seattle Metro: added 1 place (2 of 25).\nAdded: Washington (United States)");
     assert.equal(await say(A, "set", { region: "Seattle Metro" }), "Region set to Seattle Metro.\nCommander stats: Seattle Metro's own entries.");
-    const full = (await run(A, "preview")).embeds![0]!;
-    assert.equal(full.description, undefined);
-    assert.ok(full.fields.some((f) => f.name === "📊 Most played (6 months)"));
+    const full = (await run(A, "preview")).embeds!;
+    assert.doesNotMatch(full[0]!.description ?? "", /Commander stats:|most played commander in /, "no note: the stats are its own");
+    assert.ok(full.flatMap((e) => e.fields).some((f) => f.name === "📊 Most played (6 months)"));
     assert.equal(await say(A, "remove", { place: "Washington (United States)", region: "Seattle Metro" }), "Seattle Metro: removed 1 place (1 left).\nRemoved: Washington (United States)");
   });
 

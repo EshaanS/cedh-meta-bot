@@ -69,11 +69,12 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
       order by guild_id`
   ).filter((c) => isGuildAllowed(allowlist, c.guild_id) && !summary.pruned.includes(c.guild_id));
 
-  const composed = new Map<string, Promise<Embed>>();
-  const embedFor = (regionId: string) => {
+  // One message per server: every embed of the post goes out together.
+  const composed = new Map<string, Promise<Embed[]>>();
+  const embedsFor = (regionId: string) => {
     let p = composed.get(regionId);
     if (!p) {
-      p = loadPostData(sql, regionId, target).then((data) => composePost(data).embed);
+      p = loadPostData(sql, regionId, target).then((data) => composePost(data).embeds);
       composed.set(regionId, p);
     }
     return p;
@@ -82,7 +83,7 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
   if (opts.dryRun) {
     for (const c of candidates) {
       try {
-        await embedFor(c.region_id);
+        await embedsFor(c.region_id);
         summary.wouldPost.push(c.guild_id);
       } catch (err) {
         summary.failed.push({ guildId: c.guild_id, error: errorText(err) });
@@ -112,7 +113,7 @@ export async function runCron(deps: CronDeps, opts: CronOptions = {}): Promise<C
     }
     const { previous, channel_id: channelId, region_id: regionId } = claim[0]!;
     try {
-      await discord.createMessage(channelId, { embeds: [await embedFor(regionId)] });
+      await discord.createMessage(channelId, { embeds: await embedsFor(regionId) });
       summary.posted.push(c.guild_id);
     } catch (err) {
       const code = err instanceof DiscordError ? err.code : undefined;

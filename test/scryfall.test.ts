@@ -1,8 +1,9 @@
-// Scryfall pair-commander list: parsing, paging and name handling (no network, no database).
+// Scryfall lists (pair commanders, commander colors): parsing, paging and name handling (no network, no database).
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { colorRows, leaderColors } from "../scripts/lib/commander-colors";
 import { pairNames } from "../scripts/lib/pair-commanders";
-import { cardNameKey, leaderNames, oracleNames, parseSearchPage, searchCards } from "../scripts/lib/scryfall";
+import { cardNameKey, colorString, COMMANDER_QUERY, leaderNames, oracleNames, parseSearchPage, searchCards } from "../scripts/lib/scryfall";
 
 const card = (over: Record<string, unknown>) => ({
   object: "card", name: "Tymna the Weaver", type_line: "Legendary Creature — Human Cleric", keywords: ["Partner", "Lifelink"],
@@ -15,7 +16,7 @@ const page = (data: unknown[], more: string | null = null, total = data.length) 
 test("parseSearchPage keeps only the whitelisted card fields", () => {
   const p = parseSearchPage(page([card({}), { object: "card" }, "junk"]));
   assert.equal(p.cards.length, 1, "rows without a name are dropped");
-  assert.deepEqual(Object.keys(p.cards[0]!).sort(), ["altNames", "faceNames", "keywords", "name", "oracleText", "typeLine"]);
+  assert.deepEqual(Object.keys(p.cards[0]!).sort(), ["altNames", "colorIdentity", "faceNames", "keywords", "name", "oracleText", "typeLine"]);
   assert.doesNotMatch(JSON.stringify(p), /usd|artist|image/);
   assert.equal(p.totalCards, 3);
   assert.equal(p.nextPage, null);
@@ -84,4 +85,34 @@ test("searchCards follows next_page, asks for printings when told to, and report
   assert.equal(short.complete, false, "fewer rows than total_cards is not complete");
   const none = await searchCards("x", { fetcher: async () => ({ object: "error", code: "not_found" }), pauseMs: 0 });
   assert.deepEqual({ n: none.cards.length, complete: none.complete }, { n: 0, complete: true });
+});
+
+test("color identity: letters in WUBRG order, nothing else kept; one row per name with the card's colors", () => {
+  assert.equal(colorString(["G", "U"]), "UG");
+  assert.equal(colorString(["R", "W", "B", "U", "G"]), "WUBRG");
+  assert.equal(colorString([]), "");
+  assert.equal(colorString(["C", "X", 5, null]), "", "only the five colors count");
+  assert.equal(colorString(undefined), "");
+  const p = parseSearchPage(page([
+    card({ name: "Kinnan, Bonder Prodigy", color_identity: ["G", "U"] }),
+    card({ name: "Kozilek, the Great Distortion", color_identity: [] }),
+    card({ name: "Front Half // Back Half", color_identity: ["R"], card_faces: [{ name: "Front Half", image_uris: { normal: "https://example.invalid/f.jpg" } }, { name: "Back Half" }] }),
+    card({ name: "Other Card", color_identity: ["W"], flavor_name: "Kinnan, Bonder Prodigy" }),
+  ]));
+  assert.deepEqual(p.cards.map((c) => c.colorIdentity), ["UG", "", "R", "W"]);
+  assert.doesNotMatch(JSON.stringify(p), /image|example\.invalid/, "no image fields are read");
+  assert.deepEqual(colorRows(p.cards), [
+    { name_key: "back half", name: "Back Half", card_name: "Front Half // Back Half", colors: "R" },
+    { name_key: "front half", name: "Front Half", card_name: "Front Half // Back Half", colors: "R" },
+    { name_key: "front half // back half", name: "Front Half // Back Half", card_name: "Front Half // Back Half", colors: "R" },
+    // A card's own name wins over another card's flavor name.
+    { name_key: "kinnan, bonder prodigy", name: "Kinnan, Bonder Prodigy", card_name: "Kinnan, Bonder Prodigy", colors: "UG" },
+    { name_key: "kozilek, the great distortion", name: "Kozilek, the Great Distortion", card_name: "Kozilek, the Great Distortion", colors: "" },
+    { name_key: "other card", name: "Other Card", card_name: "Other Card", colors: "W" },
+  ]);
+  const colors = new Map(colorRows(p.cards).map((r) => [r.name_key, r.colors]));
+  assert.equal(leaderColors("Kinnan, Bonder Prodigy / Other Card", colors), "WUG");
+  assert.equal(leaderColors("Kinnan, Bonder Prodigy / Missing", colors), null);
+  assert.equal(leaderColors("Kozilek, the Great Distortion", colors), "");
+  assert.equal(COMMANDER_QUERY, "is:commander or oracletag:pair-commander");
 });

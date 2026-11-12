@@ -40,7 +40,7 @@ export type InteractionDeps = {
 export type InteractionResult = { response: unknown; background?: () => Promise<void> };
 type Choice = { name: string; value: string };
 
-// Config replies show no TopDeck data, so they carry no attribution; /preview's embed has the Sources field.
+// Config replies show no TopDeck data, so they carry no attribution; /preview's last embed has the Sources field.
 const ephemeral = (content: string) => ({ type: RESPONSE_MESSAGE, data: { content, flags: EPHEMERAL } });
 const reply = (content: string): MessagePayload => ({ content });
 
@@ -280,12 +280,12 @@ async function preview(deps: InteractionDeps, guildId: string): Promise<MessageP
   const now = deps.now();
   const [cfg] = await sql<{ region_id: string }[]>`select region_id from guild_configs where guild_id = ${guildId}`;
   const month = previousMonth(now);
-  const { embed } = composePost(await loadPostData(sql, cfg?.region_id ?? "global", month));
+  const { embeds } = composePost(await loadPostData(sql, cfg?.region_id ?? "global", month));
   const lines = [`Preview of the ${monthName(month)} report (only you can see this).`];
   if (now.getUTCDate() < POST_FROM_DAY) {
     lines.push(`${monthName(month)} data is still settling; the posted version goes out on or after ${POST_FROM_DAY} ${monthName(currentMonth(now))}.`);
   }
-  return { content: lines.join("\n"), embeds: [embed] };
+  return { content: lines.join("\n"), embeds };
 }
 
 // ---------- dispatch ----------

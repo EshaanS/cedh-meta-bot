@@ -1,82 +1,122 @@
 Global — cEDH meta, October 2026
+🏆 MBG Commanderpalooza #3 (TimeTwister event) (150 players) went to Mara Ellison on Kraum / Tymna the Weaver
+🎯 Kraum / Tymna the Weaver made the most top cuts: 157
+📈 Dack Fayden, Helping Hand is the commander to watch: 93 entries in October, new since Sep 26
 
 📍 Events — October: 354 (+9% vs September)
 Players: 10,412 (+12% vs September)
 Draw rate: 25%
 Largest event: 150 players · MBG Commanderpalooza #3 (TimeTwister event)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── 👥 Players — October ──
 
-🏆 Winners — October (largest events)
-• 150p · MBG Commanderpalooza #3 (TimeTwister event) · Mara Ellison on Kraum / Tymna the Weaver
-• 119p · BAKED ZITI 4: Goldsabertooth’s NY cEDH · Tobias Quill on Dack Fayden, Helping Hand
-• 105p · 1st annual 1stCKMA cEDH Tournament 100% PROXY FRI… · Kinnan, Bonder Prodigy
-• 96p · CEDH Norte Bilbao + Zaragoza + Pamplona · Ines Varga on Arcum Dagsson
-• 94p · Collectible Ventures: S.N.L. / Mages 10K Birthday… · Devon Okafor on Kinnan, Bonder Prodigy
-• 93p · Steel City Green Chile Slopper Tournament Series I · Lena Marchetti on Thrasios / Tymna the Weaver
-• 91p · Perfect Storm Comics & Games - Tabernacle 10K · Soren Blake on Krark / Thrasios
-• 84p · Quantum Nexus' Highlander 10K · Priya Nandakumar on Kinnan, Bonder Prodigy
-• 79p · FOIL Gaea's Cradle cEDH 6k · Hugo Lindqvist on Kinnan, Bonder Prodigy
-• 77p · 1.cEDH069 Major Die Fabrik · Camille Rousseau on Rograkh / Thrasios
+🏆 Winners (largest events)
+MBG Commanderpalooza #3 (TimeTwister event) · 150 players
+🏆 Mara Ellison on Kraum / Tymna the Weaver 🟨🟦🟪🟥
 
-👑 Top players — October
-1. Mara Ellison — 2 wins, 3 top cuts · Kraum / Tymna the Weaver
-2. Tobias Quill — 1 win, 2 top cuts · Dack Fayden, Helping Hand
-3. Ines Varga — 1 win, 1 top cut · Arcum Dagsson
-4. Aiko Tanabe — 3 top cuts · Kraum / Tymna the Weaver
-5. Rafael Montoya — 2 top cuts
+BAKED ZITI 4: Goldsabertooth’s NY cEDH · 119 players
+🏆 Tobias Quill on Dack Fayden, Helping Hand 🟨
 
-🌱 Rising players — October (first win or top cut in 3 years of data)
-Noor Haddad — first top cut · 150p MBG Commanderpalooza #3 (TimeTwister event)
-Tobias Quill — first win · 119p BAKED ZITI 4: Goldsabertooth’s NY cEDH
-Felix Brandt — top cut in first 5 events · 96p CEDH Norte Bilbao + Zaragoza + Pamplona
+1st annual 1stCKMA cEDH Tournament 100% PROXY FRI… · 105 players
+🏆 Kinnan, Bonder Prodigy 🟦🟩
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CEDH Norte Bilbao + Zaragoza + Pamplona · 96 players
+🏆 Ines Varga on Arcum Dagsson 🟦
+
+Collectible Ventures: S.N.L. / Mages 10K Birthday… · 94 players
+🏆 Devon Okafor on Kinnan, Bonder Prodigy 🟦🟩
+
+Steel City Green Chile Slopper Tournament Series I · 93 players
+🏆 Lena Marchetti on Thrasios / Tymna the Weaver 🟨🟦🟪🟩
+
+Perfect Storm Comics & Games - Tabernacle 10K · 91 players
+🏆 Soren Blake on Krark / Thrasios 🟦🟥🟩
+
+Quantum Nexus' Highlander 10K · 84 players
+🏆 Priya Nandakumar on Kinnan, Bonder Prodigy 🟦🟩
+
+FOIL Gaea's Cradle cEDH 6k · 79 players
+🏆 Hugo Lindqvist on Kinnan, Bonder Prodigy 🟦🟩
+
+1.cEDH069 Major Die Fabrik · 77 players
+🏆 Camille Rousseau on Rograkh / Thrasios 🟦🟥🟩
+
+👑 Top players
+🥇 Mara Ellison — 🏆 2 wins · 🎯 3 top cuts
+Kraum / Tymna the Weaver 🟨🟦🟪🟥
+🥈 Tobias Quill — 🏆 1 win · 🎯 2 top cuts
+Dack Fayden, Helping Hand 🟨
+🥉 Ines Varga — 🏆 1 win · 🎯 1 top cut
+Arcum Dagsson 🟦
+4️⃣ Aiko Tanabe — 🎯 3 top cuts
+Kraum / Tymna the Weaver 🟨🟦🟪🟥
+5️⃣ Rafael Montoya — 🎯 2 top cuts
+
+🌱 Rising players (first win or top cut in 3 years of data)
+🎯 Noor Haddad — first top cut
+150 players · MBG Commanderpalooza #3 (TimeTwister event)
+🏆 Tobias Quill — first win
+119 players · BAKED ZITI 4: Goldsabertooth’s NY cEDH
+🎯 Felix Brandt — top cut in first 5 events
+96 players · CEDH Norte Bilbao + Zaragoza + Pamplona
+
+── 🃏 Commanders — October ──
 
 🎯 Top-cut appearances — October
-1. Kraum / Tymna the Weaver — 157 cuts · 9.2% of cuts vs 8.5% of field
-2. Kinnan, Bonder Prodigy — 153 cuts · 9.0% of cuts vs 7.5% of field
-3. Rograkh / Thrasios — 107 cuts · 6.3% of cuts vs 5.6% of field
-4. Sisay, Weatherlight Captain — 102 cuts · 6.0% of cuts vs 5.1% of field
-5. Rograkh / Silas Renn — 90 cuts · 5.3% of cuts vs 4.9% of field
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🥇 Kraum / Tymna the Weaver 🟨🟦🟪🟥
+157 cuts · 9.2% of cuts vs 8.5% of field
+🥈 Kinnan, Bonder Prodigy 🟦🟩
+153 cuts · 9.0% of cuts vs 7.5% of field
+🥉 Rograkh / Thrasios 🟦🟥🟩
+107 cuts · 6.3% of cuts vs 5.6% of field
+4️⃣ Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
+102 cuts · 6.0% of cuts vs 5.1% of field
+5️⃣ Rograkh / Silas Renn 🟦🟪🟥
+90 cuts · 5.3% of cuts vs 4.9% of field
 
 📊 Most played (6 months)
-1. Kraum / Tymna the Weaver — 7.7%
-2. Kinnan, Bonder Prodigy — 7.5%
-3. Rograkh / Thrasios — 5.5%
-4. Rograkh / Silas Renn — 4.8%
-5. Sisay, Weatherlight Captain — 4.3%
-6. Thrasios / Tymna the Weaver — 3.1%
-7. Ral, Monsoon Mage — 2.3%
-8. Dargo / Tymna the Weaver — 2.2%
-9. Vivi Ornitier — 2.2%
-10. Ishai / Rograkh — 2.1%
+🥇 ▰▰▰▰▰▰▰▰▰▰ 7.7% · Kraum / Tymna the Weaver 🟨🟦🟪🟥
+🥈 ▰▰▰▰▰▰▰▰▰▰ 7.5% · Kinnan, Bonder Prodigy 🟦🟩
+🥉 ▰▰▰▰▰▰▰▱▱▱ 5.5% · Rograkh / Thrasios 🟦🟥🟩
+4️⃣ ▰▰▰▰▰▰▱▱▱▱ 4.8% · Rograkh / Silas Renn 🟦🟪🟥
+5️⃣ ▰▰▰▰▰▰▱▱▱▱ 4.3% · Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
+6️⃣ ▰▰▰▰▱▱▱▱▱▱ 3.1% · Thrasios / Tymna the Weaver 🟨🟦🟪🟩
+7️⃣ ▰▰▰▱▱▱▱▱▱▱ 2.3% · Ral, Monsoon Mage 🟦🟥
+8️⃣ ▰▰▰▱▱▱▱▱▱▱ 2.2% · Dargo / Tymna the Weaver 🟨🟪🟥
+9️⃣ ▰▰▰▱▱▱▱▱▱▱ 2.2% · Vivi Ornitier 🟦🟥
+🔟 ▰▰▰▱▱▱▱▱▱▱ 2.1% · Ishai / Rograkh 🟨🟦🟥
 
 ⭐ Best results (adjusted PPG, 30+ entries)
-1. Dack Fayden, Helping Hand — 1.62 (97 entries)
-2. Shang-Chi, Master of Kung Fu — 1.47 (119 entries)
-3. Scion of the Ur-Dragon — 1.46 (300 entries)
-4. Kediss / Malcolm — 1.45 (148 entries)
-5. Jhoira, Ageless Innovator — 1.45 (106 entries)
+🥇 Dack Fayden, Helping Hand 🟨 — 1.62 (97 entries)
+🥈 Shang-Chi, Master of Kung Fu 🟩 — 1.47 (119 entries)
+🥉 Scion of the Ur-Dragon 🟨🟦🟪🟥🟩 — 1.46 (300 entries)
+4️⃣ Kediss / Malcolm 🟦🟥 — 1.45 (148 entries)
+5️⃣ Jhoira, Ageless Innovator 🟦🟥 — 1.45 (106 entries)
 
 🔀 Top-cut conversion (baseline 26%)
-1. Dack Fayden, Helping Hand — 45% (91 entries)
-2. Dihada, Binder of Wills — 40% (154 entries)
-3. Shang-Chi, Master of Kung Fu — 39% (108 entries)
-4. Scion of the Ur-Dragon — 36% (274 entries)
-5. Malcolm / Tymna the Weaver — 35% (139 entries)
+🥇 Dack Fayden, Helping Hand 🟨 — 45% (91 entries)
+🥈 Dihada, Binder of Wills 🟨🟪🟥 — 40% (154 entries)
+🥉 Shang-Chi, Master of Kung Fu 🟩 — 39% (108 entries)
+4️⃣ Scion of the Ur-Dragon 🟨🟦🟪🟥🟩 — 36% (274 entries)
+5️⃣ Malcolm / Tymna the Weaver 🟨🟦🟪 — 35% (139 entries)
 
 📈 Rising commanders (by share growth vs prior 3 months)
-Dack Fayden, Helping Hand — 93 entries in October, new since Sep 26
-Vraska, Soul of Stone — 35 entries in October, new since Sep 26
-Jace, Multiverse Architect — 19 entries in October, new since Oct 1
+🆕 Dack Fayden, Helping Hand 🟨
+93 entries in October, new since Sep 26
+🆕 Vraska, Soul of Stone 🟨🟦🟥
+35 entries in October, new since Sep 26
+🆕 Jace, Multiverse Architect 🟨🟦🟪🟥
+19 entries in October, new since Oct 1
 
 📉 Cooling commanders (by share drop vs prior 3 months)
-Etali, Primal Conqueror — 98 entries in October (avg 136/month)
-Ishai / Rograkh — 100 entries in October (avg 120/month)
-Ral, Monsoon Mage — 131 entries in October (avg 152/month)
+🧊 Etali, Primal Conqueror 🟥🟩
+98 entries in October (avg 136/month)
+🧊 Ishai / Rograkh 🟨🟦🟥
+100 entries in October (avg 120/month)
+🧊 Ral, Monsoon Mage 🟦🟥
+131 entries in October (avg 152/month)
+
+── ℹ️ About this report ──
 
 ℹ️ Coverage: 1,971 qualifying events over 6 months · 69% of entries with decklists · 96% of October entries have a linked player
 🔗 Sources: Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

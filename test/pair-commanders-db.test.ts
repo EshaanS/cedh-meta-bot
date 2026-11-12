@@ -14,7 +14,7 @@ describe("pair commanders against Postgres", { skip: url ? false : "TEST_DATABAS
   let saved: { name_key: string; name: string; card_name: string; fetched_at: Date }[] = [];
   const MONTH = "2032-04-01";
   const PLAYER = "testpcplayer".padEnd(28, "0");
-  const c = (name: string, alt: string[] = []): ScryfallCard => ({ name, faceNames: [], altNames: alt, typeLine: "", keywords: [], oracleText: "" });
+  const c = (name: string, alt: string[] = []): ScryfallCard => ({ name, faceNames: [], altNames: alt, typeLine: "", keywords: [], oracleText: "", colorIdentity: "" });
   const filler = Array.from({ length: 60 }, (_, i) => c(`Filler Partner ${i}`));
   const result = (cards: ScryfallCard[], total = cards.length): SearchResult => ({ cards, totalCards: total, pages: 1, complete: cards.length === total });
   const fullList = [...filler, c("Kraum, Ludevic's Opus"), c("Tymna the Weaver"), c("Wernog, Rider's Chaplain", ["Will the Wise"]), c("Wernog, Rider's Chaplain")];

@@ -1,6 +1,6 @@
 API terms question: player names in a monthly recap bot
 3 messages
-Trim Stream <streamtrim@gmail.com>	Sat, Nov 7, 2026 at 1:17 PM
+Trim Stream	Sat, Nov 7, 2026 at 1:17 PM
 To: contact@topdeck.gg
 Hi TopDeck team,
 
@@ -18,7 +18,7 @@ Is either of these permitted under the terms, and are there conditions you'd wan
 Thanks,
 Trim Stream
 TopDeck.gg <contact@topdeck.gg>	Tue, Nov 10, 2026 at 12:35 PM
-To: Trim Stream <streamtrim@gmail.com>
+To: Trim Stream
 Hey,
 
 Thanks for reaching out! Both of those are permitted, especially since you're already planning to honor privacy requests and keep names current.
@@ -27,7 +27,7 @@ As long as you keep the attribution and respect those privacy requests, you're g
 
 Zain
 [Quoted text hidden]
-Trim Stream <streamtrim@gmail.com>	Tue, Nov 10, 2026 at 4:05 PM
+Trim Stream	Tue, Nov 10, 2026 at 4:05 PM
 To: "TopDeck.gg" <contact@topdeck.gg>
 Hey Zain,
 

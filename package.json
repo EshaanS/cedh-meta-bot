@@ -15,7 +15,7 @@
     "quality": "tsx --env-file-if-exists=.env scripts/quality.ts",
     "geocode": "tsx --env-file-if-exists=.env scripts/geocode.ts",
     "classify": "tsx --env-file-if-exists=.env scripts/classify.ts",
-    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run standings && npm run geocode && npm run regions && npm run pair-commanders",
+    "refresh": "npm run backfill -- --months 2 && npm run classify && npm run standings && npm run geocode && npm run regions && npm run pair-commanders && npm run color-identity",
     "regions": "tsx --env-file-if-exists=.env scripts/regions.ts",
     "report": "tsx --env-file-if-exists=.env scripts/report.ts",
     "preview": "tsx --env-file-if-exists=.env scripts/preview.ts",
@@ -28,6 +28,8 @@
     "optout": "tsx --env-file-if-exists=.env scripts/optout.ts",
     "pair-commanders": "tsx --env-file-if-exists=.env scripts/fetch-pair-commanders.ts",
     "pair-report": "tsx --env-file-if-exists=.env scripts/pair-report.ts",
+    "color-identity": "tsx --env-file-if-exists=.env scripts/fetch-color-identity.ts",
+    "color-report": "tsx --env-file-if-exists=.env scripts/color-report.ts",
     "places": "tsx --env-file-if-exists=.env scripts/load-populated-places.ts"
   },
   "devDependencies": {

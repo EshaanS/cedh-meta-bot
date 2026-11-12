@@ -1,60 +1,69 @@
 Seattle Metro — cEDH meta, October 2026
 Commander stats: Washington (United States), because Seattle Metro had too few entries.
 
+🏆 Mind Full Games: October's Monthly 1k Event (43 players) went to Mara Ellison on Francisco / Rograkh
+📊 Kraum / Tymna the Weaver is the most played commander in Washington: 7.3% of entries over 6 months
+🌱 Noor Haddad is the player to watch: first top cut at Mind Full Games: October's Monthly 1k Event (43 players)
+
 📍 Events — October: 1 (-67% vs September)
 Players: 43 (-37% vs September)
 Draw rate: 29%
 Largest event: 43 players · Mind Full Games: October's Monthly 1k Event
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── 👥 Players — October ──
 
-🏆 Winners — October (largest events)
-• 43p · Mind Full Games: October's Monthly 1k Event · Mara Ellison on Francisco / Rograkh
+🏆 Winners (largest events)
+Mind Full Games: October's Monthly 1k Event · 43 players
+🏆 Mara Ellison on Francisco / Rograkh 🟪🟥
 
-👑 Top players — October
-1. Mara Ellison — 1 win, 1 top cut · Francisco / Rograkh
-2. Tobias Quill — 1 top cut · Kefka, Court Mage
-3. Ines Varga — 1 top cut · Dack Fayden, Helping Hand
+👑 Top players
+🥇 Mara Ellison — 🏆 1 win · 🎯 1 top cut
+Francisco / Rograkh 🟪🟥
+🥈 Tobias Quill — 🎯 1 top cut
+Kefka, Court Mage 🟦🟪🟥
+🥉 Ines Varga — 🎯 1 top cut
+Dack Fayden, Helping Hand 🟨
 
-🌱 Rising players — October (first win or top cut in 3 years of data)
-Noor Haddad — first top cut · 43p Mind Full Games: October's Monthly 1k Event
+🌱 Rising players (first win or top cut in 3 years of data)
+🎯 Noor Haddad — first top cut
+43 players · Mind Full Games: October's Monthly 1k Event
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── 🃏 Commanders — October ──
 
 🎯 Top-cut appearances — October
-1. Dack Fayden, Helping Hand — 1 cut
-2. Francisco / Rograkh — 1 cut
-3. Ishai / Rograkh — 1 cut
-4. Kefka, Court Mage — 1 cut
-5. Kraum / Tymna the Weaver — 1 cut
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🥇 Dack Fayden, Helping Hand 🟨 — 1 cut
+🥈 Francisco / Rograkh 🟪🟥 — 1 cut
+🥉 Ishai / Rograkh 🟨🟦🟥 — 1 cut
+4️⃣ Kefka, Court Mage 🟦🟪🟥 — 1 cut
+5️⃣ Kraum / Tymna the Weaver 🟨🟦🟪🟥 — 1 cut
 
 📊 Most played — Washington (6 months)
-1. Kraum / Tymna the Weaver — 7.3%
-2. Kinnan, Bonder Prodigy — 6.7%
-3. Rograkh / Thrasios — 6.2%
-4. Kenrith, the Returned King — 4.9%
-5. Magda, Brazen Outlaw — 4.0%
-6. Sisay, Weatherlight Captain — 3.7%
-7. Rograkh / Silas Renn — 3.5%
-8. Etali, Primal Conqueror — 2.6%
-9. Ishai / Rograkh — 2.6%
-10. Thrasios / Tymna the Weaver — 2.6%
+🥇 ▰▰▰▰▰▰▰▰▰▰ 7.3% · Kraum / Tymna the Weaver 🟨🟦🟪🟥
+🥈 ▰▰▰▰▰▰▰▰▰▱ 6.7% · Kinnan, Bonder Prodigy 🟦🟩
+🥉 ▰▰▰▰▰▰▰▰▰▱ 6.2% · Rograkh / Thrasios 🟦🟥🟩
+4️⃣ ▰▰▰▰▰▰▰▱▱▱ 4.9% · Kenrith, the Returned King 🟨🟦🟪🟥🟩
+5️⃣ ▰▰▰▰▰▰▱▱▱▱ 4.0% · Magda, Brazen Outlaw 🟥
+6️⃣ ▰▰▰▰▰▱▱▱▱▱ 3.7% · Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩
+7️⃣ ▰▰▰▰▰▱▱▱▱▱ 3.5% · Rograkh / Silas Renn 🟦🟪🟥
+8️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.6% · Etali, Primal Conqueror 🟥🟩
+9️⃣ ▰▰▰▰▱▱▱▱▱▱ 2.6% · Ishai / Rograkh 🟨🟦🟥
+🔟 ▰▰▰▰▱▱▱▱▱▱ 2.6% · Thrasios / Tymna the Weaver 🟨🟦🟪🟩
 
 ⭐ Best results — Washington (adjusted PPG, 30+ entries)
-1. Kinnan, Bonder Prodigy — 1.43 (55 entries)
-2. Kenrith, the Returned King — 1.34 (40 entries)
-3. Magda, Brazen Outlaw — 1.30 (33 entries)
-4. Sisay, Weatherlight Captain — 1.23 (30 entries)
-5. Rograkh / Thrasios — 1.21 (51 entries)
+🥇 Kinnan, Bonder Prodigy 🟦🟩 — 1.43 (55 entries)
+🥈 Kenrith, the Returned King 🟨🟦🟪🟥🟩 — 1.34 (40 entries)
+🥉 Magda, Brazen Outlaw 🟥 — 1.30 (33 entries)
+4️⃣ Sisay, Weatherlight Captain 🟨🟦🟪🟥🟩 — 1.23 (30 entries)
+5️⃣ Rograkh / Thrasios 🟦🟥🟩 — 1.21 (51 entries)
 
 🔀 Top-cut conversion — Washington (baseline 28%)
-1. Kinnan, Bonder Prodigy — 38% (52 entries)
-2. Kraum / Tymna the Weaver — 36% (56 entries)
-3. Kenrith, the Returned King — 35% (40 entries)
-4. Magda, Brazen Outlaw — 27% (30 entries)
-5. Rograkh / Thrasios — 26% (47 entries)
+🥇 Kinnan, Bonder Prodigy 🟦🟩 — 38% (52 entries)
+🥈 Kraum / Tymna the Weaver 🟨🟦🟪🟥 — 36% (56 entries)
+🥉 Kenrith, the Returned King 🟨🟦🟪🟥🟩 — 35% (40 entries)
+4️⃣ Magda, Brazen Outlaw 🟥 — 27% (30 entries)
+5️⃣ Rograkh / Thrasios 🟦🟥🟩 — 26% (47 entries)
+
+── ℹ️ About this report ──
 
 ℹ️ Coverage: 14 qualifying events over 6 months · 74% of entries with decklists · 100% of October entries have a linked player
 🔗 Sources: Data provided by TopDeck.gg (https://topdeck.gg) · Methods: cedhstats.org (https://cedhstats.org/about)

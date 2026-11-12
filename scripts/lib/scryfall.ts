@@ -1,6 +1,7 @@
-// Scryfall card search, used only to list the cards that can share the command zone (CLAUDE.md data-source
-// exception). Only scripts/fetch-pair-commanders.ts and scripts/pair-report.ts call this; the bot and the
-// Vercel app never do. Requests are sequential and paced, and 429 responses are retried after Retry-After.
+// Scryfall card search, used only to list the cards that can share the command zone and the color identity of
+// commanders (CLAUDE.md data-source exception). Only scripts/fetch-pair-commanders.ts, scripts/pair-report.ts,
+// scripts/fetch-color-identity.ts and scripts/color-report.ts call this; the bot and the Vercel app never do.
+// No images and no image URLs are read. Requests are sequential and paced, and 429 responses are retried after Retry-After.
 // The TopDeck API key is never sent here.
 import { isObj, log, sleep, text } from "./topdeck";
 
@@ -19,6 +20,11 @@ export const PAIR_QUERY = "oracletag:pair-commander";
 /** Used only by the report, to check the tag still includes the cards that have no pairing ability themselves. */
 export const BACKGROUND_QUERY = "type:background";
 export const DOCTOR_QUERY = 'type:"time lord" type:doctor';
+/**
+ * The search whose results make up commander_colors: every card that can be a commander, plus the pair list,
+ * which adds the Backgrounds (they sit in the command zone but are not commanders by themselves).
+ */
+export const COMMANDER_QUERY = "is:commander or oracletag:pair-commander";
 
 /** The fields we read from a Scryfall card. Everything else in the card object is dropped. */
 export type ScryfallCard = {
@@ -30,9 +36,17 @@ export type ScryfallCard = {
   typeLine: string;
   keywords: string[];
   oracleText: string;
+  /** Color identity as a subset of "WUBRG" in that order; "" is colorless. */
+  colorIdentity: string;
 };
 export type SearchPage = { cards: ScryfallCard[]; totalCards: number | null; nextPage: string | null };
 export type PageFetcher = (url: string) => Promise<unknown>;
+
+/** Scryfall gives color identity as an array of letters; anything else in it is dropped. */
+export function colorString(raw: unknown): string {
+  const letters: unknown[] = Array.isArray(raw) ? raw : [];
+  return [..."WUBRG"].filter((l) => letters.includes(l)).join("");
+}
 
 function pickCard(raw: unknown): ScryfallCard | null {
   if (!isObj(raw)) return null;
@@ -47,6 +61,7 @@ function pickCard(raw: unknown): ScryfallCard | null {
     typeLine: text(raw.type_line) ?? "",
     keywords: Array.isArray(raw.keywords) ? raw.keywords.filter((k): k is string => typeof k === "string") : [],
     oracleText: text(raw.oracle_text) ?? "",
+    colorIdentity: colorString(raw.color_identity),
   };
 }
 

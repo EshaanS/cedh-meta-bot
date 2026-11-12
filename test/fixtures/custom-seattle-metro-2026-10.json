@@ -475,5 +475,31 @@
     }
   ],
   "baselineConversion": 0.2774936061381074,
-  "trend": []
+  "trend": [],
+  "colors": {
+    "Chatterfang, Squirrel General": "BG",
+    "Crystal, Inhuman Princess": "WURG",
+    "Dack Fayden, Helping Hand": "W",
+    "Dargo, the Shipwrecker / Tymna the Weaver": "WBR",
+    "Etali, Primal Conqueror": "RG",
+    "Francisco, Fowl Marauder / Rograkh, Son of Rohgahh": "BR",
+    "Helga, Skittish Seer": "WUG",
+    "Ishai, Ojutai Dragonspeaker / Rograkh, Son of Rohgahh": "WUR",
+    "Kefka, Court Mage": "UBR",
+    "Kenrith, the Returned King": "WUBRG",
+    "Kinnan, Bonder Prodigy": "UG",
+    "Kraum, Ludevic's Opus / Tymna the Weaver": "WUBR",
+    "Magda, Brazen Outlaw": "R",
+    "Magus Lucea Kane": "URG",
+    "Ob Nixilis, Captive Kingpin": "BR",
+    "Rograkh, Son of Rohgahh / Silas Renn, Seeker Adept": "UBR",
+    "Rograkh, Son of Rohgahh / Thrasios, Triton Hero": "URG",
+    "Scion of the Ur-Dragon": "WUBRG",
+    "Sisay, Weatherlight Captain": "WUBRG",
+    "Tayam, Luminous Enigma": "WBG",
+    "Thrasios, Triton Hero / Tymna the Weaver": "WUBG",
+    "Thrasios, Triton Hero / Yoshimaru, Ever Faithful": "WUG",
+    "Tivit, Seller of Secrets": "WUB",
+    "Vraska, Soul of Stone": "WUR"
+  }
 }

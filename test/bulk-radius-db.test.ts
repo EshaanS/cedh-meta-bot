@@ -383,13 +383,15 @@ describe("bulk add, bulk remove and radius places against Postgres", { skip: url
       "Region set to Donau.",
       "Commander stats (most played, best results, conversion): Germany, because Donau has too few entries with decklists. Events, winners and players are Donau's own.",
     ].join("\n"));
-    const embed = (await run(A, "preview")).embeds![0]!;
+    const preview = (await run(A, "preview")).embeds!;
+    const embed = preview[0]!;
+    const all = preview.flatMap((e) => e.fields);
     assert.equal(embed.title, "Donau — cEDH meta, June 2036");
-    assert.equal(embed.description, "Commander stats: Germany, because Donau had too few entries.");
-    const field = (prefix: string) => embed.fields.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix));
+    assert.equal(embed.description!.split("\n")[0], "Commander stats: Germany, because Donau had too few entries.");
+    const field = (prefix: string) => all.find((f) => f.name.replace(/^[^A-Za-z]+/, "").startsWith(prefix));
     assert.equal(field("Events")?.value, "2", "the two events inside the circle");
     assert.equal(field("Most played — Germany (6 months)")!.value.split("\n").length, 10);
-    assert.match(embed.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
+    assert.match(all.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
 
     // Salzburg is in Austria; Freilassing, inside the circle, is in Germany.
     assert.equal(await anchor(await regionId(A, "Salzburg area")), "europe");

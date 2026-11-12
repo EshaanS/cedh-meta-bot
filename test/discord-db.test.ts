@@ -89,7 +89,14 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     assert.equal((await row("test-g1"))!.last, `${POSTED_MONTH}-01`);
     assert.equal((await row("test-outside"))!.last, null);
     assert.equal(d.sent.length, 2);
-    assert.equal((d.sent[0]!.payload.embeds as unknown[]).length, 1);
+    // One message per server carries every embed of the post; the last one ends with the Sources field.
+    for (const s of d.sent) {
+      const posted = s.payload.embeds as { title?: string; fields: { name: string; value: string }[] }[];
+      assert.ok(posted.length >= 2 && posted.length <= 10, `${posted.length} embeds in one message`);
+      assert.match(posted[0]!.title ?? "", / — cEDH meta, /);
+      assert.match(posted.at(-1)!.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
+      assert.equal(s.payload.content, undefined);
+    }
 
     const second = await runCron({ sql, discord: d.client, allowlist, now }, { monthOverride: POSTED_MONTH });
     assert.deepEqual(second.posted, []);
@@ -186,10 +193,12 @@ describe("discord app against Postgres", { skip: url ? false : "TEST_DATABASE_UR
     assert.match(d.edits.at(-1)!.content!, /Channel: <#chan-ok>/);
 
     await run(cmd("preview"));
-    assert.equal(d.edits.at(-1)!.embeds?.length, 1);
+    // The preview is one reply with every embed; the attribution is the last field of the last one.
+    const shown = d.edits.at(-1)!.embeds as { fields: { name: string; value: string }[] }[];
+    assert.ok(shown.length >= 2 && shown.length <= 10, `${shown.length} embeds in one reply`);
     assert.match(d.edits.at(-1)!.content!, /Preview of the October report/);
-    const embed = d.edits.at(-1)!.embeds![0] as { fields: { name: string; value: string }[] };
-    assert.match(embed.fields.at(-1)!.name, /Sources$/);
+    assert.match(shown.at(-1)!.fields.at(-1)!.name, /Sources$/);
+    assert.match(shown.at(-1)!.fields.at(-1)!.value, /Data provided by \[TopDeck\.gg\]\(https:\/\/topdeck\.gg\)/);
     for (const e of d.edits.slice(0, -1)) assert.doesNotMatch(e.content ?? "", /Data provided by/);
     for (const c of choices) assert.doesNotMatch(c.name, /\((continent|country|custom region)\)/);
   });
