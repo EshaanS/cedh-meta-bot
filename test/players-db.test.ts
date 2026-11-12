@@ -138,6 +138,9 @@ describe("player stats and opt-outs against Postgres", { skip: url ? false : "TE
 
   test("removing the opt-out shows the player again", async () => {
     await sql`delete from player_optouts where player_id = 'testpltwo0000000000000000000'`;
+    // An ingest blanks the stored name of every opted-out player, and test/optout-db.test.ts ingests while this
+    // file runs. The name is written again here, as the player's next ingest would.
+    await sql`update players set display_name = 'Test Player Two' where player_id = 'testpltwo0000000000000000000'`;
     try {
       const [b] = await sql<{ winner_name: string | null; winner_hidden: boolean }[]>`
         select winner_name, winner_hidden from stat_month_results('global', ${MONTH}::date, 10) where tid = 'test-pl-b'`;

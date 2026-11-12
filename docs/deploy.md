@@ -182,13 +182,26 @@ keep names current, and honor privacy requests (`docs/permissions.md`).
 - First run after migration 008: `npm run migrate`, then `npm run backfill -- --months 36` (player history; it
   re-fetches months that were ingested before player ids were stored), then `npm run classify`,
   `npm run standings`, `npm run geocode`, `npm run regions`. After that, `npm run refresh` as before.
-- When a player asks not to be named, find their TopDeck player id and run `npm run optout -- add <player_id>
-  --note "requested by email 2026-11-10"`. They show as "a player" in Winners and are left out of the player
-  sections from the next post or `/preview` on. Posts already sent are not edited.
-- `npm run optout -- remove <player_id>` undoes it (the name returns on the next refresh), and
-  `npm run optout -- list` shows the list.
+- When a player asks not to be named:
+  1. `npm run optout -- find "<their name as a post shows it>"` prints the TopDeck player id of every player with
+     that name, with how many events each has and where they last played. The whole name has to match (case and
+     extra spaces don't matter). It never prints a name.
+  2. If more than one player has the name, pick by the last event and its place, or ask the player which
+     events they played.
+  3. `npm run optout -- add <player_id> --note "requested by email 2026-11-10"`.
+
+  They show as "a player" in Winners and are left out of the player sections from the next post or `/preview`
+  on, and their name is removed from the database at once. Other players with the same name are not affected.
+  Posts already sent are not edited.
+- `npm run optout -- remove <player_id>` undoes it (the name returns on the next refresh, not before), and
+  `npm run optout -- list` shows the list (ids, dates and notes).
+- Requests reach you through the address in `CONTACT_EMAIL`, which the privacy page shows. While it is unset
+  the page says "not yet published" and players have no way to ask, so set it in Vercel before the bot is
+  opened to other servers.
 
 ## Going public (needs your explicit approval)
+0. Check that `CONTACT_EMAIL` is set in Vercel and that the install page shows it: it is how a player asks not
+   to be named, which TopDeck's permission depends on.
 1. In Vercel, set `ALLOW_ALL_GUILDS=true`, or add servers to `ALLOWED_GUILD_IDS`, and redeploy.
 2. Run `npm run register-commands -- --global --confirm-global`. Global commands can take up to an hour to appear.
 3. Keep running `npm run refresh` after the 14th of each month. The cron refuses to post a month whose data isn't final.
